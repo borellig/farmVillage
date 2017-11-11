@@ -23,15 +23,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
+            <Button
                 android:id="@+id/imageButton3"
                 android:layout_width="match_parent"
-                android:layout_height="47dp"
-                android:src="@mipmap/facebookconnect" />
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="facebook connect emplacement"
+                android:textColor="@android:color/white"
+                />
 
-            <ImageButton
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="30dp"
+                android:background="@android:color/holo_red_dark"
+                android:text="gmail emplacement"
+                android:textColor="@android:color/white"/>
 
             <TextView
                 android:layout_width="match_parent"
