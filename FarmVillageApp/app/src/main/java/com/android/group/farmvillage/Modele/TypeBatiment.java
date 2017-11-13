@@ -6,19 +6,22 @@ package com.android.group.farmvillage.Modele;
 
 public enum TypeBatiment {
     //Objets directement construits
-    HDV ("Hotel de Ville", 1),
-    Ferme ("Ferme", 1),
-    Champs ("Champs", 1),
-    Entrepot ("Entrepot", 1),
-    Port ("Port", 1);
+    HDV ("Hotel de Ville", 1, 10),
+    Ferme ("Ferme", 1, 10),
+    Champs ("Champs", 1, 10),
+    Entrepot ("Entrepot", 1, 10),
+    Port ("Port", 1, 10);
 
-    private String name = "";
-    private int taille = 0;
+    private String sName;
+    private int iTaille;
+    private int iTpsConstruct;
 
     //Constructeur
-    TypeBatiment(String name, int taille){
-        this.name = name;
-        this.taille = taille;
+    TypeBatiment(String name, int taille, int tpsConstruct){
+        this.sName = name;
+        this.iTaille = taille;
+        this.iTpsConstruct = tpsConstruct;
+
     }
 
 
