@@ -16,12 +16,21 @@ public enum TypeBatiment {
     private int iTaille;
     private int iTpsConstruct;
 
+    public int getiTaille() {
+        return iTaille;
+    }
+    public String getsName() {
+        return sName;
+    }
+    public int getiTpsConstruct() {
+        return iTpsConstruct;
+    }
+
     //Constructeur
     TypeBatiment(String name, int taille, int tpsConstruct){
         this.sName = name;
         this.iTaille = taille;
         this.iTpsConstruct = tpsConstruct;
-
     }
 
 

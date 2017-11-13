@@ -1,5 +1,7 @@
 package com.android.group.farmvillage.Modele;
 
+import android.widget.ListAdapter;
+
 /**
  * Created by geoffrey on 13/11/17.
  */
