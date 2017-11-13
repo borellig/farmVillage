@@ -44,4 +44,108 @@ public enum TypeBuilding {
         this.sNameFile = sNameFile;
         this.duration = duration;
     }
+
+    public String getsName() {
+        return sName;
+    }
+
+    public void setsName(String sName) {
+        this.sName = sName;
+    }
+
+    public int getiTaille() {
+        return iTaille;
+    }
+
+    public void setiTaille(int iTaille) {
+        this.iTaille = iTaille;
+    }
+
+    public int getiTpsConstruct() {
+        return iTpsConstruct;
+    }
+
+    public void setiTpsConstruct(int iTpsConstruct) {
+        this.iTpsConstruct = iTpsConstruct;
+    }
+
+    public int getiHomeCapacity() {
+        return iHomeCapacity;
+    }
+
+    public void setiHomeCapacity(int iHomeCapacity) {
+        this.iHomeCapacity = iHomeCapacity;
+    }
+
+    public int getiProductionCapacity() {
+        return iProductionCapacity;
+    }
+
+    public void setiProductionCapacity(int iProductionCapacity) {
+        this.iProductionCapacity = iProductionCapacity;
+    }
+
+    public String getsProdutionType() {
+        return sProdutionType;
+    }
+
+    public void setsProdutionType(String sProdutionType) {
+        this.sProdutionType = sProdutionType;
+    }
+
+    public int getiPriceWood() {
+        return iPriceWood;
+    }
+
+    public void setiPriceWood(int iPriceWood) {
+        this.iPriceWood = iPriceWood;
+    }
+
+    public int getiPriceFood() {
+        return iPriceFood;
+    }
+
+    public void setiPriceFood(int iPriceFood) {
+        this.iPriceFood = iPriceFood;
+    }
+
+    public int getiPriceRock() {
+        return iPriceRock;
+    }
+
+    public void setiPriceRock(int iPriceRock) {
+        this.iPriceRock = iPriceRock;
+    }
+
+    public int getiPriceGold() {
+        return iPriceGold;
+    }
+
+    public void setiPriceGold(int iPriceGold) {
+        this.iPriceGold = iPriceGold;
+    }
+
+    public int getiDefensePoint() {
+        return iDefensePoint;
+    }
+
+    public void setiDefensePoint(int iDefensePoint) {
+        this.iDefensePoint = iDefensePoint;
+    }
+
+    public String getsNameFile() {
+        return sNameFile;
+    }
+
+    public void setsNameFile(String sNameFile) {
+        this.sNameFile = sNameFile;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 }

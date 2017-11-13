@@ -4,7 +4,7 @@ package com.android.group.farmvillage.Modele;
  * Created by geoffrey on 13/11/17.
  */
 
-class Coordonnees {
+public class Coordonnees {
     int iX;
     int iY;
 

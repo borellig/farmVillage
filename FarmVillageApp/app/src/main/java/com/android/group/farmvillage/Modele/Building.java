@@ -22,12 +22,12 @@ public class Building {
     protected int iMilitaryCount;
 
 
-    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, ArrayList<Coordonnees> coord, String sName, Date dConstruct, int iMilitaryCount) {
+    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, ArrayList<Coordonnees> coord, Date dConstruct, int iMilitaryCount) {
         this.bEnable = bEnable;
         this.iLevel=iLevel;
         this.tbBuilding = tbBuilding;
         this.coord = coord;
-        this.sName = sName;
+        this.sName = tbBuilding.sName;
         this.dConstruct = dConstruct;
         this.iMilitaryCount = iMilitaryCount;
     }
@@ -87,11 +87,11 @@ public class Building {
         this.bEnable = bEnable;
     }
 
-    public TypeBuilding getTbNuilding() {
+    public TypeBuilding getTbBuilding() {
         return tbBuilding;
     }
 
-    public void setTbNuilding(TypeBuilding tbNuilding) {
+    public void setTbBuilding(TypeBuilding tbNuilding) {
         this.tbBuilding = tbNuilding;
     }
 
