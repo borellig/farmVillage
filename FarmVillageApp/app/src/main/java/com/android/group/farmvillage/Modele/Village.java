@@ -36,6 +36,10 @@ public class Village {
      */
     public void addBuilding(Building building){
         this.listBuilding.add(building);
+        setiFood(this.iFood-building.tbBuilding.iPriceFood);
+        setiWood(this.iWood-building.tbBuilding.iPriceWood);
+        setiRock(this.iRock-building.tbBuilding.iPriceRock);
+        setiGold(this.iGold-building.tbBuilding.iPriceGold);
         //// TODO: 13/11/17 insert webService
     }
 
@@ -49,6 +53,7 @@ public class Village {
         this.iRock = (int) Math.pow(building.tbBuilding.iPriceRock, 1+building.iLevel/10);
         this.iGold = (int) Math.pow(building.tbBuilding.iPriceGold, 1+building.iLevel/10);
         this.listBuilding.remove(building);
+        // // TODO: 13/11/17 delete webservice
     }
 
     /**
