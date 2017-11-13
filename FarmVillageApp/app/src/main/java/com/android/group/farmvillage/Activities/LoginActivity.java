@@ -1,10 +1,11 @@
-package com.android.group.farmvillage.Activity;
+package com.android.group.farmvillage.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -15,7 +16,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +28,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.group.farmvillage.R;
 
@@ -61,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View bLostPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +96,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        bLostPassword = (Button)findViewById(R.id.nopassword);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        bLostPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AskNewPassword();
+            }
+        });
     }
 
     private void populateAutoComplete() {
@@ -290,6 +304,53 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    public void AskNewPassword(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Redemander votre mots de passe");
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        //final DBHandler db1 = db;
+
+        final EditText titleBox = new EditText(this);
+        titleBox.setHint("Adresse mail");
+        titleBox.setInputType(InputType.TYPE_CLASS_TEXT);
+        layout.addView(titleBox);
+
+        builder.setView(layout);
+        final String adressmail = titleBox.getText().toString().trim();
+
+        // Configurations des bouttons
+        builder.setPositiveButton("Demander", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                    /**/
+                    if(isValidEmail(adressmail)==true){
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Mauvaise adresse mail indiquée", Toast.LENGTH_LONG).show();
+
+                    }
+
+
+            }
+        });
+
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
+    }
+
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -340,11 +401,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
 
+
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
         }
     }
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
 }
 
