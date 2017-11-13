@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         Village myVillage = new Village(0001, "villageNom", 100, 100, 100, 100, 50, listBatiment);
 
+
         mapAdapteur = new map_adapt(myVillage.getListBuilding(), this);
 
         GridView listTest = (GridView) findViewById(R.id.gridMap);

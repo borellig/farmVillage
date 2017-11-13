@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <HorizontalScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="820dp"
-        android:layout_height="900dp">
+<HorizontalScrollView
+    android:layout_width="2000px"
+    android:layout_height="2500px"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <ScrollView
-            android:layout_width="800dp"
-            android:layout_height="800dp"
-            android:scrollbars="vertical">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:background="@drawable/testvillage">
 
-                    <GridView
-                        android:id="@+id/gridMap"
-                        android:scrollbars="vertical"
-                        android:layout_width="800dp"
-                        android:layout_height="900dp"
-                        android:numColumns="3" />
-        </ScrollView>
+        <AbsoluteLayout
+            android:layout_width="2000px"
+            android:layout_height="1500px">
 
-    </HorizontalScrollView>
+            <GridView
+                android:layout_height="1800px"
+                android:layout_width="wrap_content"
+                android:id="@+id/gridMap"
+                android:numColumns="4" />
+
+        </AbsoluteLayout>
+
+    </ScrollView>
+</HorizontalScrollView>
