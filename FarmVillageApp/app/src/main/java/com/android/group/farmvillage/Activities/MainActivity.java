@@ -20,7 +20,6 @@ import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +43,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+<<<<<<< HEAD
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
+=======
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        /*Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
+
+        startActivity(secondeActivite);*/
+
+        setSupportActionBar(toolbar);
+>>>>>>> c36bcac102bbfd7b13636f0f446d4ce6680cdf84
 
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));
@@ -117,6 +126,13 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
+
     }
+
+    /**
+     * Fonction pour récupérer la clé SHA1 pour FB Connect
+     */
+
+
 
 }
