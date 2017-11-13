@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,17 +48,17 @@ public class map_adapt extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return listBat.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public Object getItem(int position) {
+        return listBat.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(int position) {
+        return listBat.get(position).getiId();
     }
 
     @Override
@@ -67,10 +68,10 @@ public class map_adapt extends BaseAdapter {
             final LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.map_adapt, null);
         }
+        final Batiment b = listBat.get(position);
 
-        TextView test = (TextView) convertView.findViewById(R.id.test);
-        test.setText("test");
-
+        final TextView test = (TextView) convertView.findViewById(R.id.test);
+        test.setText(b.getTbBatiment().getsName());
 
         return convertView;
     }

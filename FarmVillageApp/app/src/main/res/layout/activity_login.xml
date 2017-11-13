@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.android.group.farmvillage.Activity.LoginActivity">
+    tools:context="com.android.group.farmvillage.Activities.LoginActivity">
 
     <!-- Login progress -->
     <ScrollView
@@ -89,6 +89,7 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
             <Button
+                android:id="@+id/nopassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
