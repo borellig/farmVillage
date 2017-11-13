@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.android.group.farmvillage.Activities.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+<HorizontalScrollView
+    android:layout_width="2000px"
+    android:layout_height="2500px"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:background="@drawable/testvillage">
 
-    </android.support.design.widget.AppBarLayout>
+        <AbsoluteLayout
+            android:layout_width="2000px"
+            android:layout_height="1500px">
 
-    <include layout="@layout/content_main" />
+            <GridView
+                android:layout_height="1800px"
+                android:layout_width="wrap_content"
+                android:id="@+id/gridMap"
+                android:numColumns="6" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        </AbsoluteLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    </ScrollView>
+</HorizontalScrollView>

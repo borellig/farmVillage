@@ -3,6 +3,7 @@
     <string name="title_activity_login">Connexion</string>
     <string name="fb_app_id">345467332525564</string>
     <string name="fb_login_protocol_scheme">fb345467332525564</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
