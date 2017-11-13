@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:id="@+id/or"
+            android:icon="@drawable/or"
+            android:title="or"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/orValue"
+            android:title="1000"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/bois"
+            android:icon="@drawable/or"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/boisValue"
+            android:tooltipText="2000"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/food"
+            android:icon="@drawable/food"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/foodValue"
+            android:tooltipText="1000"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/pierre"
+            android:icon="@drawable/pierre"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/pierreValue"
+            android:tooltipText="1000"
+            android:title="yes"
+            app:showAsAction="ifRoom" />
+
+
+
+</menu>

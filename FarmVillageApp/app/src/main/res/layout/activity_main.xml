@@ -1,27 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <HorizontalScrollView
     android:layout_width="2000px"
     android:layout_height="2500px"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:background="@drawable/testvillage">
 
-        <AbsoluteLayout
-            android:layout_width="2000px"
-            android:layout_height="1500px">
+        <RelativeLayout
+            android:layout_width="3100px"
+            android:layout_height="fill_parent">
 
             <GridView
-                android:layout_height="1800px"
-                android:layout_width="wrap_content"
+                android:layout_height="2500px"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
                 android:id="@+id/gridMap"
                 android:numColumns="6" />
 
-        </AbsoluteLayout>
+            <LinearLayout
+                android:id="@+id/ressource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_red_dark"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:layout_width="200px"
+                    android:layout_height="200px"
+                    android:src="@drawable/bois"/>
+
+                <ImageView
+                    android:layout_width="200px"
+                    android:layout_height="200px"
+                    android:src="@drawable/food"/>
+                <ImageView
+                    android:layout_width="200px"
+                    android:layout_height="200px"
+                    android:src="@drawable/pierre"/>
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="200px"
+                    android:layout_height="200px"
+                    android:layout_x="118dp"
+                    android:layout_y="8dp"
+                    android:paddingLeft="200px"
+                    android:src="@drawable/or" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </ScrollView>
 </HorizontalScrollView>
+
+
