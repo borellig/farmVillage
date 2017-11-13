@@ -30,18 +30,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Batiment bat1 = new Batiment(1,TypeBatiment.Entrepot, false, 1, 1);
-        Batiment bat2 = new Batiment(1,TypeBatiment.HDV, false, 1, 1);
-        Batiment bat3 = new Batiment(1,TypeBatiment.Ferme, false, 1, 1);
-        Batiment bat4 = new Batiment(1,TypeBatiment.HDV, false, 1, 1);
-        Batiment bat5 = new Batiment(1,TypeBatiment.Ferme, false, 1, 1);
-        Batiment bat6 = new Batiment(1,TypeBatiment.HDV, false, 1, 1);
-        Batiment bat7 = new Batiment(1,TypeBatiment.Ferme, false, 1, 1);
-        Batiment bat8 = new Batiment(1,TypeBatiment.HDV, false, 1, 1);
-        Batiment bat9 = new Batiment(1,TypeBatiment.Ferme, false, 1, 1);
+        Batiment bat2 = new Batiment(2,TypeBatiment.HDV, false, 1, 1);
+        Batiment bat3 = new Batiment(3,TypeBatiment.Ferme, false, 1, 1);
+        Batiment bat4 = new Batiment(4,TypeBatiment.Champs, false, 1, 1);
+        Batiment bat5 = new Batiment(5,TypeBatiment.Ferme, false, 1, 1);
+        Batiment bat6 = new Batiment(6,TypeBatiment.HDV, false, 1, 1);
+        Batiment bat7 = new Batiment(7,TypeBatiment.Ferme, false, 1, 1);
+        Batiment bat8 = new Batiment(8,TypeBatiment.HDV, false, 1, 1);
+        Batiment bat9 = new Batiment(9,TypeBatiment.Ferme, false, 1, 1);
 
         listBatiment.add(bat1);
         listBatiment.add(bat2);
         listBatiment.add(bat3);
+        listBatiment.add(bat4);
+        listBatiment.add(bat5);
+        listBatiment.add(bat6);
+        listBatiment.add(bat7);
+        listBatiment.add(bat8);
+        listBatiment.add(bat9);
 
         mapAdapteur = new map_adapt(listBatiment, this);
 
