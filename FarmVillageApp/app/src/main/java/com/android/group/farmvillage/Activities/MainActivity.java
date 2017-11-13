@@ -37,8 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
         Building b1 = new Building(true, 1, TypeBuilding.HDV, coord, d, 50);
 
-        ArrayList listBatiment = new ArrayList();
-        listBatiment.add(b1);
+        final ArrayList<Building> listBatiment = new ArrayList<Building>(24);
+        for (int i=0; i<24; i++){
+            listBatiment.add(i, null);
+        }
+        listBatiment.set(0, b1);
+
+
+
+
+
+
+
 
         Village myVillage = new Village(0001, "villageNom", 100, 100, 100, 100, 50, listBatiment);
 
@@ -53,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("position", String.valueOf(position));
+                if (listBatiment.get(position)==null){
+                    Log.d("vide", "ajoute building");
+                }
+                else{
+                    Log.d("vide", listBatiment.get(position).getsName());
+                }
             }
         }
 

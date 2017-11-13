@@ -26,7 +26,9 @@ public class Village {
         this.iGold = iGold;
         this.listBuilding = listBuilding;
         for (Building b : listBuilding){
-            this.iDefensePoint+=b.getiMilitaryCount()+b.tbBuilding.iDefensePoint;
+            if (b!=null) {
+                this.iDefensePoint += b.getiMilitaryCount() + b.tbBuilding.iDefensePoint;
+            }
         }
     }
 

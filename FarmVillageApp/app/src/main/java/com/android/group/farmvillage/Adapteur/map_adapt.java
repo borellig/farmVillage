@@ -48,7 +48,12 @@ public class map_adapt extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return listBat.get(position).getiId();
+        if (listBat.get(position) != null) {
+            return listBat.get(position).getiId();
+        }
+        else {
+            return -1;
+        }
     }
 
     @Override
@@ -61,6 +66,7 @@ public class map_adapt extends BaseAdapter {
         final Building b = listBat.get(position);
 
         final TextView test = (TextView) convertView.findViewById(R.id.test);
+        if (b!=null)
         test.setText(b.getTbBuilding().getsName());
 
         return convertView;

@@ -19,7 +19,7 @@
                 android:layout_height="1800px"
                 android:layout_width="wrap_content"
                 android:id="@+id/gridMap"
-                android:numColumns="4" />
+                android:numColumns="6" />
 
         </AbsoluteLayout>
 
