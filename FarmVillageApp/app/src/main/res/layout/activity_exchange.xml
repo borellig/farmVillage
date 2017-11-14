@@ -1,9 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.group.farmvillage.Activities.ExchangeActivity">
+    tools:context="com.android.group.farmvillage.Activities.ExchangeActivity"
+    android:weightSum="1">
 
-</android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:layout_width="591dp"
+        android:layout_height="294dp"
+        android:layout_weight="1.00"
+        >
+
+        <Button
+            android:id="@+id/buttonOR"
+            android:layout_width="95dp"
+            android:layout_height="40dp"
+            android:layout_alignBaseline="@+id/buttonFood"
+            android:layout_alignBottom="@+id/buttonFood"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:text="OR"
+            tools:layout_editor_absoluteX="377dp"
+            tools:layout_editor_absoluteY="7dp" />
+
+        <Button
+            android:id="@+id/buttonBois"
+            android:layout_width="91dp"
+            android:layout_height="48dp"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/buttonOR"
+            android:text="Bois"
+            tools:layout_editor_absoluteX="251dp"
+            tools:layout_editor_absoluteY="7dp" />
+
+        <Button
+            android:id="@+id/buttonPierre"
+            android:layout_width="91dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_toEndOf="@+id/buttonBois"
+            android:text="Pierre"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="7dp" />
+
+        <Button
+            android:id="@+id/buttonFood"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_Left="@+id/buttonPierre"
+            android:text="Nourriture"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="7dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/buttonPierre" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/buttonOR"
+            android:layout_below="@+id/buttonOR"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="23dp">
+
+
+        </RelativeLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ExchangeListeView"
+            android:layout_alignEnd="@+id/relativeLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/relativeLayout"
+            android:layout_below="@+id/buttonFood" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

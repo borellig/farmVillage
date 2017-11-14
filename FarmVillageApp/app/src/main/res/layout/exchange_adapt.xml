@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/UserNameRemote"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:text="TextView"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/ValueExchange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/UserNameRemote"
+        android:layout_marginStart="18dp"
+        android:layout_toEndOf="@+id/UserNameRemote"
+        android:text="TextView" />
+
+    <ImageButton
+        android:id="@+id/ValideExchange"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@mipmap/valide1"
+        android:layout_marginStart="21dp"
+        android:layout_alignTop="@+id/ValueExchange"
+        android:layout_toEndOf="@+id/ValueExchange" />
+
+</RelativeLayout>
