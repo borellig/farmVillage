@@ -1,5 +1,6 @@
 package com.android.group.farmvillage.Activities;
 
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -67,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        final Village myVillage = new Village(0001, "villageNom", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
+        final Village myVillage = new Village(0001, "Sparte", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
 
-
+        initMainValue(myVillage);
 
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
 
@@ -97,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    /**
+     * Initialise les principales valeurs du jeu
+     * @param myVillage
+     */
+    private void initMainValue(Village myVillage){
+
+        //On affiche le nom du village dans le menu du haut
+        setTitle(myVillage.getsName());
+
+        //Met à jour les ressources
     }
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
