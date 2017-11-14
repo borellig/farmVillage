@@ -51,9 +51,9 @@ public class MapAdapter extends ArrayAdapter<Building> {
         if (tmpLogo!=0) {
             imageBatiment.setImageResource(tmpLogo);
         }
-        else {
+       /* else {
             imageBatiment.setImageResource(R.drawable.or);
-        }
+        }*/
 
         return convertView;
     }
