@@ -11,8 +11,7 @@
     <RelativeLayout
         android:layout_width="591dp"
         android:layout_height="294dp"
-        android:layout_weight="1.00"
-        >
+        android:layout_weight="1.00">
 
         <Button
             android:id="@+id/buttonOR"
@@ -51,7 +50,6 @@
             android:id="@+id/buttonFood"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:layout_Left="@+id/buttonPierre"
             android:text="Nourriture"
             tools:layout_editor_absoluteX="24dp"
             tools:layout_editor_absoluteY="7dp"

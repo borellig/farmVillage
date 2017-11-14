@@ -16,17 +16,18 @@ public class Building {
     protected boolean bEnable;
     protected int iLevel;
     protected TypeBuilding tbBuilding;
-    protected ArrayList<Coordonnees> coord;
+    //protected ArrayList<Coordonnees> coord;
+    protected int indexList;
     protected String sName;
     protected Date dConstruct;
     protected int iMilitaryCount;
 
 
-    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, ArrayList<Coordonnees> coord, Date dConstruct, int iMilitaryCount) {
+    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
         this.bEnable = bEnable;
         this.iLevel=iLevel;
         this.tbBuilding = tbBuilding;
-        this.coord = coord;
+        this.indexList = indexList;
         this.sName = tbBuilding.sName;
         this.dConstruct = dConstruct;
         this.iMilitaryCount = iMilitaryCount;
@@ -58,17 +59,25 @@ public class Building {
         return ressource;
     }
 
-    protected ArrayList<Ressource> getLvlUpPrice(){
+    public ArrayList<Ressource> getLvlUpPrice(){
         ArrayList<Ressource> price = new ArrayList<Ressource>();
-        Ressource r1 = new Ressource("wood", (int) Math.pow(this.tbBuilding.iPriceWood, 1+this.iLevel/10));
-        Ressource r2 = new Ressource("food", (int) Math.pow(this.tbBuilding.iPriceFood, 1+this.iLevel/10));
-        Ressource r3 = new Ressource("rock", (int) Math.pow(this.tbBuilding.iPriceRock, 1+this.iLevel/10));
-        Ressource r4 = new Ressource("gold", (int) Math.pow(this.tbBuilding.iPriceGold, 1+this.iLevel/10));
+        Ressource r1 = new Ressource("Bois", (int) Math.pow(this.tbBuilding.iPriceWood, 1+(double)this.iLevel/10));
+        Ressource r2 = new Ressource("Nourriture", (int) Math.pow(this.tbBuilding.iPriceFood, 1+(double)this.iLevel/10));
+        Ressource r3 = new Ressource("Pierre", (int) Math.pow(this.tbBuilding.iPriceRock, 1+(double)this.iLevel/10));
+        Ressource r4 = new Ressource("Or", (int) Math.pow(this.tbBuilding.iPriceGold, 1+(double)this.iLevel/10));
         price.add(r1);
         price.add(r2);
         price.add(r3);
         price.add(r4);
         return price;
+    }
+
+    public int getiLevel() {
+        return iLevel;
+    }
+
+    public void setiLevel(int iLevel) {
+        this.iLevel = iLevel;
     }
 
     public int getiId() {
@@ -95,12 +104,12 @@ public class Building {
         this.tbBuilding = tbNuilding;
     }
 
-    public ArrayList<Coordonnees> getCoord() {
-        return coord;
+    public int getIndexList() {
+        return indexList;
     }
 
-    public void setCoord(ArrayList<Coordonnees> coord) {
-        this.coord = coord;
+    public void setIndexList(int indexList) {
+        this.indexList = indexList;
     }
 
     public String getsName() {
@@ -127,4 +136,17 @@ public class Building {
         this.iMilitaryCount = iMilitaryCount;
     }
 
+    @Override
+    public String toString() {
+        return "Building{" +
+                "iId=" + iId +
+                ", bEnable=" + bEnable +
+                ", iLevel=" + iLevel +
+                ", tbBuilding=" + tbBuilding +
+                ", indexList=" + indexList +
+                ", sName='" + sName + '\'' +
+                ", dConstruct=" + dConstruct +
+                ", iMilitaryCount=" + iMilitaryCount +
+                '}';
+    }
 }
