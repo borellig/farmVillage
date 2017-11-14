@@ -27,14 +27,14 @@ dependencies {
     })
 
 
-    compile 'com.facebook.android:facebook-login:[4,5)'
 
+
+
+    compile 'com.facebook.android:facebook-login:[4,5)'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
-
-
 }
 
 /*vu cette internet https://stackoverflow.com/questions/43280871/android-getting-manifest-merger-failed-error-after-update-to-new-version-of-grad */

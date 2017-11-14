@@ -13,7 +13,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
-import com.android.group.farmvillage.Adapteur.map_adapt;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Coordonnees;
 import com.android.group.farmvillage.Modele.Ressource;
@@ -48,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-        //setSupportActionBar(toolbar);
 
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     newBuilding(position, ressourcesDispo, myVillage);
                 }
                 else{
-                    buildingLvlUp(position, myVillage);
+                    buildingModification(position, myVillage);
                 }
             }
         }
@@ -173,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void buildingLvlUp(final int position, final Village myVillage) {
+    private void buildingModification(final int position, final Village myVillage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
-        ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
         String besoin = "";
         for(Ressource res : ressources){
             besoin+=res.getType()+" x"+res.getQte()+"\n";
@@ -213,7 +210,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                myVillage.getListBuilding().get(position).levelUp();
+                myVillage.setiWood(myVillage.getiWood()-ressources.get(0).getQte());
+                myVillage.setiFood(myVillage.getiFood()-ressources.get(1).getQte());
+                myVillage.setiRock(myVillage.getiRock()-ressources.get(2).getQte());
+                myVillage.setiGold(myVillage.getiGold()-ressources.get(3).getQte());
             }
         });
         AlertDialog d = builder.show();
