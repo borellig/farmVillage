@@ -28,13 +28,10 @@
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login" />
-<<<<<<< HEAD
-        <activity android:name=".Activities.MainActivity">
-=======
+
         <activity
             android:name=".Activities.MainActivity"
             android:screenOrientation="landscape">
->>>>>>> b732a2c99bd3895602abd6c191d66d27a52661c1
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
