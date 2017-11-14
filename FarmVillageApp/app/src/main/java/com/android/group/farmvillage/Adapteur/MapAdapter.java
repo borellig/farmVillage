@@ -1,10 +1,13 @@
 package com.android.group.farmvillage.Adapteur;
 
 import android.content.Context;
+import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.group.farmvillage.Modele.Building;
@@ -39,6 +42,19 @@ public class MapAdapter extends ArrayAdapter<Building> {
         if (b!=null)
             test.setText(b.getTbBuilding().getsName());
 
+        //Récupération de l'image du batiment
+        ImageView imageBatiment = (ImageView) convertView.findViewById(R.id.image_id);
+
+
+
+        int tmpLogo = getImage(getContext(),b.getTbBuilding().getsNameFile());
+        if (tmpLogo!=0) {
+            imageBatiment.setImageResource(tmpLogo);
+        }
+        else {
+            imageBatiment.setImageResource(R.drawable.or);
+        }
+
         return convertView;
     }
 
@@ -47,6 +63,13 @@ public class MapAdapter extends ArrayAdapter<Building> {
         listBuilding.remove(position);
         this.notifyDataSetChanged();
     }
+
+
+    private static int getImage(Context c, String Logo){
+        return c.getResources().getIdentifier(Logo,"drawable",c.getPackageName());
+
+    }
+
 
 
 
