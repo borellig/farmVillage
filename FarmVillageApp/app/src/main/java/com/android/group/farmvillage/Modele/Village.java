@@ -1,5 +1,7 @@
 package com.android.group.farmvillage.Modele;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -33,8 +35,8 @@ public class Village {
     }
 
     public void recolte() {
-        for (Building b : listBuilding){
-            if (b.getTbBuilding().name()!="Vide") {
+        for (Building b : this.listBuilding){
+            if (b.getTbBuilding().getsName()!="Vide" && b.getTbBuilding().getsProdutionType()!=null) {
                 switch(b.getTbBuilding().getsProdutionType()){
                     case "food" :
                         this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);

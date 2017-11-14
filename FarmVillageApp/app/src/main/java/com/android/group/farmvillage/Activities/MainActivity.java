@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     //Déclaration de l'adapteur MarketAdapteur
     //public map_adapt mapAdapteur;
     public MapAdapter mapAdapteur;
+    Village myVillage;
+
 
     /**
      * Créé le menu horizontal en haut du layout
@@ -42,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.orValue).setTitle(String.valueOf(myVillage.getiGold()));
+        menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
+        menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
+        menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
         return true;
     }
 
@@ -50,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -65,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        final Village myVillage = new Village(0001, "Sparte", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
+        myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
+
 
         initMainValue(myVillage);
 
@@ -162,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     Date d = new Date();
                     Building newB = new Building(true, 1, tb, position, d, 0);
                     myVillage.addBuilding(newB);
+                    invalidateOptionsMenu();
                     mapAdapteur.notifyDataSetChanged();
                 }
                 else {
@@ -208,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 Date d = new Date();
                 Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
                 myVillage.addBuilding(b);
+                invalidateOptionsMenu();
                 mapAdapteur.notifyDataSetChanged();
 
             }
@@ -243,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void recolteThread(final Village myVillage) {
-        Log.d("methode thread", "true");
         final Thread thRecolte = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -252,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run()
                     {
                         myVillage.recolte();
+                        invalidateOptionsMenu();
                     }
                 };
                 timer.schedule( task, 0L ,1000L);
@@ -260,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         thRecolte.start(); //lance le thread
 
     }
+
 
     /**
      * Fonction pour récupérer la clé SHA1 pour FB Connect
