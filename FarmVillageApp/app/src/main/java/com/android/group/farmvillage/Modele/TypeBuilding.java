@@ -45,6 +45,8 @@ public enum TypeBuilding {
         this.duration = duration;
     }
 
+
+
     public String getsName() {
         return sName;
     }

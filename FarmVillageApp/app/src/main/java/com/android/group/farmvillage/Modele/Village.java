@@ -37,7 +37,7 @@ public class Village {
      * @param building
      */
     public void addBuilding(Building building){
-        this.listBuilding.add(building);
+        this.listBuilding.set(building.indexList, building);
         setiFood(this.iFood-building.tbBuilding.iPriceFood);
         setiWood(this.iWood-building.tbBuilding.iPriceWood);
         setiRock(this.iRock-building.tbBuilding.iPriceRock);
@@ -71,6 +71,19 @@ public class Village {
             totalCapacity+=b.tbBuilding.iHomeCapacity;
         }
         return (totalCapacity-usedCapacity);
+    }
+
+    public ArrayList<Ressource> getAllRessource(){
+        ArrayList<Ressource> ressources = new ArrayList<Ressource>();
+        Ressource r1 = new Ressource("Bois", this.iWood);
+        Ressource r2 = new Ressource("Nourriture", this.iFood);
+        Ressource r3 = new Ressource("Pierre", this.iRock);
+        Ressource r4 = new Ressource("Or", this.iGold);
+        ressources.add(r1);
+        ressources.add(r2);
+        ressources.add(r3);
+        ressources.add(r4);
+        return ressources;
     }
 
     public int getiId() {
