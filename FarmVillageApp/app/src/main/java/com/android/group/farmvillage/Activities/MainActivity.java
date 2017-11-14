@@ -1,6 +1,7 @@
 package com.android.group.farmvillage.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        /*
+        FonctionMissoum();
+        */
+        // Puis on lance l'intent !
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -232,5 +238,11 @@ public class MainActivity extends AppCompatActivity {
      */
 
 
+    private void FonctionMissoum(){
+       // CreationBanqueDonneeMissoum();
+        Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
+        startActivity(secondeActivite);
+
+    }
 
 }

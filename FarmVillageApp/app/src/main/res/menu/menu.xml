@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <item
+            android:id="@+id/exchangeMenu"
+            android:tooltipText="1000"
+            android:title="exchangeMenu" />
+        <item
             android:id="@+id/or"
             android:icon="@drawable/or"
             android:title="or"
@@ -42,6 +46,7 @@
             android:tooltipText="1000"
             android:title="yes"
             app:showAsAction="ifRoom" />
+
 
 
 
