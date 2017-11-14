@@ -47,6 +47,7 @@ public class Building {
      */
     public void levelUp() {
         this.iLevel++;
+
     }
 
     /**

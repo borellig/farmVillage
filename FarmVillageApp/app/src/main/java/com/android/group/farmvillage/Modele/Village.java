@@ -32,6 +32,27 @@ public class Village {
         }
     }
 
+    public void recolte() {
+        for (Building b : listBuilding){
+            if (b.getTbBuilding().name()!="Vide") {
+                switch(b.getTbBuilding().getsProdutionType()){
+                    case "food" :
+                        this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "wood" :
+                        this.iWood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "rock" :
+                        this.iRock+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "gold" :
+                        this.iGold+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                }
+            }
+        }
+    }
+
     /**
      * Permet d'ajouter un batiment à la liste des batilents du village
      * @param building

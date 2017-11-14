@@ -22,6 +22,8 @@ import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         listTest.setAdapter(mapAdapteur);
 
+        recolteThread(myVillage);
+
         listTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -88,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         );
-
-
-
     }
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
@@ -225,6 +226,25 @@ public class MainActivity extends AppCompatActivity {
         else {
             d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         }
+    }
+
+    public void recolteThread(final Village myVillage) {
+        Log.d("methode thread", "true");
+        final Thread thRecolte = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        myVillage.recolte();
+                    }
+                };
+                timer.schedule( task, 0L ,1000L);
+            }
+        });
+        thRecolte.start(); //lance le thread
+
     }
 
     /**
