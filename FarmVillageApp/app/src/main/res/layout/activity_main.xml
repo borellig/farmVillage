@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        android:background="@drawable/testvillage">
+        android:background="@drawable/map">
 
         <RelativeLayout
             android:layout_width="3100px"
@@ -16,7 +16,7 @@
 
             <GridView
                 android:layout_height="2500px"
-                android:layout_width="match_parent"
+                android:layout_width="3500px"
                 android:layout_alignParentTop="true"
                 android:id="@+id/gridMap"
                 android:numColumns="6" />

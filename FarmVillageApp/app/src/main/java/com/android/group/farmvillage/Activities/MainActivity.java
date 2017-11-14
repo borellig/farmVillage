@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        final Village myVillage = new Village(0001, "villageNom", 300, 300, 300, 300, 50, listBatiment);
+        final Village myVillage = new Village(0001, "villageNom", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
 
