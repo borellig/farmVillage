@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -43,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
+
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-=======
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         /*Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
@@ -54,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(secondeActivite);*/
 
         setSupportActionBar(toolbar);
->>>>>>> c36bcac102bbfd7b13636f0f446d4ce6680cdf84
 
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));

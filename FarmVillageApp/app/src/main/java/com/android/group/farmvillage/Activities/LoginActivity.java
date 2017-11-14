@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View bLostPassword;
+
+    //Connect with FB
     LoginButton lLoginButtonwithFB;
     CallbackManager CallbackManage;
 
@@ -132,6 +134,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    /**
+     * Fonction pour se connecter avec facebook
+     */
     private void loginWithFB(){
         LoginManager.getInstance().registerCallback(CallbackManage, new FacebookCallback<LoginResult>() {
             @Override
@@ -148,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "KO"+error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "KO : "+error.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
