@@ -38,14 +38,14 @@ public class Building {
     /**
      * Change l'état d'un batiment, le rend innactif si il était actif et actif si il était inactif.
      */
-    protected void changeEtat(){
+    public void changeEtat(){
         this.bEnable=!bEnable;
     }
 
     /**
      * Augmente le niveau de 1;
      */
-    protected void levelUp() {
+    public void levelUp() {
         this.iLevel++;
     }
 
@@ -53,7 +53,7 @@ public class Building {
      * Calcul le type et la quantitée de ressources fournie par unité de temps
      * @return obejt de type Ressource {type, quantite}
      */
-    protected Ressource getProdution(){
+    public Ressource getProdution(){
         Ressource ressource;
         ressource = new Ressource(this.tbBuilding.sProdutionType, (int) Math.pow(this.tbBuilding.iProductionCapacity, 1+this.iLevel/10));
         return ressource;
