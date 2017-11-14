@@ -36,6 +36,7 @@ public class exchange_adap extends ArrayAdapter<AskExchange> {
             viewHolder = new AskViewHolder();
             viewHolder.tvPseudo = (TextView) convertView.findViewById(R.id.UserNameRemote);
             viewHolder.tvText = (TextView) convertView.findViewById(R.id.ValueExchange);
+            viewHolder.ibButtonValide = (ImageButton) convertView.findViewById(R.id.ValideExchange);
           //  viewHolder.ibButtonValide = (ImageButton) convertView.findViewById(R.id.)
             convertView.setTag(viewHolder);
         }
@@ -46,6 +47,7 @@ public class exchange_adap extends ArrayAdapter<AskExchange> {
         //il ne reste plus qu'à remplir notre vue
         viewHolder.tvPseudo.setText(request.getsUserNameRemote());
         viewHolder.tvText.setText(String.valueOf(request.getrRessource().getQte()));
+
 
         return convertView;
     }
