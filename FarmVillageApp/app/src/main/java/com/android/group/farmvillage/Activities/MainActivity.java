@@ -47,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-        //setSupportActionBar(toolbar);
 
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));
