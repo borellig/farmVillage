@@ -8,8 +8,11 @@ public enum TypeBuilding {
     //Objets directement construits
     HDV ("Hotel de Ville", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Ferme ("Ferme", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Champs ("Champs", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Entrepot ("Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
+    Academie ("Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000),
+    Scierie ("Scierie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "scierie", 10000),
+    Mur ("Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000),
+    Carriere ("Carrière", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "carriere", 10000),
     Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0);

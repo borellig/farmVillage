@@ -116,6 +116,12 @@ public class Building {
         return sName;
     }
 
+    public String getsNameMiniscule() {
+        sName = sName.toLowerCase();
+        return sName;
+
+    }
+
     public void setsName(String sName) {
         this.sName = sName;
     }
