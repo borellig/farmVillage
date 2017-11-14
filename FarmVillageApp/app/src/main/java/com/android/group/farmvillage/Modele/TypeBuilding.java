@@ -11,7 +11,8 @@ public enum TypeBuilding {
     Champs ("Champs", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Entrepot ("Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
     Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000);
+    Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
+    Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0);
 
     protected String sName;
     protected int iTaille;

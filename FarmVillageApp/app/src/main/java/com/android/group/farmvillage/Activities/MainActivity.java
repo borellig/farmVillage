@@ -1,18 +1,17 @@
 package com.android.group.farmvillage.Activities;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Adapteur.map_adapt;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Coordonnees;
@@ -23,38 +22,54 @@ import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
     //Déclaration de l'adapteur MarketAdapteur
-    public map_adapt mapAdapteur;
+    //public map_adapt mapAdapteur;
+    public MapAdapter mapAdapteur;
+
+    /**
+     * Créé le menu horizontal en haut du layout
+     * @param menu Le contenu du menu
+     * @return true
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //ajoute les entrées de menu_test à l'ActionBar
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+
+        //setSupportActionBar(toolbar);
 
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));
         Date d = new Date();
 
-        final Building b1 = new Building(true, 5, TypeBuilding.HDV, 0, d, 50);
 
-        final ArrayList<Building> listBatiment = new ArrayList<Building>(24);
+        final ArrayList<Building> listBatiment = new ArrayList<>(24);
         for (int i=0; i<24; i++){
-            listBatiment.add(i, null);
+            listBatiment.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
         }
 
-        final Village myVillage = new Village(0001, "villageNom", 1100, 1100, 1100, 1100, 50, listBatiment);
 
+        final Village myVillage = new Village(0001, "villageNom", 200, 200, 200, 200, 50, listBatiment);
+        Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
 
 
-        mapAdapteur = new map_adapt(myVillage.getListBuilding(), this);
+
+        mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
 
         GridView listTest = (GridView) findViewById(R.id.gridMap);
 
@@ -63,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
         listTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Log.d("position", String.valueOf(position));
-                if (listBatiment.get(position)==null){
-                    final String [] batimentDispo = new String[6];
-                    final String [] nomBatimentDispo = new String[6];
+                ArrayList<Building> listBuilding = listBatiment;
+                if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide){
+                    final String [] batimentDispo = new String[TypeBuilding.values().length];
+                    final String [] nomBatimentDispo = new String[TypeBuilding.values().length];
                     int cpt=0;
                     for (TypeBuilding tb : TypeBuilding.values()){
                         batimentDispo[cpt]=tb.name();
@@ -105,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     builder.show();
-
-
                 }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -127,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
                     builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
+                            Date d = new Date();
+                            Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                            myVillage.addBuilding(b);
+                            mapAdapteur.notifyDataSetChanged();
 
                         }
                     });
@@ -161,6 +179,13 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
+
     }
+
+    /**
+     * Fonction pour récupérer la clé SHA1 pour FB Connect
+     */
+
+
 
 }

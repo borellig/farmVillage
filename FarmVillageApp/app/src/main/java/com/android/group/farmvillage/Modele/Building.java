@@ -136,4 +136,17 @@ public class Building {
         this.iMilitaryCount = iMilitaryCount;
     }
 
+    @Override
+    public String toString() {
+        return "Building{" +
+                "iId=" + iId +
+                ", bEnable=" + bEnable +
+                ", iLevel=" + iLevel +
+                ", tbBuilding=" + tbBuilding +
+                ", indexList=" + indexList +
+                ", sName='" + sName + '\'' +
+                ", dConstruct=" + dConstruct +
+                ", iMilitaryCount=" + iMilitaryCount +
+                '}';
+    }
 }

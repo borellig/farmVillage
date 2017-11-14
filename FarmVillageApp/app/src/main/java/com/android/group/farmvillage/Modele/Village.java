@@ -50,11 +50,11 @@ public class Village {
      * @param building
      */
     public void removeBuilding(Building building) {
-        this.iFood = (int) Math.pow(building.tbBuilding.iPriceFood, 1+building.iLevel/10);
-        this.iWood = (int) Math.pow(building.tbBuilding.iPriceWood, 1+building.iLevel/10);
-        this.iRock = (int) Math.pow(building.tbBuilding.iPriceRock, 1+building.iLevel/10);
-        this.iGold = (int) Math.pow(building.tbBuilding.iPriceGold, 1+building.iLevel/10);
-        this.listBuilding.remove(building);
+        this.iFood += (int) Math.pow(building.tbBuilding.iPriceFood, 1+(double)building.iLevel/10);
+        this.iWood += (int) Math.pow(building.tbBuilding.iPriceWood, 1+(double)building.iLevel/10);
+        this.iRock += (int) Math.pow(building.tbBuilding.iPriceRock, 1+(double)building.iLevel/10);
+        this.iGold += (int) Math.pow(building.tbBuilding.iPriceGold, 1+(double)building.iLevel/10);
+        this.listBuilding.set(building.indexList, null);
         // // TODO: 13/11/17 delete webservice
     }
 

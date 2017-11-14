@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -33,9 +34,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -67,14 +77,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View bLostPassword;
+    LoginButton lLoginButtonwithFB;
+    CallbackManager CallbackManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        initializeControls();
+        loginWithFB();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -106,6 +124,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 AskNewPassword();
             }
         });
+    }
+
+    private void initializeControls(){
+        CallbackManage = CallbackManager.Factory.create();
+        lLoginButtonwithFB = (LoginButton)findViewById(R.id.login_button);
+
+    }
+
+    private void loginWithFB(){
+        LoginManager.getInstance().registerCallback(CallbackManage, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplicationContext(), "Cancel", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), "KO"+error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        CallbackManage.onActivityResult(requestCode, resultCode, data);
     }
 
     private void populateAutoComplete() {
@@ -315,10 +367,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final EditText titleBox = new EditText(this);
         titleBox.setHint("Adresse mail");
         titleBox.setInputType(InputType.TYPE_CLASS_TEXT);
+
         layout.addView(titleBox);
 
         builder.setView(layout);
-        final String adressmail = titleBox.getText().toString().trim();
 
         // Configurations des bouttons
         builder.setPositiveButton("Demander", new DialogInterface.OnClickListener() {
@@ -326,8 +378,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(DialogInterface dialog, int which) {
 
                     /**/
-                    if(isValidEmail(adressmail)==true){
 
+                    String mailaddress = titleBox.getText().toString();
+                    mailaddress = mailaddress.trim();
+                    if(isEmailValide(mailaddress)==true){
+                        Toast.makeText(getApplicationContext(), mailaddress, Toast.LENGTH_LONG).show();
+                        /*action envoyer mdp sur l'adresse mail, voir si adresse mail non répertorié"*/
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Mauvaise adresse mail indiquée", Toast.LENGTH_LONG).show();
@@ -408,8 +464,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
-    public final static boolean isValidEmail(CharSequence target) {
-        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+
+    public static boolean isEmailValide(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
     }
 
 }
