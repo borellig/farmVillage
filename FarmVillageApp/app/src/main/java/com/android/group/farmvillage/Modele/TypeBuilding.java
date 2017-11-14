@@ -1,21 +1,23 @@
 package com.android.group.farmvillage.Modele;
 
+import java.util.ArrayList;
+
 /**
  * Created by geoffrey on 13/11/17.
  */
 
 public enum TypeBuilding {
     //Objets directement construits
-    HDV ("Hotel de Ville", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Ferme ("Ferme", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Entrepot ("Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Academie ("Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000),
-    Scierie ("Scierie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "scierie", 10000),
-    Mur ("Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000),
-    Carriere ("Carrière", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "carriere", 10000),
-    Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000),
-    Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0);
+    HDV ("Hotel de Ville", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 0),
+    Ferme ("Ferme", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Entrepot ("Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
+    Academie ("Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
+    Scierie ("Scierie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "scierie", 10000, 2000),
+    Mur ("Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000, 2000),
+    Carriere ("Carrière", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "carriere", 10000, 2000),
+    Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
     protected String sName;
     protected int iTaille;
@@ -30,10 +32,10 @@ public enum TypeBuilding {
     protected int iDefensePoint;
     protected String sNameFile;
     protected int duration;
+    protected int iStockageCapacity;
 
 
-
-    TypeBuilding(String sName, int iTaille, int iTpsConstruct, int iHomeCapacity, int iProductionCapacity, String sProdutionType, int iPriceWood, int iPriceFood, int iPriceRock, int iPriceGold, int iDefensePoint, String sNameFile, int duration) {
+    TypeBuilding(String sName, int iTaille, int iTpsConstruct, int iHomeCapacity, int iProductionCapacity, String sProdutionType, int iPriceWood, int iPriceFood, int iPriceRock, int iPriceGold, int iDefensePoint, String sNameFile, int duration, int iStockageCapacity) {
         this.sName = sName;
         this.iTaille = iTaille;
         this.iTpsConstruct = iTpsConstruct;
@@ -47,6 +49,20 @@ public enum TypeBuilding {
         this.iDefensePoint = iDefensePoint;
         this.sNameFile = sNameFile;
         this.duration = duration;
+        this.iStockageCapacity=iStockageCapacity;
+    }
+
+    public ArrayList<Ressource> constructionPrice () {
+        ArrayList<Ressource> constructionPrice = new ArrayList<>();
+        Ressource r1 = new Ressource("Bois", this.iPriceWood);
+        Ressource r2 = new Ressource("Nourriture", this.iPriceFood);
+        Ressource r3 = new Ressource("Pierre", this.iPriceRock);
+        Ressource r4 = new Ressource("Or", this.iPriceGold);
+        constructionPrice.add(r1);
+        constructionPrice.add(r2);
+        constructionPrice.add(r3);
+        constructionPrice.add(r4);
+        return constructionPrice;
     }
 
 
@@ -153,5 +169,13 @@ public enum TypeBuilding {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getiStockageCapacity() {
+        return iStockageCapacity;
+    }
+
+    public void setiStockageCapacity(int iStockageCapacity) {
+        this.iStockageCapacity = iStockageCapacity;
     }
 }

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Adapteur.map_adapt;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        final Village myVillage = new Village(0001, "villageNom", 200, 200, 200, 200, 50, listBatiment);
+        final Village myVillage = new Village(0001, "villageNom", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
 
@@ -79,99 +80,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 ArrayList<Building> listBuilding = listBatiment;
-                if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide){
-                    final String [] batimentDispo = new String[TypeBuilding.values().length];
-                    final String [] nomBatimentDispo = new String[TypeBuilding.values().length];
-                    int cpt=0;
-                    for (TypeBuilding tb : TypeBuilding.values()){
-                        batimentDispo[cpt]=tb.name();
-                        nomBatimentDispo[cpt]=tb.getsName();
-                        cpt++;
-                    }
-                    final String[] batAcreer = {null};
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Choisir un batiment");
-                    builder.setSingleChoiceItems(nomBatimentDispo,-1, new
-
-                            DialogInterface.OnClickListener()
-
-                            {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("test", batimentDispo[which]);
-                                    batAcreer[0] =batimentDispo[which];
-
-                                }
-                            });
-                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
-                            Date d = new Date();
-                            Building newB = new Building(true, 0, tb, position, d, 0);
-                            myVillage.addBuilding(newB);
-                            mapAdapteur.notifyDataSetChanged();
-                        }
-                    });
-                    builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    builder.show();
+                ArrayList<Ressource> ressourcesDispo = myVillage.getAllRessource();
+                if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide) {
+                    newBuilding(position, ressourcesDispo, myVillage);
                 }
                 else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
-                    ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
-                    String besoin = "";
-                    for(Ressource res : ressources){
-                        besoin+=res.getType()+" x"+res.getQte()+"\n";
-                    }
-                    builder.setMessage("Pour passer de niveau il faut : \n"+
-                        besoin);
-                    builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
-                            Date d = new Date();
-                            Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
-                            myVillage.addBuilding(b);
-                            mapAdapteur.notifyDataSetChanged();
-
-                        }
-                    });
-                    boolean bool = true;
-                    int cpt = 0;
-                    ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
-                    while(cpt<4 && bool){
-                        Log.d("comparaison", String.valueOf(villageRessources.get(cpt).getQte())+" | "+String.valueOf(ressources.get(cpt).getQte()));
-                        if (villageRessources.get(cpt).getQte()<ressources.get(cpt).getQte()){
-                            bool=false;
-                        }
-                        cpt++;
-                    }
-                    builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog d = builder.show();
-
-                    if (bool) {
-                        d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    }
-                    else {
-                        d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    }
+                    buildingLvlUp(position, myVillage);
                 }
             }
         }
@@ -180,6 +94,136 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
+        ArrayList<TypeBuilding> buildingDispo = new ArrayList<>();
+        for (TypeBuilding tb : TypeBuilding.values()) {
+            if (tb != TypeBuilding.Vide) {
+                int indexList=0;
+                boolean bool=true;
+                while(indexList<4 && bool){
+                    if (ressourcesDispo.get(indexList).getQte()<tb.constructionPrice().get(indexList).getQte()){
+                        bool=false;
+                    }
+                    indexList++;
+                }
+                if (bool){
+                    buildingDispo.add(tb);
+                }
+            }
+        }
+        final String [] batimentDispo = new String[buildingDispo.size()];
+        final String [] nomBatimentDispo = new String[buildingDispo.size()];
+        int cpt=0;
+        for (TypeBuilding tb : buildingDispo){
+            batimentDispo[cpt] = tb.name();
+            nomBatimentDispo[cpt] = tb.getsName();
+            cpt++;
+        }
+        final String[] batAcreer = {null};
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Choisir un batiment");
+        if(nomBatimentDispo.length!=0) {
+            builder.setSingleChoiceItems(nomBatimentDispo, -1, new
+
+                    DialogInterface.OnClickListener()
+
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("test", batimentDispo[which]);
+                            batAcreer[0] = batimentDispo[which];
+
+                        }
+                    });
+        }
+        else {
+            builder.setMessage("Vous ne disposez pas des ressources nécessaires pour contruire un batiment. T'es pauvre. Corialement.");
+
+        }
+        builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (batAcreer[0]!= null) {
+                    TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
+                    Date d = new Date();
+                    Building newB = new Building(true, 1, tb, position, d, 0);
+                    myVillage.addBuilding(newB);
+                    mapAdapteur.notifyDataSetChanged();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Veillez choisir un batiment quand meme !", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog d = builder.show();
+
+        if (nomBatimentDispo.length!=0) {
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+        }
+        else {
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
+    }
+
+    private void buildingLvlUp(final int position, final Village myVillage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
+        ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        String besoin = "";
+        for(Ressource res : ressources){
+            besoin+=res.getType()+" x"+res.getQte()+"\n";
+        }
+        builder.setMessage("Pour passer de niveau il faut : \n"+
+            besoin);
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
+                Date d = new Date();
+                Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                myVillage.addBuilding(b);
+                mapAdapteur.notifyDataSetChanged();
+
+            }
+        });
+        boolean bool = true;
+        int cpt = 0;
+        ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
+        while(cpt<4 && bool){
+            Log.d("comparaison", String.valueOf(villageRessources.get(cpt).getQte())+" | "+String.valueOf(ressources.get(cpt).getQte()));
+            if (villageRessources.get(cpt).getQte()<ressources.get(cpt).getQte()){
+                bool=false;
+            }
+            cpt++;
+        }
+        builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog d = builder.show();
+
+        if (bool) {
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+        }
+        else {
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
     }
 
     /**

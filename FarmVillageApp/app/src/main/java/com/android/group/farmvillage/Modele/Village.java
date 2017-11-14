@@ -26,7 +26,7 @@ public class Village {
         this.iGold = iGold;
         this.listBuilding = listBuilding;
         for (Building b : listBuilding){
-            if (b!=null) {
+            if (b.getTbBuilding().name()!="Vide") {
                 this.iDefensePoint += b.getiMilitaryCount() + b.tbBuilding.iDefensePoint;
             }
         }
