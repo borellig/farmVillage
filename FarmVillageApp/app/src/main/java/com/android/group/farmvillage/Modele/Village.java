@@ -1,19 +1,14 @@
 package com.android.group.farmvillage.Modele;
 
-import android.util.Log;
-
-import com.android.group.farmvillage.Activities.MainActivity;
-import com.android.group.farmvillage.Adapteur.MapAdapter;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 /**
  * Created by geoffrey on 13/11/17.
  */
 
-public class Village {
+public class Village implements Serializable {
     protected int iId;
     protected String sName;
     protected int iWood;
