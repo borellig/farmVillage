@@ -1,8 +1,12 @@
 package com.android.group.farmvillage.Activities;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,13 +20,16 @@ import android.widget.Toast;
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Coordonnees;
+import com.android.group.farmvillage.Modele.Event;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.TypeBuilding;
+import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     //Déclaration de l'adapteur MarketAdapteur
     //public map_adapt mapAdapteur;
     public MapAdapter mapAdapteur;
-    Village myVillage;
+    public Village myVillage;
+    public Handler mHandler;
+    public boolean eventValidate = true;
 
 
     /**
@@ -55,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mHandler=new Handler();
 
 
 
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         listTest.setAdapter(mapAdapteur);
 
         recolteThread(myVillage);
+        eventThread(myVillage);
 
         listTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -272,6 +283,47 @@ public class MainActivity extends AppCompatActivity {
         });
         thRecolte.start(); //lance le thread
 
+    }
+
+    public void eventThread(final Village myVillage){
+        final Thread thEvent = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Long time = 10000L;
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        if (eventValidate) {
+                            eventValidate=false;
+                            mHandler.post(new Runnable() {
+                                public void run() {
+                                    TypeEvent[] eventPossible = TypeEvent.values();
+                                    Random randomGenerator = new Random();
+                                    int rdm = randomGenerator.nextInt(9);
+                                    final Event e = new Event(eventPossible[rdm]);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setTitle(e.getsTitre());
+                                    builder.setMessage(e.getsDefinition());
+                                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            myVillage.evement(e.getrConsequence());
+                                            invalidateOptionsMenu();
+                                            eventValidate=true;
+                                        }
+                                    });
+                                    builder.show();
+
+                                }
+                            });
+                        }
+                    }
+                };
+                timer.schedule( task, time ,time);
+            }
+        });
+        thEvent.start(); //lance le thread
     }
 
 
