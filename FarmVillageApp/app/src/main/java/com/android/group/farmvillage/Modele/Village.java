@@ -1,14 +1,13 @@
 package com.android.group.farmvillage.Modele;
 
-import android.util.Log;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by geoffrey on 13/11/17.
  */
 
-public class Village {
+public class Village implements Serializable {
     protected int iId;
     protected String sName;
     protected int iWood;

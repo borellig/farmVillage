@@ -1,6 +1,7 @@
 package com.android.group.farmvillage.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import com.android.group.farmvillage.Adapteur.exchange_adap;
 import com.android.group.farmvillage.Modele.AskExchange;
 import com.android.group.farmvillage.Modele.Ressource;
+import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
@@ -28,10 +30,14 @@ public class ExchangeActivity extends AppCompatActivity {
     Button OrButton;
     Button PierreButton;
     Button FoodButton;
+    public final static String VillageIntent = "village";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
+        Intent i = getIntent();
+        Village Myvillage = (Village) i.getSerializableExtra(VillageIntent);
 
         //Mise en relation Layout Object
 

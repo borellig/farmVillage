@@ -1,17 +1,15 @@
 package com.android.group.farmvillage.Activities;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public Village myVillage;
     public Handler mHandler;
     public boolean eventValidate = true;
+    public final static String VillageIntent = "village";
 
 
     /**
@@ -65,10 +64,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHandler=new Handler();
-
-
-
-        FonctionMissoum();
 
         // Puis on lance l'intent !
 
@@ -115,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
         );
+
     }
 
     /**
@@ -330,11 +327,22 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Fonction pour récupérer la clé SHA1 pour FB Connect
      */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exchangeMenu:
 
+                FonctionMissoum();
+                ;
+                Log.d("ok", "ca passe");
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void FonctionMissoum(){
        // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
+        // On rajoute un extra
+        secondeActivite.putExtra(VillageIntent,myVillage);
         startActivity(secondeActivite);
 
     }
