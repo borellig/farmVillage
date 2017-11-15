@@ -180,12 +180,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (batAcreer[0]!= null) {
-                    TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
-                    Date d = new Date();
-                    Building newB = new Building(true, 1, tb, position, d, 0);
-                    myVillage.addBuilding(newB);
-                    invalidateOptionsMenu();
+                    final TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
+                    final Date d = new Date();
+                    Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                    myVillage.getListBuilding().set(position, construction);
                     mapAdapteur.notifyDataSetChanged();
+                    Thread thConstruction = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Timer timer = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Building newB = new Building(true, 1, tb, position, d, 0);
+                                    myVillage.addBuilding(newB);
+                                    invalidateOptionsMenu();
+                                    MainActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mapAdapteur.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            };
+                            timer.schedule(task, (long) tb.getDuration());
+
+                        }
+                    });
+                    thConstruction.start();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Veillez choisir un batiment quand meme !", Toast.LENGTH_LONG).show();

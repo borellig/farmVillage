@@ -2,7 +2,12 @@ package com.android.group.farmvillage.Modele;
 
 import android.util.Log;
 
+import com.android.group.farmvillage.Activities.MainActivity;
+import com.android.group.farmvillage.Adapteur.MapAdapter;
+
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by geoffrey on 13/11/17.
@@ -90,12 +95,12 @@ public class Village {
      * Permet d'ajouter un batiment à la liste des batilents du village
      * @param building
      */
-    public void addBuilding(Building building){
-        this.listBuilding.set(building.indexList, building);
-        setiFood(this.iFood-building.tbBuilding.iPriceFood);
-        setiWood(this.iWood-building.tbBuilding.iPriceWood);
-        setiRock(this.iRock-building.tbBuilding.iPriceRock);
-        setiGold(this.iGold-building.tbBuilding.iPriceGold);
+    public void addBuilding(final Building building){
+        listBuilding.set(building.indexList, building);
+        setiFood(iFood-building.tbBuilding.iPriceFood);
+        setiWood(iWood-building.tbBuilding.iPriceWood);
+        setiRock(iRock-building.tbBuilding.iPriceRock);
+        setiGold(iGold-building.tbBuilding.iPriceGold);
         //// TODO: 13/11/17 insert webService
     }
 

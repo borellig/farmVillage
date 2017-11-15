@@ -17,6 +17,7 @@ public enum TypeBuilding {
     Carriere ("Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
     Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
     Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Construction ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
     Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
     protected String sName;
