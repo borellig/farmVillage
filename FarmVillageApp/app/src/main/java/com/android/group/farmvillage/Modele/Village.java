@@ -55,6 +55,37 @@ public class Village {
         }
     }
 
+    public void evement(ArrayList<Ressource> rConsequence){
+        for(Ressource r : rConsequence){
+            switch (r.getType()){
+                case "food" :
+                    this.iFood=this.iFood+r.getQte()*this.iFood/100;
+                    if (this.iFood<0){
+                        this.iFood=0;
+                    }
+                    break;
+                case "wood" :
+                    this.iWood=this.iWood+r.getQte()*this.iWood/100;
+                    if (this.iWood<0){
+                        this.iWood=0;
+                    }
+                    break;
+                case "rock" :
+                    this.iRock=this.iRock+r.getQte()*this.iRock/100;
+                    if (this.iRock<0){
+                        this.iRock=0;
+                    }
+                    break;
+                case "gold" :
+                    this.iGold=this.iGold+r.getQte()*this.iGold/100;
+                    if (this.iGold<0){
+                        this.iGold=0;
+                    }
+                    break;
+            }
+        }
+    }
+
     /**
      * Permet d'ajouter un batiment à la liste des batilents du village
      * @param building
