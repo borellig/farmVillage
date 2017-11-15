@@ -249,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                 //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 Date d = new Date();
                 Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 myVillage.addBuilding(b);
                 invalidateOptionsMenu();
                 mapAdapteur.notifyDataSetChanged();
