@@ -76,6 +76,7 @@
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/relativeLayout"
             android:layout_alignParentBottom="true"
+            android:focusable="true"
             android:layout_alignStart="@+id/relativeLayout"
             android:layout_alignTop="@+id/relativeLayout" />
 

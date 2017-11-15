@@ -24,14 +24,5 @@
         android:layout_toEndOf="@+id/UserNameRemote"
         android:text="TextView" />
 
-    <ImageButton
-        android:id="@+id/ValideExchange"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:background="@android:color/transparent"
-        app:srcCompat="@mipmap/valide1"
-        android:layout_marginStart="210dp"
-        android:layout_alignTop="@+id/ValueExchange"
-        android:layout_toEndOf="@+id/ValueExchange" />
 
 </RelativeLayout>
