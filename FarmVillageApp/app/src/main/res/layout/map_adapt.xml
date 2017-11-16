@@ -3,22 +3,21 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="150px"
-        android:layout_height="200px"
-        android:layout_marginTop="100px"
-        android:paddingLeft="100px"
-        android:paddingTop="200px"
-        android:textSize="25dp"
-        android:layout_below="@+id/image_id"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
 
     <ImageView
         android:id="@+id/image_id"
         android:layout_width="250px"
         android:layout_height="300px" />
+    <TextView
+        android:id="@+id/timeConstruct"
+        android:layout_width="450px"
+        android:layout_height="100px"
+        android:layout_marginTop="0px"
+        android:textSize="15dp"
+        android:layout_below="@+id/image_id"
+        android:gravity="bottom"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 
 

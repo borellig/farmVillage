@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
@@ -349,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * Fonction pour récupérer la clé SHA1 pour FB Connect
      */
@@ -370,5 +372,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(secondeActivite);
 
     }
+
+
 
 }
