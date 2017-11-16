@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         //On affiche le nom du village dans le menu du haut
         setTitle(myVillage.getsName());
 
-        //Met à jour les ressources
     }
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
@@ -350,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * Fonction pour récupérer la clé SHA1 pour FB Connect
      */
@@ -371,5 +372,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(secondeActivite);
 
     }
+
+
 
 }

@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.group.farmvillage.Modele.Building;
+import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by geoffrey on 14/11/17.
@@ -29,6 +32,8 @@ public class MapAdapter extends ArrayAdapter<Building> {
         this.listBuilding=listBuilding;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -38,9 +43,11 @@ public class MapAdapter extends ArrayAdapter<Building> {
         }
         final Building b = getItem(position);
 
-        final TextView test = (TextView) convertView.findViewById(R.id.test);
-        if (b!=null)
-            test.setText(b.getTbBuilding().getsName());
+        final TextView test = (TextView) convertView.findViewById(R.id.timeConstruct);
+        //test.setText(String.valueOf(b.getTbBuilding().getDuration()));
+
+      /* if (b!=null)
+            test.setText(String.valueOf(b.getTbBuilding().getDuration()));*/
 
         //Récupération de l'image du batiment
         ImageView imageBatiment = (ImageView) convertView.findViewById(R.id.image_id);
@@ -51,12 +58,10 @@ public class MapAdapter extends ArrayAdapter<Building> {
         if (tmpLogo!=0) {
             imageBatiment.setImageResource(tmpLogo);
         }
-       /* else {
-            imageBatiment.setImageResource(R.drawable.or);
-        }*/
 
         return convertView;
     }
+
 
     public void enleve(int position)
     {
