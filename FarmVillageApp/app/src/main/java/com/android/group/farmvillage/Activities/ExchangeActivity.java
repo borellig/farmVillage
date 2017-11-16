@@ -35,14 +35,18 @@ public class ExchangeActivity extends AppCompatActivity {
     Button PierreButton;
     Button FoodButton;
     public final static String VillageIntent = "village";
+
     Village myVillage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
+
         myVillage = (Village) i.getSerializableExtra(VillageIntent);
+
         //Mise en relation Layout Object
 
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
@@ -126,10 +130,11 @@ public class ExchangeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
-       /* menu.findItem(R.id.orValue).setTitle(String.valueOf(myVillage.getiGold()));
+
+        menu.findItem(R.id.orValue).setTitle(String.valueOf(myVillage.getiGold()));
         menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
         menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
-        menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));*/
+        menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
         return true;
     }
 
@@ -171,6 +176,7 @@ public class ExchangeActivity extends AppCompatActivity {
     private void sendRessource(AskExchange request, Village village, int i){
         final int max;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
         builder.setTitle("Gestion d'envoi de ressource : "+ConvertIDRessource(i));
 
         LinearLayout layout = new LinearLayout(this);
@@ -282,6 +288,7 @@ public class ExchangeActivity extends AppCompatActivity {
         return max;
 
     }
+
 
     private String ConvertIDRessource(int i){
         String Ressource = new String();
