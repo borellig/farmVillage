@@ -35,13 +35,14 @@ public class ExchangeActivity extends AppCompatActivity {
     Button PierreButton;
     Button FoodButton;
     public final static String VillageIntent = "village";
+    Village myVillage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
-        final Village Myvillage = (Village) i.getSerializableExtra(VillageIntent);
+        myVillage = (Village) i.getSerializableExtra(VillageIntent);
         //Mise en relation Layout Object
 
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
@@ -60,7 +61,7 @@ public class ExchangeActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,Myvillage,1);
+                        sendRessource(request,myVillage,1);
                     }
                 });
             }
@@ -75,7 +76,7 @@ public class ExchangeActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,Myvillage,3);
+                        sendRessource(request,myVillage,3);
                     }
                 });
             }
@@ -91,11 +92,12 @@ public class ExchangeActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,Myvillage,4);
+                        sendRessource(request,myVillage,4);
                     }
                 });
             }
         });
+
         FoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,13 +108,14 @@ public class ExchangeActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,Myvillage,2);
+                        sendRessource(request,myVillage,2);
                     }
                 });
             }
         });
 
     }
+
 
     /**
      * Créé le menu horizontal en haut du layout
@@ -123,6 +126,10 @@ public class ExchangeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
+       /* menu.findItem(R.id.orValue).setTitle(String.valueOf(myVillage.getiGold()));
+        menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
+        menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
+        menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));*/
         return true;
     }
 
@@ -132,7 +139,7 @@ public class ExchangeActivity extends AppCompatActivity {
         request.add(new AskExchange("Zizou",ressource1));
         Ressource ressource2 = new Ressource("Bois",4);
         request.add(new AskExchange("Zizou",ressource2));
-        Ressource ressource3 = new Ressource("Or",4);
+        Ressource ressource3 = new Ressource("Or",5000);
         request.add(new AskExchange("Henry",ressource3));
         Ressource ressource4 = new Ressource("Pierre",4);
         request.add(new AskExchange("Henry",ressource4));
@@ -164,12 +171,12 @@ public class ExchangeActivity extends AppCompatActivity {
     private void sendRessource(AskExchange request, Village village, int i){
         final int max;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Gestion d'envoi de ressource");
+        builder.setTitle("Gestion d'envoi de ressource : "+ConvertIDRessource(i));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        max = ComparaisonValeurRessource(request, village,i);
+        max = ComparaisonValeurRessource(request, myVillage,i);
 
         final EditText titleBox = new EditText(this);
         switch(i){
@@ -202,7 +209,7 @@ public class ExchangeActivity extends AppCompatActivity {
         //Controle de saisie
 
         // Configurations des bouttons
-        builder.setPositiveButton("Total", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Total :"+max+" "+ConvertIDRessource(i), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -215,7 +222,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        builder.setNeutralButton("Valider", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Somme indiquée ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(Integer.parseInt(titleBox.getText().toString())>max){
@@ -276,5 +283,27 @@ public class ExchangeActivity extends AppCompatActivity {
 
     }
 
+    private String ConvertIDRessource(int i){
+        String Ressource = new String();
+        switch (i){
+            case 1:
+                Ressource = "Bois";
+                break;
+            case 2:
+                Ressource = "Nourriture";
+
+                break;
+            case 3:
+                Ressource = "OR";
+
+                break;
+            case 4:
+                Ressource = "Pierre";
+
+                break;
+
+        }
+        return  Ressource;
+    }
 
 }
