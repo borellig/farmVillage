@@ -22,10 +22,9 @@ public class exchange_adap extends ArrayAdapter<AskExchange> {
     public exchange_adap(Context context, List<AskExchange> askProduct) {
         super(context, 0, askProduct);
     }
-    ImageButton ButtonValidate;
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.exchange_adapt, parent, false);
@@ -36,16 +35,18 @@ public class exchange_adap extends ArrayAdapter<AskExchange> {
             viewHolder = new AskViewHolder();
             viewHolder.tvPseudo = (TextView) convertView.findViewById(R.id.UserNameRemote);
             viewHolder.tvText = (TextView) convertView.findViewById(R.id.ValueExchange);
-          //  viewHolder.ibButtonValide = (ImageButton) convertView.findViewById(R.id.)
+            //viewHolder.ibButtonValide = (ImageButton) convertView.findViewById(R.id.ValideExchange);
             convertView.setTag(viewHolder);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        AskExchange request = getItem(position);
+        final AskExchange request = getItem(position);
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.tvPseudo.setText(request.getsUserNameRemote());
         viewHolder.tvText.setText(String.valueOf(request.getrRessource().getQte()));
+
+
 
         return convertView;
     }
@@ -55,5 +56,7 @@ public class exchange_adap extends ArrayAdapter<AskExchange> {
         public TextView tvText;
         public ImageButton ibButtonValide;
     }
+
+
 }
 

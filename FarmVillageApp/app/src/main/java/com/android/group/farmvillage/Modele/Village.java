@@ -1,12 +1,14 @@
 package com.android.group.farmvillage.Modele;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
 
 /**
  * Created by geoffrey on 13/11/17.
  */
 
-public class Village {
+public class Village implements Serializable {
     protected int iId;
     protected String sName;
     protected int iWood;
@@ -32,16 +34,68 @@ public class Village {
         }
     }
 
+    public void recolte() {
+        for (Building b : this.listBuilding){
+            if (b.getTbBuilding().getsName()!="Vide" && b.getTbBuilding().getsProdutionType()!=null) {
+                switch(b.getTbBuilding().getsProdutionType()){
+                    case "food" :
+                        this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "wood" :
+                        this.iWood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "rock" :
+                        this.iRock+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                    case "gold" :
+                        this.iGold+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        break;
+                }
+            }
+        }
+    }
+
+    public void evement(ArrayList<Ressource> rConsequence){
+        for(Ressource r : rConsequence){
+            switch (r.getType()){
+                case "food" :
+                    this.iFood=this.iFood+r.getQte()*this.iFood/100;
+                    if (this.iFood<0){
+                        this.iFood=0;
+                    }
+                    break;
+                case "wood" :
+                    this.iWood=this.iWood+r.getQte()*this.iWood/100;
+                    if (this.iWood<0){
+                        this.iWood=0;
+                    }
+                    break;
+                case "rock" :
+                    this.iRock=this.iRock+r.getQte()*this.iRock/100;
+                    if (this.iRock<0){
+                        this.iRock=0;
+                    }
+                    break;
+                case "gold" :
+                    this.iGold=this.iGold+r.getQte()*this.iGold/100;
+                    if (this.iGold<0){
+                        this.iGold=0;
+                    }
+                    break;
+            }
+        }
+    }
+
     /**
      * Permet d'ajouter un batiment à la liste des batilents du village
      * @param building
      */
-    public void addBuilding(Building building){
-        this.listBuilding.set(building.indexList, building);
-        setiFood(this.iFood-building.tbBuilding.iPriceFood);
-        setiWood(this.iWood-building.tbBuilding.iPriceWood);
-        setiRock(this.iRock-building.tbBuilding.iPriceRock);
-        setiGold(this.iGold-building.tbBuilding.iPriceGold);
+    public void addBuilding(final Building building){
+        listBuilding.set(building.indexList, building);
+        setiFood(iFood-building.tbBuilding.iPriceFood);
+        setiWood(iWood-building.tbBuilding.iPriceWood);
+        setiRock(iRock-building.tbBuilding.iPriceRock);
+        setiGold(iGold-building.tbBuilding.iPriceGold);
         //// TODO: 13/11/17 insert webService
     }
 

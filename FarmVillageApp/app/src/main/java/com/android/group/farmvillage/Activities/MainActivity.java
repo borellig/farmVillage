@@ -1,8 +1,9 @@
 package com.android.group.farmvillage.Activities;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,19 +18,29 @@ import android.widget.Toast;
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Coordonnees;
+import com.android.group.farmvillage.Modele.Event;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.TypeBuilding;
+import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     //Déclaration de l'adapteur MarketAdapteur
     //public map_adapt mapAdapteur;
     public MapAdapter mapAdapteur;
+    public Village myVillage;
+    public Handler mHandler;
+    public boolean eventValidate = true;
+    public final static String VillageIntent = "village";
+
 
     /**
      * Créé le menu horizontal en haut du layout
@@ -40,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.orValue).setTitle(String.valueOf(myVillage.getiGold()));
+        menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
+        menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
+        menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
         return true;
     }
 
@@ -48,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mHandler=new Handler();
 
+        // Puis on lance l'intent !
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -63,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        final Village myVillage = new Village(0001, "Sparte", 30000000, 30000000, 3000000, 3000000, 50, listBatiment);
+        myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
+
 
         initMainValue(myVillage);
 
@@ -74,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         GridView listTest = (GridView) findViewById(R.id.gridMap);
 
         listTest.setAdapter(mapAdapteur);
+
+        recolteThread(myVillage);
+        eventThread(myVillage);
 
         listTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,9 +110,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
         );
-
-
 
     }
 
@@ -156,11 +176,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (batAcreer[0]!= null) {
-                    TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
-                    Date d = new Date();
-                    Building newB = new Building(true, 1, tb, position, d, 0);
-                    myVillage.addBuilding(newB);
+                    final TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
+                    final Date d = new Date();
+                    Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                    myVillage.getListBuilding().set(position, construction);
                     mapAdapteur.notifyDataSetChanged();
+                    Thread thConstruction = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Timer timer = new Timer();
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    final Building newB = new Building(true, 1, tb, position, d, 0);
+                                    myVillage.addBuilding(newB);
+                                    invalidateOptionsMenu();
+                                    MainActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mapAdapteur.notifyDataSetChanged();
+                                            Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            };
+                            timer.schedule(task, (long) tb.getDuration());
+
+                        }
+                    });
+                    thConstruction.start();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Veillez choisir un batiment quand meme !", Toast.LENGTH_LONG).show();
@@ -202,10 +246,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 Date d = new Date();
                 Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 myVillage.addBuilding(b);
+                invalidateOptionsMenu();
                 mapAdapteur.notifyDataSetChanged();
 
             }
@@ -240,10 +285,90 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void recolteThread(final Village myVillage) {
+        final Thread thRecolte = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        myVillage.recolte();
+                        invalidateOptionsMenu();
+                    }
+                };
+                timer.schedule( task, 0L ,1000L);
+            }
+        });
+        thRecolte.start(); //lance le thread
+    }
+
+    public void eventThread(final Village myVillage){
+        final Thread thEvent = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Long time = 10000L;
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        Random randomGenerator = new Random();
+                        int rdmApparition = randomGenerator.nextInt(9);
+                        if (rdmApparition==9) {
+                            if (eventValidate) {
+                                eventValidate = false;
+                                mHandler.post(new Runnable() {
+                                    public void run() {
+                                        TypeEvent[] eventPossible = TypeEvent.values();
+                                        Random randomGenerator = new Random();
+                                        int rdm = randomGenerator.nextInt(9);
+                                        final Event e = new Event(eventPossible[rdm]);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                        builder.setTitle(e.getsTitre());
+                                        builder.setMessage(e.getsDefinition());
+                                        builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                myVillage.evement(e.getrConsequence());
+                                                invalidateOptionsMenu();
+                                                eventValidate = true;
+                                            }
+                                        });
+                                        builder.show();
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                };
+                timer.schedule( task, time ,time);
+            }
+        });
+        thEvent.start(); //lance le thread
+    }
+
+
     /**
      * Fonction pour récupérer la clé SHA1 pour FB Connect
      */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exchangeMenu:
 
+                FonctionMissoum();
+                Log.d("ok", "ca passe");
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void FonctionMissoum(){
+       // CreationBanqueDonneeMissoum();
+        Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
+        // On rajoute un extra
+        secondeActivite.putExtra(VillageIntent,myVillage);
+        startActivity(secondeActivite);
+
+    }
 
 }

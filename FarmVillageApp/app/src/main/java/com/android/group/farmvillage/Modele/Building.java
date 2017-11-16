@@ -1,16 +1,14 @@
 package com.android.group.farmvillage.Modele;
 
-import android.util.Log;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by geoffrey on 13/11/17.
  */
 
-public class Building {
+public class Building implements Serializable {
 
     protected int iId;
     protected boolean bEnable;
@@ -47,6 +45,7 @@ public class Building {
      */
     public void levelUp() {
         this.iLevel++;
+
     }
 
     /**

@@ -13,12 +13,20 @@
         android:layout_height="294dp"
         android:layout_weight="1.00">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/buttonOR"
+            android:layout_alignStart="@+id/buttonOR"
+            android:layout_below="@+id/buttonOR"
+            android:layout_marginStart="13dp"
+            android:text="Demandeur" />
+
         <Button
             android:id="@+id/buttonOR"
             android:layout_width="95dp"
             android:layout_height="40dp"
-            android:layout_alignBaseline="@+id/buttonFood"
-            android:layout_alignBottom="@+id/buttonFood"
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
             android:text="OR"
@@ -30,7 +38,8 @@
             android:layout_width="91dp"
             android:layout_height="48dp"
             android:layout_above="@+id/relativeLayout"
-            android:layout_marginStart="11dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="41dp"
             android:layout_toEndOf="@+id/buttonOR"
             android:text="Bois"
             tools:layout_editor_absoluteX="251dp"
@@ -41,20 +50,13 @@
             android:layout_width="91dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="55dp"
             android:layout_toEndOf="@+id/buttonBois"
             android:text="Pierre"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="7dp" />
 
-        <Button
-            android:id="@+id/buttonFood"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="Nourriture"
-            tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="7dp"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/buttonPierre" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -69,13 +71,33 @@
         </RelativeLayout>
 
         <ListView
+            android:id="@+id/ExchangeListeView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/ExchangeListeView"
             android:layout_alignEnd="@+id/relativeLayout"
             android:layout_alignParentBottom="true"
+            android:focusable="true"
             android:layout_alignStart="@+id/relativeLayout"
-            android:layout_below="@+id/buttonFood" />
+            android:layout_alignTop="@+id/relativeLayout" />
+
+
+        <Button
+            android:id="@+id/buttonFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="53dp"
+            android:layout_toEndOf="@+id/buttonPierre"
+            android:text="Nourriture" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantité"
+            android:layout_below="@+id/buttonBois"
+            android:layout_alignEnd="@+id/buttonBois" />
 
     </RelativeLayout>
 
