@@ -189,13 +189,14 @@ public class MainActivity extends AppCompatActivity {
                             TimerTask task = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    Building newB = new Building(true, 1, tb, position, d, 0);
+                                    final Building newB = new Building(true, 1, tb, position, d, 0);
                                     myVillage.addBuilding(newB);
                                     invalidateOptionsMenu();
                                     MainActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             mapAdapteur.notifyDataSetChanged();
+                                            Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -246,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 Date d = new Date();
                 Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
                 myVillage.removeBuilding(myVillage.getListBuilding().get(position));
@@ -302,7 +302,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         thRecolte.start(); //lance le thread
-
     }
 
     public void eventThread(final Village myVillage){
@@ -314,29 +313,33 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task = new TimerTask() {
                     public void run()
                     {
-                        if (eventValidate) {
-                            eventValidate=false;
-                            mHandler.post(new Runnable() {
-                                public void run() {
-                                    TypeEvent[] eventPossible = TypeEvent.values();
-                                    Random randomGenerator = new Random();
-                                    int rdm = randomGenerator.nextInt(9);
-                                    final Event e = new Event(eventPossible[rdm]);
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                    builder.setTitle(e.getsTitre());
-                                    builder.setMessage(e.getsDefinition());
-                                    builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            myVillage.evement(e.getrConsequence());
-                                            invalidateOptionsMenu();
-                                            eventValidate=true;
-                                        }
-                                    });
-                                    builder.show();
+                        Random randomGenerator = new Random();
+                        int rdmApparition = randomGenerator.nextInt(9);
+                        if (rdmApparition==9) {
+                            if (eventValidate) {
+                                eventValidate = false;
+                                mHandler.post(new Runnable() {
+                                    public void run() {
+                                        TypeEvent[] eventPossible = TypeEvent.values();
+                                        Random randomGenerator = new Random();
+                                        int rdm = randomGenerator.nextInt(9);
+                                        final Event e = new Event(eventPossible[rdm]);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                        builder.setTitle(e.getsTitre());
+                                        builder.setMessage(e.getsDefinition());
+                                        builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                myVillage.evement(e.getrConsequence());
+                                                invalidateOptionsMenu();
+                                                eventValidate = true;
+                                            }
+                                        });
+                                        builder.show();
 
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                     }
                 };
@@ -355,7 +358,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.exchangeMenu:
 
                 FonctionMissoum();
-                ;
                 Log.d("ok", "ca passe");
         }
         return super.onOptionsItemSelected(item);

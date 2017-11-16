@@ -26,6 +26,8 @@ import com.android.group.farmvillage.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExchangeActivity extends AppCompatActivity {
 
@@ -35,13 +37,15 @@ public class ExchangeActivity extends AppCompatActivity {
     Button PierreButton;
     Button FoodButton;
     public final static String VillageIntent = "village";
+    public Village Myvillage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
-        final Village Myvillage = (Village) i.getSerializableExtra(VillageIntent);
+        Myvillage = (Village) i.getSerializableExtra(VillageIntent);
         //Mise en relation Layout Object
 
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
@@ -123,6 +127,10 @@ public class ExchangeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.orValue).setTitle(String.valueOf(Myvillage.getiGold()));
+        menu.findItem(R.id.pierreValue).setTitle(String.valueOf(Myvillage.getiRock()));
+        menu.findItem(R.id.boisValue).setTitle(String.valueOf(Myvillage.getiWood()));
+        menu.findItem(R.id.foodValue).setTitle(String.valueOf(Myvillage.getiFood()));
         return true;
     }
 
@@ -275,6 +283,4 @@ public class ExchangeActivity extends AppCompatActivity {
         return max;
 
     }
-
-
 }
