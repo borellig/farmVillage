@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         //On affiche le nom du village dans le menu du haut
         setTitle(myVillage.getsName());
 
-        //Met à jour les ressources
     }
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
