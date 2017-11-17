@@ -129,21 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
         ArrayList<TypeBuilding> buildingDispo = new ArrayList<>();
-        for (TypeBuilding tb : TypeBuilding.values()) {
-            if (tb != TypeBuilding.Vide) {
-                int indexList=0;
-                boolean bool=true;
-                while(indexList<4 && bool){
-                    if (ressourcesDispo.get(indexList).getQte()<tb.constructionPrice().get(indexList).getQte()){
-                        bool=false;
-                    }
-                    indexList++;
-                }
-                if (bool){
-                    buildingDispo.add(tb);
-                }
-            }
-        }
+        buildingDispo=TypeBuilding.getTypeBuildingsDispo(myVillage);
         final String [] batimentDispo = new String[buildingDispo.size()];
         final String [] nomBatimentDispo = new String[buildingDispo.size()];
         int cpt=0;
@@ -170,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
         else {
-            builder.setMessage("Vous ne disposez pas des ressources nécessaires pour contruire un batiment. T'es pauvre. Corialement.");
+            builder.setMessage("Vous ne disposez pas des ressources nécessaires pour construire un batiment. T'es pauvre. Cordialement.");
 
         }
         builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
@@ -180,32 +166,10 @@ public class MainActivity extends AppCompatActivity {
                     final TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
                     final Date d = new Date();
                     Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
-                    myVillage.getListBuilding().set(position, construction);
+                    final Building newB = new Building(true, 1, tb, position, d, 0);
+                    myVillage.construction(construction, newB);
                     mapAdapteur.notifyDataSetChanged();
-                    Thread thConstruction = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Timer timer = new Timer();
-                            TimerTask task = new TimerTask() {
-                                @Override
-                                public void run() {
-                                    final Building newB = new Building(true, 1, tb, position, d, 0);
-                                    myVillage.addBuilding(newB);
-                                    invalidateOptionsMenu();
-                                    MainActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mapAdapteur.notifyDataSetChanged();
-                                            Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            };
-                            timer.schedule(task, (long) tb.getDuration());
-
-                        }
-                    });
-                    thConstruction.start();
+                    threadConstruction(tb, newB, myVillage);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Veillez choisir un batiment quand meme !", Toast.LENGTH_LONG).show();
@@ -226,6 +190,33 @@ public class MainActivity extends AppCompatActivity {
         else {
             d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         }
+    }
+
+    private void threadConstruction(final TypeBuilding tb, final Building newB, final Village myVillage) {
+        Thread thConstruction = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        myVillage.addBuilding(newB);
+                        invalidateOptionsMenu();
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mapAdapteur.notifyDataSetChanged();
+                                Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                };
+                timer.schedule(task, (long) tb.getDuration());
+
+            }
+        });
+        thConstruction.start();
     }
 
     private void buildingModification(final int position, final Village myVillage) {
@@ -260,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
         int cpt = 0;
         ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
         while(cpt<4 && bool){
-            Log.d("comparaison", String.valueOf(villageRessources.get(cpt).getQte())+" | "+String.valueOf(ressources.get(cpt).getQte()));
             if (villageRessources.get(cpt).getQte()<ressources.get(cpt).getQte()){
                 bool=false;
             }
@@ -269,11 +259,18 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                myVillage.getListBuilding().get(position).levelUp();
+                Date d = new Date();
+                Building currentBuilding = myVillage.getListBuilding().get(position);
+                currentBuilding.levelUp();
+                Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                myVillage.construction(construction, currentBuilding);
+                mapAdapteur.notifyDataSetChanged();
+                threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage);
+                /*myVillage.getListBuilding().get(position).levelUp();
                 myVillage.setiWood(myVillage.getiWood()-ressources.get(0).getQte());
                 myVillage.setiFood(myVillage.getiFood()-ressources.get(1).getQte());
                 myVillage.setiRock(myVillage.getiRock()-ressources.get(2).getQte());
-                myVillage.setiGold(myVillage.getiGold()-ressources.get(3).getQte());
+                myVillage.setiGold(myVillage.getiGold()-ressources.get(3).getQte());*/
             }
         });
         AlertDialog d = builder.show();
@@ -315,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         Random randomGenerator = new Random();
                         int rdmApparition = randomGenerator.nextInt(9);
-                        if (rdmApparition==9) {
+                        if (rdmApparition>=8) {
                             if (eventValidate) {
                                 eventValidate = false;
                                 mHandler.post(new Runnable() {

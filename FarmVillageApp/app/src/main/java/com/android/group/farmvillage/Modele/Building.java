@@ -45,7 +45,6 @@ public class Building implements Serializable {
      */
     public void levelUp() {
         this.iLevel++;
-
     }
 
     /**

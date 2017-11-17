@@ -66,6 +66,26 @@ public enum TypeBuilding {
         return constructionPrice;
     }
 
+    public static ArrayList<TypeBuilding> getTypeBuildingsDispo (Village myVillage) {
+        ArrayList<TypeBuilding> dispo = new ArrayList<>();
+        for (TypeBuilding tb : TypeBuilding.values()) {
+            if (tb != TypeBuilding.Vide && tb != TypeBuilding.Construction) {
+                int indexList=0;
+                boolean bool=true;
+                while(indexList<4 && bool){
+                    if (myVillage.getAllRessource().get(indexList).getQte()<tb.constructionPrice().get(indexList).getQte()){
+                        bool=false;
+                    }
+                    indexList++;
+                }
+                if (bool){
+                    dispo.add(tb);
+                }
+            }
+        }
+        return dispo;
+    }
+
 
 
     public String getsName() {
@@ -179,4 +199,5 @@ public enum TypeBuilding {
     public void setiStockageCapacity(int iStockageCapacity) {
         this.iStockageCapacity = iStockageCapacity;
     }
+
 }
