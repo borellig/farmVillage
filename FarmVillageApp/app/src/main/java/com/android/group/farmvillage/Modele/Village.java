@@ -1,5 +1,7 @@
 package com.android.group.farmvillage.Modele;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -35,20 +37,33 @@ public class Village implements Serializable {
     }
 
     public void recolte() {
+        int stockageCapacity=getStockageCapacity();
         for (Building b : this.listBuilding){
             if (b.getTbBuilding().getsName()!="Vide" && b.getTbBuilding().getsProdutionType()!=null) {
                 switch(b.getTbBuilding().getsProdutionType()){
                     case "food" :
                         this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        if(this.iFood>stockageCapacity/4) {
+                            this.iFood = stockageCapacity/4;
+                        }
                         break;
                     case "wood" :
                         this.iWood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        if(this.iWood>stockageCapacity/4) {
+                            this.iWood = stockageCapacity/4;
+                        }
                         break;
                     case "rock" :
                         this.iRock+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        if(this.iRock>stockageCapacity/4) {
+                            this.iRock = stockageCapacity/4;
+                        }
                         break;
                     case "gold" :
                         this.iGold+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        if(this.iGold>stockageCapacity/4) {
+                            this.iGold = stockageCapacity/4;
+                        }
                         break;
                 }
             }
@@ -56,6 +71,7 @@ public class Village implements Serializable {
     }
 
     public void evement(ArrayList<Ressource> rConsequence){
+        int stockageCapacity=getStockageCapacity();
         for(Ressource r : rConsequence){
             switch (r.getType()){
                 case "food" :
@@ -63,11 +79,17 @@ public class Village implements Serializable {
                     if (this.iFood<0){
                         this.iFood=0;
                     }
+                    if(this.iFood>stockageCapacity/4) {
+                        this.iFood = stockageCapacity/4;
+                    }
                     break;
                 case "wood" :
                     this.iWood=this.iWood+r.getQte()*this.iWood/100;
                     if (this.iWood<0){
                         this.iWood=0;
+                    }
+                    if(this.iWood>stockageCapacity/4) {
+                        this.iWood = stockageCapacity/4;
                     }
                     break;
                 case "rock" :
@@ -75,11 +97,17 @@ public class Village implements Serializable {
                     if (this.iRock<0){
                         this.iRock=0;
                     }
+                    if(this.iRock>stockageCapacity/4) {
+                        this.iRock = stockageCapacity/4;
+                    }
                     break;
                 case "gold" :
                     this.iGold=this.iGold+r.getQte()*this.iGold/100;
                     if (this.iGold<0){
                         this.iGold=0;
+                    }
+                    if(this.iGold>stockageCapacity/4) {
+                        this.iGold = stockageCapacity/4;
                     }
                     break;
             }
@@ -144,6 +172,14 @@ public class Village implements Serializable {
         ressources.add(r3);
         ressources.add(r4);
         return ressources;
+    }
+
+    public int getStockageCapacity(){
+        int stockage=0;
+        for(Building b : listBuilding){
+            stockage+=Math.pow(b.getiStockageCapacity(), 1+(double)b.iLevel/100);
+        }
+        return stockage;
     }
 
     public int getiId() {

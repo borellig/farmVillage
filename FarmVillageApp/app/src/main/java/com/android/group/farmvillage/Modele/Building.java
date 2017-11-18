@@ -14,11 +14,11 @@ public class Building implements Serializable {
     protected boolean bEnable;
     protected int iLevel;
     protected TypeBuilding tbBuilding;
-    //protected ArrayList<Coordonnees> coord;
     protected int indexList;
     protected String sName;
     protected Date dConstruct;
     protected int iMilitaryCount;
+    protected int iStockageCapacity;
 
 
     public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
@@ -29,6 +29,7 @@ public class Building implements Serializable {
         this.sName = tbBuilding.sName;
         this.dConstruct = dConstruct;
         this.iMilitaryCount = iMilitaryCount;
+        this.iStockageCapacity=tbBuilding.getiStockageCapacity();
     }
 
 
@@ -118,6 +119,14 @@ public class Building implements Serializable {
         sName = sName.toLowerCase();
         return sName;
 
+    }
+
+    public int getiStockageCapacity() {
+        return iStockageCapacity;
+    }
+
+    public void setiStockageCapacity(int iStockageCapacity) {
+        this.iStockageCapacity = iStockageCapacity;
     }
 
     public void setsName(String sName) {
