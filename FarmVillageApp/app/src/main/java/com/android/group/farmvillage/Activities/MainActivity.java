@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
@@ -66,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mHandler=new Handler();
 
-        // Puis on lance l'intent !
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
         coord.add(new Coordonnees(1, 1));
         Date d = new Date();
@@ -121,15 +116,12 @@ public class MainActivity extends AppCompatActivity {
      * @param myVillage
      */
     private void initMainValue(Village myVillage){
-
         //On affiche le nom du village dans le menu du haut
         setTitle(myVillage.getsName());
-
     }
 
     private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
-        ArrayList<TypeBuilding> buildingDispo = new ArrayList<>();
-        buildingDispo=TypeBuilding.getTypeBuildingsDispo(myVillage);
+        ArrayList<TypeBuilding> buildingDispo=TypeBuilding.getTypeBuildingsDispo(myVillage);
         final String [] batimentDispo = new String[buildingDispo.size()];
         final String [] nomBatimentDispo = new String[buildingDispo.size()];
         int cpt=0;
@@ -138,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             nomBatimentDispo[cpt] = tb.getsName();
             cpt++;
         }
+        Log.d("cpt", String.valueOf(cpt));
         final String[] batAcreer = {null};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Choisir un batiment");
@@ -193,6 +186,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void threadConstruction(final TypeBuilding tb, final Building newB, final Village myVillage) {
+        final Thread thCountDown = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int[] delay = {(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10))};
+                Timer timerCountDown = new Timer();
+                TimerTask countDowntask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        Log.d("temps", String.valueOf(delay[0]));
+                        delay[0]-=1000;
+                        if (delay[0] <=0 ){
+                            this.cancel();
+                            Log.d("this", this.toString());
+                        }
+                    }
+                };
+                timerCountDown.schedule(countDowntask, 0, 1000L);
+            }
+        });
+        thCountDown.start();
         Thread thConstruction = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -200,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-
                         myVillage.addBuilding(newB);
                         invalidateOptionsMenu();
                         MainActivity.this.runOnUiThread(new Runnable() {
@@ -212,8 +224,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 };
-                timer.schedule(task, (long) tb.getDuration());
-
+                timer.schedule(task, (int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
             }
         });
         thConstruction.start();
@@ -266,11 +277,6 @@ public class MainActivity extends AppCompatActivity {
                 myVillage.construction(construction, currentBuilding);
                 mapAdapteur.notifyDataSetChanged();
                 threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage);
-                /*myVillage.getListBuilding().get(position).levelUp();
-                myVillage.setiWood(myVillage.getiWood()-ressources.get(0).getQte());
-                myVillage.setiFood(myVillage.getiFood()-ressources.get(1).getQte());
-                myVillage.setiRock(myVillage.getiRock()-ressources.get(2).getQte());
-                myVillage.setiGold(myVillage.getiGold()-ressources.get(3).getQte());*/
             }
         });
         AlertDialog d = builder.show();
@@ -343,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 timer.schedule( task, time ,time);
             }
         });
-        thEvent.start(); //lance le thread
+        thEvent.start();
     }
 
 
