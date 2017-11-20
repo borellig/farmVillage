@@ -151,15 +151,15 @@ public class Building implements Serializable {
 
     @Override
     public String toString() {
-        return "Building{" +
-                "iId=" + iId +
-                ", bEnable=" + bEnable +
-                ", iLevel=" + iLevel +
-                ", tbBuilding=" + tbBuilding +
-                ", indexList=" + indexList +
-                ", sName='" + sName + '\'' +
-                ", dConstruct=" + dConstruct +
-                ", iMilitaryCount=" + iMilitaryCount +
-                '}';
+        return "{" +
+                "iId:" + iId +
+                ", bEnable:" + bEnable +
+                ", iLevel:" + iLevel +
+                ", tbBuilding:" + tbBuilding +
+                ", indexList:" + indexList +
+                ", sName:'" + sName + '\'' +
+                ", dConstruct:" + dConstruct.getTime() +
+                ", iMilitaryCount:" + iMilitaryCount +
+                "}";
     }
 }

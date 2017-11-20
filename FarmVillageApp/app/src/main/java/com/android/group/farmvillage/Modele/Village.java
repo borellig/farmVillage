@@ -246,5 +246,33 @@ public class Village implements Serializable {
         this.listBuilding = listBuilding;
     }
 
+    @Override
+    public String toString() {
+        return "Village{" +
+                "iId=" + iId +
+                ", sName='" + sName + '\'' +
+                ", iWood=" + iWood +
+                ", iFood=" + iFood +
+                ", iRock=" + iRock +
+                ", iGold=" + iGold +
+                ", iDefensePoint=" + iDefensePoint +
+                ", listBuilding=" + listBuilding +
+                '}';
+    }
 
+    public String toJson(){
+        String jsonString="{";
+        jsonString+="Village : {" +
+                "iId:" + iId +
+                ", sName:'" + sName + '\'' +
+                ", iWood:" + iWood +
+                ", iFood:" + iFood +
+                ", iRock:" + iRock +
+                ", iGold:" + iGold +
+                ", iDefensePoint:" + iDefensePoint +
+                ", listBuilding:" + listBuilding +
+                '}';
+        jsonString+="}";
+        return jsonString;
+    }
 }

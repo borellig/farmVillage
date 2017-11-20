@@ -18,14 +18,16 @@ public enum TypeBuilding {
     Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
     Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
     Construction ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
+    Banque ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
+    Taverne ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
     Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
     protected String sName;
     protected int iTaille;
     protected int iTpsConstruct;
     protected int iHomeCapacity;
-    protected int iProductionCapacity;
-    protected String sProdutionType;
+    public int iProductionCapacity;
+    public String sProdutionType;
     protected int iPriceWood;
     protected int iPriceFood;
     protected int iPriceRock;

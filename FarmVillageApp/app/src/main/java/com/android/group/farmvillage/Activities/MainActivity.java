@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
@@ -24,12 +24,17 @@ import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.BackgroundTask;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,16 +74,15 @@ public class MainActivity extends AppCompatActivity {
         coord.add(new Coordonnees(1, 1));
         Date d = new Date();
 
+        myVillage = initialisation();
 
-        final ArrayList<Building> listBatiment = new ArrayList<>(24);
-        for (int i=0; i<24; i++){
-            listBatiment.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
-        }
+        final ArrayList<Building> listBatiment = myVillage.getListBuilding();
 
-
-        myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
+        /*
+        new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
         Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
+         */
 
 
         initMainValue(myVillage);
@@ -360,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.exchangeMenu:
-
                 FonctionMissoum();
                 Log.d("ok", "ca passe");
         }
@@ -374,6 +377,52 @@ public class MainActivity extends AppCompatActivity {
         secondeActivite.putExtra(VillageIntent,myVillage);
         startActivity(secondeActivite);
 
+    }
+
+    private Village initialisation() {
+        BackgroundTask bgTask = new BackgroundTask();
+        Village myVillage = null;
+        try {
+            String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid=UNIQUEID1").get());
+            Log.d("str", str);
+            JSONObject jVillage = new JSONObject(str);
+            int iId = jVillage.getInt("iId");
+            String sName = jVillage.getString("sName");
+            int iWood = jVillage.getInt("iWood");
+            int iFood = jVillage.getInt("iFood");
+            int iRock = jVillage.getInt("iRock");
+            int iGold = jVillage.getInt("iGold");
+            int iDefensePoint = jVillage.getInt("iDefensePoint");
+            ArrayList<Building> listBuilding = new ArrayList<>();
+            JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
+            Date d = new Date();
+            for (int i=0; i<24; i++){
+                listBuilding.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
+            }
+            if (jListBuilding != null) {
+                for (int i=0;i<jListBuilding.length();i++){
+                    JSONObject jBuilding = new JSONObject(jListBuilding.get(i).toString());
+                    boolean bEnable ;
+                    if(jBuilding.getInt("bEnable")==1){
+                        bEnable=true;
+                    }
+                    else {
+                        bEnable=false;
+                    }
+                    int iLevel = jBuilding.getInt("iLevel");
+                    int iMilitaryCount = jBuilding.getInt("iMilitaryCount");
+                    Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
+                    int typeBuilding = jBuilding.getInt("iId_typebuilding");
+                    int index = jBuilding.getInt("iIndex");
+                    TypeBuilding tb = TypeBuilding.values()[typeBuilding];
+                    listBuilding.set(index, new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount));
+                }
+            }
+            myVillage = new Village(iId, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return myVillage;
     }
 
 

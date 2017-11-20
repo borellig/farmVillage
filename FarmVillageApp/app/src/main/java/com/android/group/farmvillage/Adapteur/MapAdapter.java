@@ -70,6 +70,8 @@ public class MapAdapter extends ArrayAdapter<Building> {
     }
 
 
+
+
     private static int getImage(Context c, String Logo){
         return c.getResources().getIdentifier(Logo,"drawable",c.getPackageName());
 
