@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,21 +9,25 @@
         android:id="@+id/UserNameRemote"
         android:layout_width="150dp"
         android:layout_height="35dp"
-        android:layout_marginStart="24dp"
-        android:text="TextView"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentStart="true" />
+        android:layout_marginStart="24dp"
+        android:layout_x="24dp"
+        android:layout_y="8dp"
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/ValueExchange"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_gravity="center_vertical"
         android:layout_alignTop="@+id/UserNameRemote"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="34dp"
         android:layout_toEndOf="@+id/UserNameRemote"
+        android:layout_x="192dp"
+        android:layout_y="8dp"
         android:text="TextView" />
 
 
-</RelativeLayout>
+</AbsoluteLayout>

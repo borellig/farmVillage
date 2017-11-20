@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.exchange_adap;
@@ -24,10 +26,28 @@ import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static java.sql.DriverManager.println;
+
 public class ExchangeActivity extends AppCompatActivity {
+
+    /** Gestion requete http - Json **/
+    public String url= "http://artshared.fr/andev1/distribue/android/get_typeBuildings.php";
+    TextView txtString;
+
 
     private ListView mListView;
     Button BoisButton;
@@ -44,16 +64,24 @@ public class ExchangeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
-
         myVillage = (Village) i.getSerializableExtra(VillageIntent);
 
         //Mise en relation Layout Object
-
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
         BoisButton = (Button)findViewById(R.id.buttonBois);
         OrButton = (Button)findViewById(R.id.buttonOR);
         PierreButton = (Button)findViewById(R.id.buttonPierre);
         FoodButton = (Button)findViewById(R.id.buttonFood);
+        txtString= (TextView)findViewById(R.id.textView3);
+
+
+        try {
+            run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         final List<AskExchange> listAsk = genererRequest();
         BoisButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +104,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 List<AskExchange>  listAsk2 =  TryForAttribut("Or",listAsk);
                 exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
                 mListView.setAdapter(adapter);
+
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -312,5 +341,63 @@ public class ExchangeActivity extends AppCompatActivity {
         }
         return  Ressource;
     }
+
+    void run() throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                final String myResponse = response.body().string();
+
+                ExchangeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(" execute ?","oui");
+
+                        try {
+                            JSONObject json = new JSONObject(myResponse);
+
+
+                            JSONArray values = json.getJSONArray("type_building");
+                            int length = json.length();
+                            for (int i = 0; i <= length; i++) {
+
+                                JSONObject building = values.getJSONObject(i);
+
+                                int id = building.getInt("sId");
+                                String name = building.getString("sName");
+
+                                println(id + ", " + name + ", " );
+                                Log.d("Ca marche ? ",name);
+                                Log.d("Ca marche ? ",""+length);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("Ca marche ? ","non");
+
+                        }
+
+
+                    }
+
+                });
+
+            }
+        });
+    }
+
+
 
 }
