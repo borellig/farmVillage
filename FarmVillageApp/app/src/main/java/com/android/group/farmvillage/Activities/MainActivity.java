@@ -370,6 +370,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *
+     */
     private void FonctionMissoum(){
        // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);

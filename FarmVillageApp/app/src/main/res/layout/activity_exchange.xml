@@ -99,6 +99,15 @@
             android:layout_below="@+id/buttonBois"
             android:layout_alignEnd="@+id/buttonBois" />
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_marginEnd="14dp"
+            android:layout_toStartOf="@+id/buttonFood"
+            android:text="TextView" />
+
     </RelativeLayout>
 
 
