@@ -111,13 +111,7 @@ public class ExchangeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                /**************************/
 
-
-               /* List<AskExchange>  listAsk2 =  TryForAttribut("Bois",listAsk);
-                exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
-                mListView.setAdapter(adapter);
-                */
             }
         });
         OrButton.setOnClickListener(new View.OnClickListener() {
@@ -139,13 +133,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                /*
 
-                List<AskExchange>  listAsk2 =  TryForAttribut("Or",listAsk);
-                exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
-                mListView.setAdapter(adapter);
-
-               */
             }
         });
 
@@ -168,11 +156,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                /*
-                List<AskExchange>  listAsk2 =  TryForAttribut("Pierre",listAsk);
-                exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
-                mListView.setAdapter(adapter);
-*/
+
             }
         });
 
@@ -196,17 +180,7 @@ public class ExchangeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                /*
-                List<AskExchange>  listAsk2 =  TryForAttribut("Food",listAsk);
-                exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
-                mListView.setAdapter(adapter);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,myVillage,2);
-                    }
-                });*/
+
             }
         });
 
@@ -655,7 +629,7 @@ public class ExchangeActivity extends AppCompatActivity {
     void UpdateRessourceVillage (Village village, int i, int SumSent){
         switch(i){
             case 1:
-                myVillage.setiWood(myVillage.getiWood()-SumSent);
+                village.setiWood(myVillage.getiWood()-SumSent);
                 break;
             case 2:
                 myVillage.setiFood(myVillage.getiFood()-SumSent);
