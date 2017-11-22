@@ -5,9 +5,15 @@ package com.android.group.farmvillage.Modele;
  */
 
 public class AskExchange  {
-
+    private int iIDUserRemote;
     private String sUserNameRemote;
     private Ressource rRessource;
+
+    public AskExchange(int iIDUserRemote, String sUserNameRemote, Ressource rRessource) {
+        this.iIDUserRemote = iIDUserRemote;
+        this.sUserNameRemote = sUserNameRemote;
+        this.rRessource = rRessource;
+    }
 
     public AskExchange(String sUserNameRemote, Ressource rRessource) {
         this.sUserNameRemote = sUserNameRemote;
