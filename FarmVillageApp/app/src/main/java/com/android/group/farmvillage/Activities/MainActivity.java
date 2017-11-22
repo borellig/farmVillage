@@ -2,8 +2,7 @@ package com.android.group.farmvillage.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Coordonnees;
@@ -27,12 +27,17 @@ import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.BackgroundTask;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +77,14 @@ public class MainActivity extends AppCompatActivity {
         coord.add(new Coordonnees(1, 1));
         Date d = new Date();
 
+        myVillage = initialisation();
 
+
+        //Test musique
+        MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
+        ring.start();
+
+/*<<<<<<< HEAD
         final ArrayList<Building> listBatiment = new ArrayList<>(50);
         for (int i=0; i<50; i++){
             listBatiment.add(i, new Building(false, 0, 10000, TypeBuilding.Vide, i, d, 0));
@@ -81,7 +93,15 @@ public class MainActivity extends AppCompatActivity {
 
         myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
         Building b1 = new Building(true, 1, 10000,  TypeBuilding.HDV, 0, d, 0);
+=======*/
+        final ArrayList<Building> listBatiment = myVillage.getListBuilding();
+
+        /*
+        new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
+        Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
+>>>>>>> f578e9ffdf4011d9d22529e2b7734dfd5c12138f
         myVillage.addBuilding(b1);
+         */
 
 
         initMainValue(myVillage);
@@ -89,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
 
         GridView listTest = (GridView) findViewById(R.id.gridMap);
+
 
         listTest.setAdapter(mapAdapteur);
 
@@ -104,20 +125,32 @@ public class MainActivity extends AppCompatActivity {
                 final TextView timeConstruct = (TextView) view.findViewById(R.id.timeConstruct);
                 final ImageView timeImage = (ImageView) view.findViewById(R.id.parchemin);
 
-                if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide) {
-                    newBuilding(position, ressourcesDispo, myVillage, timeConstruct, timeImage);
+                Log.d("elem", String.valueOf(position));
+
+                if(position==0 || position==6){
+                    Toast.makeText(getApplicationContext(), "Vous ne pouvez pas construire des bâtiments sur une forêt voyons  !!", Toast.LENGTH_LONG).show();
+                }else{
+                    if(position==5){
+                        Toast.makeText(getApplicationContext(), "Vous ne pouvez pas construire des bâtiments sur une carrière voyons  !!", Toast.LENGTH_LONG).show();
+                    }else{
+                        if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide) {
+                            newBuilding(position, ressourcesDispo, myVillage, timeConstruct, timeImage);
+                        }
+                        else{
+                            buildingModification(position, myVillage, timeConstruct, timeImage);
+                        }
+                    }
+
                 }
-                else{
-                    buildingModification(position, myVillage, timeConstruct, timeImage);
-                }
+
             }
         }
 
 
         );
 
-    }
 
+    }
     /**
      * Initialise les principales valeurs du jeu
      * @param myVillage
@@ -165,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
                 if (batAcreer[0]!= null) {
                     final TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
                     final Date d = new Date();
-                    Building construction = new Building(false, 0, 10000, TypeBuilding.Construction, position, d, 0);
-                    final Building newB = new Building(true, 1, 10000, tb, position, d, 0);
+                    Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                    final Building newB = new Building(true, 1, tb, position, d, 0);
                     myVillage.construction(construction, newB);
 
                     threadConstruction(tb, newB, myVillage, timeConstruct, timeImage);
@@ -273,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Date d = new Date();
-                Building b = new Building(false, 0, 10000,  TypeBuilding.Vide, position, d, 0);
+                Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
                 myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 myVillage.addBuilding(b);
                 invalidateOptionsMenu();
@@ -296,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 Date d = new Date();
                 Building currentBuilding = myVillage.getListBuilding().get(position);
                 currentBuilding.levelUp();
-                Building construction = new Building(false, 0, 10000, TypeBuilding.Construction, position, d, 0);
+                Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
                 myVillage.construction(construction, currentBuilding);
                 mapAdapteur.notifyDataSetChanged();
                 threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage, timeConstruct, timeImage);
@@ -383,13 +416,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.exchangeMenu:
-
                 FonctionMissoum();
                 Log.d("ok", "ca passe");
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *
+     */
     private void FonctionMissoum(){
        // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
@@ -420,6 +455,50 @@ public class MainActivity extends AppCompatActivity {
 
         return trueTime;
     }
-
+    private Village initialisation() {
+        BackgroundTask bgTask = new BackgroundTask();
+        Village myVillage = null;
+        try {
+            String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid=UNIQUEID1").get());
+            Log.d("str", str);
+            JSONObject jVillage = new JSONObject(str);
+            int iId = jVillage.getInt("iId");
+            String sName = jVillage.getString("sName");
+            int iWood = jVillage.getInt("iWood");
+            int iFood = jVillage.getInt("iFood");
+            int iRock = jVillage.getInt("iRock");
+            int iGold = jVillage.getInt("iGold");
+            int iDefensePoint = jVillage.getInt("iDefensePoint");
+            ArrayList<Building> listBuilding = new ArrayList<>();
+            JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
+            Date d = new Date();
+            for (int i=0; i<24; i++){
+                listBuilding.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
+            }
+            if (jListBuilding != null) {
+                for (int i=0;i<jListBuilding.length();i++){
+                    JSONObject jBuilding = new JSONObject(jListBuilding.get(i).toString());
+                    boolean bEnable ;
+                    if(jBuilding.getInt("bEnable")==1){
+                        bEnable=true;
+                    }
+                    else {
+                        bEnable=false;
+                    }
+                    int iLevel = jBuilding.getInt("iLevel");
+                    int iMilitaryCount = jBuilding.getInt("iMilitaryCount");
+                    Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
+                    int typeBuilding = jBuilding.getInt("iId_typebuilding");
+                    int index = jBuilding.getInt("iIndex");
+                    TypeBuilding tb = TypeBuilding.values()[typeBuilding];
+                    listBuilding.set(index, new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount));
+                }
+            }
+            myVillage = new Village(iId, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return myVillage;
+    }
 
 }

@@ -29,4 +29,12 @@ public class Ressource {
     public void setQte(int qte) {
         this.qte = qte;
     }
+
+    @Override
+    public String toString() {
+        return "Ressource{" +
+                "type='" + type + '\'' +
+                ", qte=" + qte +
+                '}';
+    }
 }

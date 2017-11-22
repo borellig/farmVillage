@@ -22,7 +22,7 @@ public class Building implements Serializable {
     protected int iStockageCapacity;
 
 
-    public Building(boolean bEnable, int iLevel, int iTpsConstruct, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
+    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
         this.bEnable = bEnable;
         this.iLevel=iLevel;
         this.iTpsConstruct = iTpsConstruct;
@@ -162,15 +162,15 @@ public class Building implements Serializable {
 
     @Override
     public String toString() {
-        return "Building{" +
-                "iId=" + iId +
-                ", bEnable=" + bEnable +
-                ", iLevel=" + iLevel +
-                ", tbBuilding=" + tbBuilding +
-                ", indexList=" + indexList +
-                ", sName='" + sName + '\'' +
-                ", dConstruct=" + dConstruct +
-                ", iMilitaryCount=" + iMilitaryCount +
-                '}';
+        return "{" +
+                "iId:" + iId +
+                ", bEnable:" + bEnable +
+                ", iLevel:" + iLevel +
+                ", tbBuilding:" + tbBuilding +
+                ", indexList:" + indexList +
+                ", sName:'" + sName + '\'' +
+                ", dConstruct:" + dConstruct.getTime() +
+                ", iMilitaryCount:" + iMilitaryCount +
+                "}";
     }
 }
