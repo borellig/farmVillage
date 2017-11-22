@@ -15,6 +15,10 @@ public class AskExchange  {
         this.rRessource = rRessource;
     }
 
+    public int getiIDUserRemote() {
+        return iIDUserRemote;
+    }
+
     public AskExchange(String sUserNameRemote, Ressource rRessource) {
         this.sUserNameRemote = sUserNameRemote;
         this.rRessource = rRessource;

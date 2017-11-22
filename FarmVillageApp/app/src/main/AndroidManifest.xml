@@ -32,7 +32,7 @@
 
         <activity
             android:name=".Activities.MainActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,7 +60,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ExchangeActivity"></activity>
+        <activity
+            android:name=".Activities.ExchangeActivity"
+            android:screenOrientation="sensorLandscape"
+            ></activity>
     </application>
 
 </manifest>

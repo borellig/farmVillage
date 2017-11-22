@@ -36,8 +36,10 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static java.sql.DriverManager.println;
@@ -46,6 +48,7 @@ public class ExchangeActivity extends AppCompatActivity {
 
     /** Gestion requete http - Json **/
     public String url= "http://artshared.fr/andev1/distribue/android/get_typeBuildings.php";
+    public String urlPostRessource="http://artshared.fr/andev1/distribue/android/set_request.php";
     TextView txtString;
 
 
@@ -57,7 +60,7 @@ public class ExchangeActivity extends AppCompatActivity {
     public final static String VillageIntent = "village";
     final List<AskExchange> demande= new ArrayList<AskExchange>();
     String strUrl = "http://artshared.fr/andev1/distribue/android/get_request.php?id_ressource=";
-
+    public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
 
     Village myVillage;
 
@@ -95,6 +98,13 @@ public class ExchangeActivity extends AppCompatActivity {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,1);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
+                            sendRessource(request,myVillage,1);
+                        }
+                    });
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
 
                 } catch (IOException e) {
@@ -107,13 +117,7 @@ public class ExchangeActivity extends AppCompatActivity {
                /* List<AskExchange>  listAsk2 =  TryForAttribut("Bois",listAsk);
                 exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
                 mListView.setAdapter(adapter);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,myVillage,1);
-                    }
-                });*/
+                */
             }
         });
         OrButton.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +127,13 @@ public class ExchangeActivity extends AppCompatActivity {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,3);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
+                            sendRessource(request,myVillage,3);
+                        }
+                    });
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
 
                 } catch (IOException e) {
@@ -134,13 +145,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
                 mListView.setAdapter(adapter);
 
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,myVillage,3);
-                    }
-                });*/
+               */
             }
         });
 
@@ -151,6 +156,13 @@ public class ExchangeActivity extends AppCompatActivity {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,4);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
+                            sendRessource(request,myVillage,4);
+                        }
+                    });
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
 
                 } catch (IOException e) {
@@ -160,13 +172,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 List<AskExchange>  listAsk2 =  TryForAttribut("Pierre",listAsk);
                 exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAsk2);
                 mListView.setAdapter(adapter);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                        sendRessource(request,myVillage,4);
-                    }
-                });*/
+*/
             }
         });
 
@@ -275,7 +281,8 @@ public class ExchangeActivity extends AppCompatActivity {
      * @param village
      * @param i
      */
-    private void sendRessource(final AskExchange request, Village village, int i){
+    private void sendRessource(final AskExchange request, Village village, final int i){
+        final int[] iSommeRestante = new int[1];
         final int max;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         
@@ -320,7 +327,8 @@ public class ExchangeActivity extends AppCompatActivity {
         builder.setPositiveButton("Total :"+max+" "+ConvertIDRessource(i), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+            makePostRequest(request, 0);
+                UpdateRessourceVillage(myVillage,i,max);
             }
         });
 
@@ -338,7 +346,9 @@ public class ExchangeActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "La quantité indiquée est trop élevée : "+max+" et pas plus", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    int SommeRestante = RemainingAmount(request, Integer.parseInt(titleBox.getText().toString()));
+                    iSommeRestante[0] = RemainingAmount(request, Integer.parseInt(titleBox.getText().toString()));
+                    makePostRequest(request, iSommeRestante[0]);
+                    UpdateRessourceVillage(myVillage,i,Integer.parseInt(titleBox.getText().toString()));
                 }
             }
         });
@@ -554,7 +564,6 @@ public class ExchangeActivity extends AppCompatActivity {
 
                                 println(idUser + ", " + qtite + ", " );
                                 Log.d("Ca marche ? ",""+qtite);
-                               // Log.d("Ca marche ? ", String.valueOf(demande.get(i)));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -573,6 +582,59 @@ public class ExchangeActivity extends AppCompatActivity {
     }
 
     /**
+     * Fonction pour envoyer les ressources demandée
+     * @param demande
+     * @param montantrestant
+     */
+    private void makePostRequest(AskExchange demande, int montantrestant) {
+        final OkHttpClient client = new OkHttpClient();
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("id", demande.getiIDUserRemote());
+            postdata.put("amount", montantrestant);
+        } catch(JSONException e){
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE,
+                postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url(urlPostRessource)
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Your Token")
+                .addHeader("cache-control", "no-cache")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    String mMessage = e.getMessage().toString();
+                    Log.w("failure Response", mMessage);
+                    //call.cancel();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response)
+                        throws IOException {
+
+                                                String mMessage = response.body().string();
+                                                if (response.isSuccessful()){
+                                                    try {
+                                                        JSONObject json = new JSONObject(mMessage);
+                                                        final String serverResponse = json.getString("Your Index");
+
+                                                    } catch (Exception e){
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }
+        }
+        );
+    }
+
+    /**
      *  Fonction pour calculer la somme restante de la demande, elle sera envoyer a la db
      * @param request
      * @param SommePaye
@@ -582,6 +644,32 @@ public class ExchangeActivity extends AppCompatActivity {
         int iSommeRestante = 0;
         iSommeRestante = request.getrRessource().getQte() - SommePaye;
         return iSommeRestante;
+    }
+
+    /**
+     * Fonction pour mettre a jour les ressources du village lors de l'envoi de ressource
+     * @param village
+     * @param i
+     * @param SumSent
+     */
+    void UpdateRessourceVillage (Village village, int i, int SumSent){
+        switch(i){
+            case 1:
+                myVillage.setiWood(myVillage.getiWood()-SumSent);
+                break;
+            case 2:
+                myVillage.setiFood(myVillage.getiFood()-SumSent);
+
+                break;
+            case 3:
+                myVillage.setiGold(myVillage.getiGold()-SumSent);
+
+                break;
+            case 4:
+                myVillage.setiRock(myVillage.getiRock()-SumSent);
+                break;
+        }
+
     }
 
 }
