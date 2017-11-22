@@ -12,6 +12,7 @@ public class Building implements Serializable {
 
     protected int iId;
     protected boolean bEnable;
+    protected int iTpsConstruct;
     protected int iLevel;
     protected TypeBuilding tbBuilding;
     protected int indexList;
@@ -21,9 +22,10 @@ public class Building implements Serializable {
     protected int iStockageCapacity;
 
 
-    public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
+    public Building(boolean bEnable, int iLevel, int iTpsConstruct, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
         this.bEnable = bEnable;
         this.iLevel=iLevel;
+        this.iTpsConstruct = iTpsConstruct;
         this.tbBuilding = tbBuilding;
         this.indexList = indexList;
         this.sName = tbBuilding.sName;
@@ -77,6 +79,15 @@ public class Building implements Serializable {
 
     public void setiLevel(int iLevel) {
         this.iLevel = iLevel;
+    }
+
+
+    public void setiTpsConstruct(int iTpsConstruct) {
+        this.iTpsConstruct = iTpsConstruct;
+    }
+
+    public int getiTpsConstruct() {
+        return iTpsConstruct;
     }
 
     public int getiId() {

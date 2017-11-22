@@ -7,25 +7,24 @@
 
     <ScrollView
         android:layout_width="4000px"
-        android:layout_height="1500px"
-        android:scrollbars="vertical"
-        android:orientation="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:background="@drawable/map">
+        android:layout_height="2000px">
 
-        <RelativeLayout
-            android:layout_width="3500px"
-            android:layout_height="1500px"
-            android:orientation="vertical">
 
-            <GridView
-                android:layout_height="1500px"
+            <RelativeLayout
                 android:layout_width="3500px"
-                android:id="@+id/gridMap"
-                android:numColumns="6"
-                android:orientation="vertical"/>
+                android:layout_height="2000px"
+                android:background="@drawable/map"
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                    <GridView
+                        android:layout_height="2000px"
+                        android:layout_width="3000px"
+                        android:id="@+id/gridMap"
+                        android:numColumns="6"
+                        android:orientation="vertical"/>
+
+
+            </RelativeLayout>
 
     </ScrollView>
 </HorizontalScrollView>

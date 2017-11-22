@@ -39,7 +39,6 @@ public enum TypeBuilding {
     TypeBuilding(String sName, int iTaille, int iTpsConstruct, int iHomeCapacity, int iProductionCapacity, String sProdutionType, int iPriceWood, int iPriceFood, int iPriceRock, int iPriceGold, int iDefensePoint, String sNameFile, int duration, int iStockageCapacity) {
         this.sName = sName;
         this.iTaille = iTaille;
-        this.iTpsConstruct = iTpsConstruct;
         this.iHomeCapacity = iHomeCapacity;
         this.iProductionCapacity = iProductionCapacity;
         this.sProdutionType = sProdutionType;

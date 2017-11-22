@@ -6,18 +6,32 @@
 
     <ImageView
         android:id="@+id/image_id"
-        android:layout_width="250px"
-        android:layout_height="300px" />
-    <TextView
-        android:id="@+id/timeConstruct"
-        android:layout_width="450px"
-        android:layout_height="100px"
-        android:layout_marginTop="0px"
-        android:textSize="15dp"
-        android:layout_below="@+id/image_id"
-        android:gravity="bottom"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_width="400px"
+        android:layout_height="350px"
+        android:layout_x="100px" />
+
+    <AbsoluteLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:id="@+id/parchemin"/>
+
+        <TextView
+            android:id="@+id/timeConstruct"
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:layout_marginTop="0px"
+            android:textSize="15dp"
+            android:layout_below="@+id/image_id"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+
+    </AbsoluteLayout>
 
 
 

@@ -44,13 +44,10 @@ public class MapAdapter extends ArrayAdapter<Building> {
         final Building b = getItem(position);
 
         final TextView test = (TextView) convertView.findViewById(R.id.timeConstruct);
-        //test.setText(String.valueOf(b.getTbBuilding().getDuration()));
-
-      /* if (b!=null)
-            test.setText(String.valueOf(b.getTbBuilding().getDuration()));*/
 
         //Récupération de l'image du batiment
         ImageView imageBatiment = (ImageView) convertView.findViewById(R.id.image_id);
+
 
 
 
@@ -61,6 +58,7 @@ public class MapAdapter extends ArrayAdapter<Building> {
 
         return convertView;
     }
+
 
 
     public void enleve(int position)

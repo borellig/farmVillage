@@ -2,17 +2,20 @@ package com.android.group.farmvillage.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
@@ -70,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
         Date d = new Date();
 
 
-        final ArrayList<Building> listBatiment = new ArrayList<>(24);
-        for (int i=0; i<24; i++){
-            listBatiment.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
+        final ArrayList<Building> listBatiment = new ArrayList<>(50);
+        for (int i=0; i<50; i++){
+            listBatiment.add(i, new Building(false, 0, 10000, TypeBuilding.Vide, i, d, 0));
         }
 
 
         myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
-        Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
+        Building b1 = new Building(true, 1, 10000,  TypeBuilding.HDV, 0, d, 0);
         myVillage.addBuilding(b1);
 
 
@@ -97,11 +100,15 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 ArrayList<Building> listBuilding = listBatiment;
                 ArrayList<Ressource> ressourcesDispo = myVillage.getAllRessource();
+
+                final TextView timeConstruct = (TextView) view.findViewById(R.id.timeConstruct);
+                final ImageView timeImage = (ImageView) view.findViewById(R.id.parchemin);
+
                 if (listBatiment.get(position).getTbBuilding()==TypeBuilding.Vide) {
-                    newBuilding(position, ressourcesDispo, myVillage);
+                    newBuilding(position, ressourcesDispo, myVillage, timeConstruct, timeImage);
                 }
                 else{
-                    buildingModification(position, myVillage);
+                    buildingModification(position, myVillage, timeConstruct, timeImage);
                 }
             }
         }
@@ -120,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle(myVillage.getsName());
     }
 
-    private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage) {
+    private void newBuilding(final int position, ArrayList<Ressource> ressourcesDispo, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
         ArrayList<TypeBuilding> buildingDispo=TypeBuilding.getTypeBuildingsDispo(myVillage);
         final String [] batimentDispo = new String[buildingDispo.size()];
         final String [] nomBatimentDispo = new String[buildingDispo.size()];
@@ -158,11 +165,11 @@ public class MainActivity extends AppCompatActivity {
                 if (batAcreer[0]!= null) {
                     final TypeBuilding tb = TypeBuilding.valueOf(batAcreer[0]);
                     final Date d = new Date();
-                    Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
-                    final Building newB = new Building(true, 1, tb, position, d, 0);
+                    Building construction = new Building(false, 0, 10000, TypeBuilding.Construction, position, d, 0);
+                    final Building newB = new Building(true, 1, 10000, tb, position, d, 0);
                     myVillage.construction(construction, newB);
-                    mapAdapteur.notifyDataSetChanged();
-                    threadConstruction(tb, newB, myVillage);
+
+                    threadConstruction(tb, newB, myVillage, timeConstruct, timeImage);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Veillez choisir un batiment quand meme !", Toast.LENGTH_LONG).show();
@@ -185,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void threadConstruction(final TypeBuilding tb, final Building newB, final Village myVillage) {
+    private void threadConstruction(final TypeBuilding tb, final Building newB, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
         final Thread thCountDown = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -194,11 +201,27 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask countDowntask = new TimerTask() {
                     @Override
                     public void run() {
-                        Log.d("temps", String.valueOf(delay[0]));
                         delay[0]-=1000;
+
+                        newB.setiTpsConstruct(delay[0]);
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                timeConstruct.setText(String.valueOf(formatSeconde(delay[0])));
+                                timeImage.setImageDrawable(getDrawable(R.drawable.parchemin));
+                                mapAdapteur.notifyDataSetChanged();
+                            }
+                        });
                         if (delay[0] <=0 ){
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    timeConstruct.setText("");
+                                    timeImage.setImageDrawable(getDrawable(R.drawable.vide));
+                                    mapAdapteur.notifyDataSetChanged();
+                                }
+                            });
                             this.cancel();
-                            Log.d("this", this.toString());
                         }
                     }
                 };
@@ -230,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         thConstruction.start();
     }
 
-    private void buildingModification(final int position, final Village myVillage) {
+    private void buildingModification(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
@@ -250,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Date d = new Date();
-                Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                Building b = new Building(false, 0, 10000,  TypeBuilding.Vide, position, d, 0);
                 myVillage.removeBuilding(myVillage.getListBuilding().get(position));
                 myVillage.addBuilding(b);
                 invalidateOptionsMenu();
@@ -273,10 +296,10 @@ public class MainActivity extends AppCompatActivity {
                 Date d = new Date();
                 Building currentBuilding = myVillage.getListBuilding().get(position);
                 currentBuilding.levelUp();
-                Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                Building construction = new Building(false, 0, 10000, TypeBuilding.Construction, position, d, 0);
                 myVillage.construction(construction, currentBuilding);
                 mapAdapteur.notifyDataSetChanged();
-                threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage);
+                threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage, timeConstruct, timeImage);
             }
         });
         AlertDialog d = builder.show();
@@ -376,6 +399,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Affiche le time en format h-m-s
+     * @param
+     */
+    public String formatSeconde(int miliSeconde){
+        String trueTime = "";
+        int s = miliSeconde/1000;
+        int m=s/60;
+        int rs=s%60;
+        int h=m/60;
+        m=m%60;
+        Log.d("date","Seconde :"+ s+" Heure : "+h+ " Minute : " +m+ " Reste seconde :"+rs);
+        if(h==0){
+            trueTime = m+"m "+s+"s";
+            if(m==0){
+                trueTime = s+"s";
+            }
+        }
+
+        return trueTime;
+    }
 
 
 }
