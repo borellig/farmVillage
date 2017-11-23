@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 if(position==0 || position==6){
-                    sauvegarde();
+                    myVillage.sauvegarde();
                     Toast.makeText(getApplicationContext(), "Vous ne pouvez pas construire des bâtiments sur une forêt voyons  !!", Toast.LENGTH_LONG).show();
                 }else{
                     if(position==5){
@@ -372,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         myVillage.recolte();
                         invalidateOptionsMenu();
+                        myVillage.sauvegardeRessource();
                     }
                 };
                 timer.schedule( task, 0L ,1000L);
@@ -540,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
                     jBuilding.put("bEnabled", b.isbEnable());
                     jBuilding.put("iLevel", b.getiLevel());
                     jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
-                    jBuilding.put("dConstruct", b.getdConstruct());
+                    jBuilding.put("dConstruct", b.getdConstruct().getTime());
                     jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
                     jBuilding.put("iIndex", b.getIndexList());
                     building.put(jBuilding);
