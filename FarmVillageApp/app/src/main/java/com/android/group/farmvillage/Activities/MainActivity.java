@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Récupère la résolution du support
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -101,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             setContentView(R.layout.activity_main);
         }
+
+
+
 
         mHandler=new Handler();
 
