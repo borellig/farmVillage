@@ -1,7 +1,12 @@
 package com.android.group.farmvillage.Tools;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
+import com.android.group.farmvillage.Activities.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +26,7 @@ import java.net.URL;
 public class BackgroundTask extends AsyncTask<String, Void, String> {
 
     protected void onPreExecute() {
+
     }
 
     protected String doInBackground(String... arg0) {

@@ -30,13 +30,24 @@ import com.android.group.farmvillage.R;
 import com.android.group.farmvillage.Tools.BackgroundTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler;
     public boolean eventValidate = true;
     public final static String VillageIntent = "village";
+    public final int nbCase=60;
 
 
     /**
@@ -80,28 +92,13 @@ public class MainActivity extends AppCompatActivity {
         myVillage = initialisation();
 
 
+
         //Test musique
         MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
         ring.start();
 
-/*<<<<<<< HEAD
-        final ArrayList<Building> listBatiment = new ArrayList<>(50);
-        for (int i=0; i<50; i++){
-            listBatiment.add(i, new Building(false, 0, 10000, TypeBuilding.Vide, i, d, 0));
-        }
-
-
-        myVillage = new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
-        Building b1 = new Building(true, 1, 10000,  TypeBuilding.HDV, 0, d, 0);
-=======*/
         final ArrayList<Building> listBatiment = myVillage.getListBuilding();
 
-        /*
-        new Village(0001, "Sparte", 500, 500, 500, 500, 50, listBatiment);
-        Building b1 = new Building(true, 1, TypeBuilding.HDV, 0, d, 0);
->>>>>>> f578e9ffdf4011d9d22529e2b7734dfd5c12138f
-        myVillage.addBuilding(b1);
-         */
 
 
         initMainValue(myVillage);
@@ -109,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
 
         GridView listTest = (GridView) findViewById(R.id.gridMap);
+
 
 
         listTest.setAdapter(mapAdapteur);
@@ -122,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Building> listBuilding = listBatiment;
                 ArrayList<Ressource> ressourcesDispo = myVillage.getAllRessource();
 
-                final TextView timeConstruct = (TextView) view.findViewById(R.id.timeConstruct);
-                final ImageView timeImage = (ImageView) view.findViewById(R.id.parchemin);
+                final TextView timeConstruct = view.findViewById(R.id.timeConstruct);
+                final ImageView timeImage = view.findViewById(R.id.parchemin);
 
-                Log.d("elem", String.valueOf(position));
 
                 if(position==0 || position==6){
+                    sauvegarde();
                     Toast.makeText(getApplicationContext(), "Vous ne pouvez pas construire des bâtiments sur une forêt voyons  !!", Toast.LENGTH_LONG).show();
                 }else{
                     if(position==5){
@@ -373,8 +371,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run()
                     {
                         Random randomGenerator = new Random();
-                        int rdmApparition = randomGenerator.nextInt(9);
-                        if (rdmApparition>=8) {
+                        int rdmApparition = randomGenerator.nextInt(99);
+                        if (rdmApparition>=95) {
                             if (eventValidate) {
                                 eventValidate = false;
                                 mHandler.post(new Runnable() {
@@ -417,7 +415,6 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.exchangeMenu:
                 FonctionMissoum();
-                Log.d("ok", "ca passe");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -463,6 +460,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("str", str);
             JSONObject jVillage = new JSONObject(str);
             int iId = jVillage.getInt("iId");
+            String sUUID = jVillage.getString("sUUID");
             String sName = jVillage.getString("sName");
             int iWood = jVillage.getInt("iWood");
             int iFood = jVillage.getInt("iFood");
@@ -472,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Building> listBuilding = new ArrayList<>();
             JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
             Date d = new Date();
-            for (int i=0; i<24; i++){
+            for (int i=0; i<this.nbCase; i++){
                 listBuilding.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
             }
             if (jListBuilding != null) {
@@ -492,13 +490,88 @@ public class MainActivity extends AppCompatActivity {
                     int index = jBuilding.getInt("iIndex");
                     TypeBuilding tb = TypeBuilding.values()[typeBuilding];
                     listBuilding.set(index, new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount));
+                    listBuilding.get(index).setiId(jBuilding.getInt("iId"));
                 }
             }
-            myVillage = new Village(iId, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
+            myVillage = new Village(iId, sUUID, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return myVillage;
     }
+
+    public void sauvegarde(){
+        Log.d("myVillage", String.valueOf(myVillage.getiFood()));
+        JSONObject jVillage=new JSONObject();
+
+        try {
+            jVillage.put("iId", myVillage.getiId());
+            jVillage.put("sUUID", myVillage.getsUUID());
+            jVillage.put("sName", myVillage.getsName());
+            jVillage.put("iWood", myVillage.getiWood());
+            jVillage.put("iFood", myVillage.getiFood());
+            jVillage.put("iRock", myVillage.getiRock());
+            jVillage.put("iGold", myVillage.getiGold());
+            jVillage.put("iDefensePoint", myVillage.getiId());
+            JSONArray building = new JSONArray();
+            for(Building b : myVillage.getListBuilding()){
+                if(b.getTbBuilding()!=TypeBuilding.Vide) {
+                    JSONObject jBuilding = new JSONObject();
+                    jBuilding.put("iId", b.getiId());
+                    jBuilding.put("bEnabled", b.isbEnable());
+                    jBuilding.put("iLevel", b.getiLevel());
+                    jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
+                    jBuilding.put("dConstruct", b.getdConstruct().getTime());
+                    jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
+                    jBuilding.put("iIndex", b.getIndexList());
+                    building.put(jBuilding);
+                }
+            }
+            jVillage.put("building", building);
+            Log.e("jVillage", jVillage.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.e("erreurgeo",e.getMessage());
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        final OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jVillage.toString());
+
+        final Request request = new Request.Builder()
+                .url("http://artshared.fr/andev1/distribue/android/set_village.php")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Your Token")
+                .addHeader("cache-control", "no-cache")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    String mMessage = e.getMessage().toString();
+                    Log.e("failure Response", mMessage);
+                    //call.cancel();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response)
+                        throws IOException {
+
+                    String mMessage = response.body().string();
+                    if (response.isSuccessful()){
+
+                            Log.d("success POST", mMessage);
+
+                    }
+                }
+            }
+        );
+    }
+
+
 
 }
