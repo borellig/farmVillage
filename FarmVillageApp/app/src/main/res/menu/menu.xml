@@ -7,6 +7,10 @@
             android:tooltipText="1000"
             android:title="exchangeMenu" />
         <item
+            android:id="@+id/renameVillage"
+            android:tooltipText="1000"
+            android:title="Renommer votre village" />
+        <item
             android:id="@+id/or"
             android:icon="@drawable/or"
             android:title="or"
