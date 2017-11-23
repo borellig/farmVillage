@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
         m=m%60;
         Log.d("date","Seconde :"+ s+" Heure : "+h+ " Minute : " +m+ " Reste seconde :"+rs);
         if(h==0){
-            trueTime = m+"m "+s+"s";
+            trueTime = m+"m "+rs+"s";
             if(m==0){
                 trueTime = s+"s";
             }
