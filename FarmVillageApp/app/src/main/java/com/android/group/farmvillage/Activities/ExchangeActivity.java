@@ -14,14 +14,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.group.farmvillage.Adapteur.Potionexchange_adapt;
 import com.android.group.farmvillage.Adapteur.exchange_adap;
 import com.android.group.farmvillage.Modele.AskExchange;
 import com.android.group.farmvillage.Modele.InputFilterMinMax;
+import com.android.group.farmvillage.Modele.PotionAskExchange;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
@@ -57,6 +60,7 @@ public class ExchangeActivity extends AppCompatActivity {
     Button OrButton;
     Button PierreButton;
     Button FoodButton;
+    ImageButton PotionButton;
     public final static String VillageIntent = "village";
     final List<AskExchange> demande= new ArrayList<AskExchange>();
     String strUrl = "http://artshared.fr/andev1/distribue/android/get_request.php?id_ressource=";
@@ -78,7 +82,7 @@ public class ExchangeActivity extends AppCompatActivity {
         OrButton = (Button)findViewById(R.id.buttonOR);
         PierreButton = (Button)findViewById(R.id.buttonPierre);
         FoodButton = (Button)findViewById(R.id.buttonFood);
-        txtString= (TextView)findViewById(R.id.textView3);
+        PotionButton = (ImageButton)findViewById(R.id.imageButtonPotion);
 
 
         try {
@@ -88,7 +92,7 @@ public class ExchangeActivity extends AppCompatActivity {
         }
 
 
-        final List<AskExchange> listAsk = genererRequest();
+        final List<PotionAskExchange> listAskPotion = genererRequest();
         BoisButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,6 +188,14 @@ public class ExchangeActivity extends AppCompatActivity {
             }
         });
 
+        PotionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Potionexchange_adapt adapter = new Potionexchange_adapt(ExchangeActivity.this, listAskPotion);
+                mListView.setAdapter(adapter);
+            }
+        });
+
     }
 
 
@@ -208,24 +220,24 @@ public class ExchangeActivity extends AppCompatActivity {
      *
      * @return
      */
-    private List<AskExchange> genererRequest(){
-        List<AskExchange> request = new ArrayList<AskExchange>();
+    private List<PotionAskExchange> genererRequest(){
+        List<PotionAskExchange> request = new ArrayList<PotionAskExchange>();
         Ressource ressource1 = new Ressource("Bois",4);
-        request.add(new AskExchange("Zizou",ressource1));
+        request.add(new PotionAskExchange("Zizou",ressource1));
         Ressource ressource2 = new Ressource("Bois",4);
-        request.add(new AskExchange("Zizou",ressource2));
+        request.add(new PotionAskExchange("Zizou",ressource2));
         Ressource ressource3 = new Ressource("Or",5000);
-        request.add(new AskExchange("Henry",ressource3));
+        request.add(new PotionAskExchange("Henry",ressource3));
         Ressource ressource4 = new Ressource("Pierre",4);
-        request.add(new AskExchange("Henry",ressource4));
+        request.add(new PotionAskExchange("Henry",ressource4));
         Ressource ressource5 = new Ressource("Bois",3444);
-        request.add(new AskExchange("Zizou",ressource5));
+        request.add(new PotionAskExchange("Zizou",ressource5));
         Ressource ressource6 = new Ressource("Bois",4);
-        request.add(new AskExchange("Zizou",ressource6));
+        request.add(new PotionAskExchange("Zizou",ressource6));
         Ressource ressource7 = new Ressource("Or",4);
-        request.add(new AskExchange("Henry",ressource7));
+        request.add(new PotionAskExchange("Henry",ressource7));
         Ressource ressource8 = new Ressource("Food",4);
-        request.add(new AskExchange("Henry",ressource8));
+        request.add(new PotionAskExchange("Henry",ressource8));
 
         return request;
     }
@@ -581,6 +593,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 .addHeader("Authorization", "Your Token")
                 .addHeader("cache-control", "no-cache")
                 .build();
+
         client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
