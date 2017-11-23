@@ -540,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
                     jBuilding.put("bEnabled", b.isbEnable());
                     jBuilding.put("iLevel", b.getiLevel());
                     jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
-                    jBuilding.put("dConstruct", b.getdConstruct().getTime());
+                    jBuilding.put("dConstruct", b.getdConstruct());
                     jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
                     jBuilding.put("iIndex", b.getIndexList());
                     building.put(jBuilding);
