@@ -12,13 +12,13 @@
 
         <RelativeLayout
             android:layout_width="3000px"
-            android:layout_height="1500px"
+            android:layout_height="1800px"
             android:background="@drawable/map"
             android:orientation="vertical">
 
             <GridView
                 android:layout_width="3000px"
-                android:layout_height="2000px"
+                android:layout_height="2200px"
                 android:id="@+id/gridMap"
                 android:numColumns="6"
                 android:orientation="vertical"/>
