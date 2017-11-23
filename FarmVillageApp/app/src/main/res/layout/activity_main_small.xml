@@ -2,8 +2,7 @@
 <HorizontalScrollView
     android:layout_width="2000px"
     android:layout_height="2500px"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
         android:layout_width="1500px"
@@ -13,15 +12,13 @@
         <RelativeLayout
             android:layout_width="3000px"
             android:layout_height="1800px"
-            android:background="@drawable/map"
-            android:orientation="vertical">
+            android:background="@drawable/map">
 
             <GridView
                 android:layout_width="3000px"
                 android:layout_height="2200px"
                 android:id="@+id/gridMap"
-                android:numColumns="6"
-                android:orientation="vertical"/>
+                android:numColumns="6"/>
 
 
         </RelativeLayout>

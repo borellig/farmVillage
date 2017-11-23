@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler;
     public boolean eventValidate = true;
     public final static String VillageIntent = "village";
-    public final int nbCase=60;
+    public final int nbCase=30;
 
 
     /**
