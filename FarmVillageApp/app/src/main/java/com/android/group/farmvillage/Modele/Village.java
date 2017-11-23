@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -140,6 +141,7 @@ public class Village implements Serializable {
     public void construction (Building bTemp, Building newB){
         bTemp.setsName("En construction : "+newB.getsName());
         bTemp.setiLevel(newB.getiLevel());
+        bTemp.tbBuilding.setiId_typebuilding(newB.getTbBuilding().getiId_typebuilding());
         listBuilding.set(bTemp.indexList, bTemp);
         setiFood(iFood-(int) Math.pow(newB.tbBuilding.iPriceFood, 1+(double)(newB.iLevel-1)/10));
         setiWood(iWood-(int) Math.pow(newB.tbBuilding.iPriceWood, 1+(double)(newB.iLevel-1)/10));
@@ -279,11 +281,12 @@ public class Village implements Serializable {
             jRessources.put("iWood", this.getiWood());
             jRessources.put("iRock", this.getiRock());
             jRessources.put("iGold", this.getiGold());
+            jRessources.put("dateMAJ", new Date().getTime());
         }
             catch (Exception e){
                 e.printStackTrace();
         }
-        requetePost(jRessources, "URL");
+        requetePost(jRessources, "http://artshared.fr/andev1/distribue/android/sauvegarde_ressource.php");
 
 
 

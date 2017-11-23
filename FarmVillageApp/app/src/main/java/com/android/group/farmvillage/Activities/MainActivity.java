@@ -509,7 +509,17 @@ public class MainActivity extends AppCompatActivity {
                     int typeBuilding = jBuilding.getInt("iId_typebuilding");
                     int index = jBuilding.getInt("iIndex");
                     TypeBuilding tb = TypeBuilding.values()[typeBuilding];
-                    listBuilding.set(index, new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount));
+                    Building newB = new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount);
+                    int dureeConstruction=(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10));
+                    if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
+                        listBuilding.set(index, newB);
+                    }
+                    else {
+                        final ImageView timeImage = (ImageView) findViewById(R.id.parchemin);
+                        final TextView timeConstruct = (TextView) findViewById(R.id.timeConstruct);
+                        /*newB.setiTpsConstruct(Math.toIntExact(newB.getdConstruct().getTime()+dureeConstruction-new Date().getTime()));
+                        threadConstruction(newB.getTbBuilding(), newB, myVillage, timeConstruct, timeImage);*/
+                    }
                     listBuilding.get(index).setiId(jBuilding.getInt("iId"));
                 }
             }
