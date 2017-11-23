@@ -61,6 +61,9 @@ public class ExchangeActivity extends AppCompatActivity {
     Button PierreButton;
     Button FoodButton;
     ImageButton PotionButton;
+    TextView texteBottomFirst;
+    TextView texteBottomscd;
+
     public final static String VillageIntent = "village";
     final List<AskExchange> demande= new ArrayList<AskExchange>();
     String strUrl = "http://artshared.fr/andev1/distribue/android/get_request.php?id_ressource=";
@@ -83,6 +86,8 @@ public class ExchangeActivity extends AppCompatActivity {
         PierreButton = (Button)findViewById(R.id.buttonPierre);
         FoodButton = (Button)findViewById(R.id.buttonFood);
         PotionButton = (ImageButton)findViewById(R.id.imageButtonPotion);
+        texteBottomFirst= (TextView)findViewById(R.id.textView);
+        texteBottomscd= (TextView)findViewById(R.id.textView2);
 
 
         try {
@@ -96,6 +101,8 @@ public class ExchangeActivity extends AppCompatActivity {
         BoisButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                texteBottomFirst.setText("Demandeur");
+                texteBottomscd.setText("Quantité");
 
                 /*Test json */
                 try {
@@ -121,6 +128,9 @@ public class ExchangeActivity extends AppCompatActivity {
         OrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                texteBottomFirst.setText("Demandeur");
+                texteBottomscd.setText("Quantité");
+
                 try {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,3);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
@@ -144,6 +154,9 @@ public class ExchangeActivity extends AppCompatActivity {
         PierreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                texteBottomFirst.setText("Demandeur");
+                texteBottomscd.setText("Quantité");
+
                 try {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,4);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
@@ -167,6 +180,9 @@ public class ExchangeActivity extends AppCompatActivity {
         FoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                texteBottomFirst.setText("Demandeur");
+                texteBottomscd.setText("Quantité");
+
                 try {
                     List<AskExchange> listAskTry = RunAskRessource(strUrl,2);
                     exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
@@ -191,6 +207,9 @@ public class ExchangeActivity extends AppCompatActivity {
         PotionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                texteBottomscd.setText("Quantité");
+
+                texteBottomFirst.setText("Offreur");
                 Potionexchange_adapt adapter = new Potionexchange_adapt(ExchangeActivity.this, listAskPotion);
                 mListView.setAdapter(adapter);
             }

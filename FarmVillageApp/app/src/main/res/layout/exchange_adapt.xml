@@ -7,6 +7,8 @@
 
     <TextView
         android:id="@+id/UserNameRemote"
+        style="@style/CustomTextExhangeactivity"
+
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:layout_alignParentStart="true"
@@ -15,10 +17,14 @@
         android:layout_marginStart="24dp"
         android:layout_x="24dp"
         android:layout_y="8dp"
+        android:textSize="24dp"
+        android:textColor="@android:color/white"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/ValueExchange"
+        style="@style/CustomTextExhangeactivity"
+
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_alignTop="@+id/UserNameRemote"
@@ -27,6 +33,8 @@
         android:layout_toEndOf="@+id/UserNameRemote"
         android:layout_x="192dp"
         android:layout_y="8dp"
+        android:textSize="24dp"
+        android:textColor="@android:color/white"
         android:text="TextView" />
 
 
