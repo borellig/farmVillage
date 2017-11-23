@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class Village implements Serializable {
     protected int iId;
+    protected String sUUID;
     protected String sName;
     protected int iWood;
     protected int iFood;
@@ -21,8 +22,9 @@ public class Village implements Serializable {
     protected ArrayList<Building> listBuilding;
 
 
-    public Village(int iId, String sName, int iWood, int iFood, int iRock, int iGold, int defensePoint, ArrayList<Building> listBuilding) {
+    public Village(int iId, String sUUID, String sName, int iWood, int iFood, int iRock, int iGold, int defensePoint, ArrayList<Building> listBuilding) {
         this.iId = iId;
+        this.sUUID=sUUID;
         this.sName = sName;
         this.iWood = iWood;
         this.iFood = iFood;
@@ -244,6 +246,22 @@ public class Village implements Serializable {
 
     public void setListBuilding(ArrayList<Building> listBuilding) {
         this.listBuilding = listBuilding;
+    }
+
+    public String getsUUID() {
+        return sUUID;
+    }
+
+    public void setsUUID(String sUUID) {
+        this.sUUID = sUUID;
+    }
+
+    public int getiDefensePoint() {
+        return iDefensePoint;
+    }
+
+    public void setiDefensePoint(int iDefensePoint) {
+        this.iDefensePoint = iDefensePoint;
     }
 
     @Override

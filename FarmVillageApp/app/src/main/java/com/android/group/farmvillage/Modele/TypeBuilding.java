@@ -8,20 +8,21 @@ import java.util.ArrayList;
 
 public enum TypeBuilding {
     //Objets directement construits
-    HDV ("Hotel de Ville", 1, 10, 50, 10, "gold", 100, 100, 100, 100, 50, "hdv", 10000, 1000),
-    Ferme ("Ferme", 1, 10, 50, 10, "food", 100, 100, 100, 100, 50, "ferme", 10000, 2000),
-    Entrepot ("Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
-    Academie ("Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
-    Scierie ("Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),
-    Mur ("Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000, 2000),
-    Carriere ("Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
-    Port ("Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
-    Garnison ("Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
-    Construction ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
-    Banque ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
-    Taverne ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
-    Vide ("", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
+    HDV (0, "Hotel de Ville", 1, 10, 50, 10, "gold", 100, 100, 100, 100, 50, "hdv", 10000, 1000),
+    Ferme (1, "Ferme", 1, 10, 50, 10, "food", 100, 100, 100, 100, 50, "ferme", 10000, 2000),
+    Entrepot (2, "Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
+    Academie (3, "Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
+    Scierie (4, "Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),
+    Mur (5, "Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000, 2000),
+    Carriere (6, "Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
+    Port (7, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Garnison (8, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
+    Construction (9, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
+    Banque (10, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
+    Taverne (11, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
+    Vide (12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
+    protected int iId_typebuilding;
     protected String sName;
     protected int iTaille;
     protected int iTpsConstruct;
@@ -38,7 +39,8 @@ public enum TypeBuilding {
     protected int iStockageCapacity;
 
 
-    TypeBuilding(String sName, int iTaille, int iTpsConstruct, int iHomeCapacity, int iProductionCapacity, String sProdutionType, int iPriceWood, int iPriceFood, int iPriceRock, int iPriceGold, int iDefensePoint, String sNameFile, int duration, int iStockageCapacity) {
+    TypeBuilding(int iId_typebuilding, String sName, int iTaille, int iTpsConstruct, int iHomeCapacity, int iProductionCapacity, String sProdutionType, int iPriceWood, int iPriceFood, int iPriceRock, int iPriceGold, int iDefensePoint, String sNameFile, int duration, int iStockageCapacity) {
+        this.iId_typebuilding=iId_typebuilding;
         this.sName = sName;
         this.iTaille = iTaille;
         this.iHomeCapacity = iHomeCapacity;
@@ -201,4 +203,11 @@ public enum TypeBuilding {
         this.iStockageCapacity = iStockageCapacity;
     }
 
+    public int getiId_typebuilding() {
+        return iId_typebuilding;
+    }
+
+    public void setiId_typebuilding(int iId_typebuilding) {
+        this.iId_typebuilding = iId_typebuilding;
+    }
 }

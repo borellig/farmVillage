@@ -25,7 +25,7 @@ public class Building implements Serializable {
     public Building(boolean bEnable, int iLevel, TypeBuilding tbBuilding, int indexList, Date dConstruct, int iMilitaryCount) {
         this.bEnable = bEnable;
         this.iLevel=iLevel;
-        this.iTpsConstruct = iTpsConstruct;
+        this.iTpsConstruct = 0;
         this.tbBuilding = tbBuilding;
         this.indexList = indexList;
         this.sName = tbBuilding.sName;
@@ -171,6 +171,7 @@ public class Building implements Serializable {
                 ", sName:'" + sName + '\'' +
                 ", dConstruct:" + dConstruct.getTime() +
                 ", iMilitaryCount:" + iMilitaryCount +
+                ", iTpsConstruc:" + iTpsConstruct +
                 "}";
     }
 }
