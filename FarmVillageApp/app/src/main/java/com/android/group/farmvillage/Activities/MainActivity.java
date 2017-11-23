@@ -96,9 +96,11 @@ public class MainActivity extends AppCompatActivity {
         int width = size.x;
         int height = size.y;
 
-        Log.d("test", String.valueOf(width)+" "+String.valueOf(height));
-
-        setContentView(R.layout.activity_main);
+        if(width<=2000 && height <= 1200){
+            setContentView(R.layout.activity_main_small);
+        }else{
+            setContentView(R.layout.activity_main);
+        }
 
         mHandler=new Handler();
 
