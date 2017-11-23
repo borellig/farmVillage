@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    android:layout_width="2000px"
+    android:layout_height="2500px"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="1500px"
+        android:layout_height="1500px">
+
+
+        <RelativeLayout
+            android:layout_width="3000px"
+            android:layout_height="1800px"
+            android:background="@drawable/map">
+
+            <GridView
+                android:layout_width="3000px"
+                android:layout_height="2200px"
+                android:id="@+id/gridMap"
+                android:numColumns="6"/>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+</HorizontalScrollView>
+
+

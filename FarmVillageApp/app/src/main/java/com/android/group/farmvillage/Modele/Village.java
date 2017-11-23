@@ -2,8 +2,21 @@ package com.android.group.farmvillage.Modele;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -128,6 +141,7 @@ public class Village implements Serializable {
     public void construction (Building bTemp, Building newB){
         bTemp.setsName("En construction : "+newB.getsName());
         bTemp.setiLevel(newB.getiLevel());
+        bTemp.tbBuilding.setiId_typebuilding(newB.getTbBuilding().getiId_typebuilding());
         listBuilding.set(bTemp.indexList, bTemp);
         setiFood(iFood-(int) Math.pow(newB.tbBuilding.iPriceFood, 1+(double)(newB.iLevel-1)/10));
         setiWood(iWood-(int) Math.pow(newB.tbBuilding.iPriceWood, 1+(double)(newB.iLevel-1)/10));
@@ -182,6 +196,100 @@ public class Village implements Serializable {
             stockage+=Math.pow(b.getiStockageCapacity(), 1+(double)b.iLevel/100);
         }
         return stockage;
+    }
+
+    public void sauvegarde(){
+        JSONObject jVillage=new JSONObject();
+
+        try {
+            jVillage.put("iId", this.getiId());
+            jVillage.put("sUUID", this.getsUUID());
+            jVillage.put("sName", this.getsName());
+            jVillage.put("iWood", this.getiWood());
+            jVillage.put("iFood", this.getiFood());
+            jVillage.put("iRock", this.getiRock());
+            jVillage.put("iGold", this.getiGold());
+            jVillage.put("iDefensePoint", this.getiId());
+            JSONArray building = new JSONArray();
+            for(Building b : this.getListBuilding()){
+                if(b.getTbBuilding()!=TypeBuilding.Vide) {
+                    JSONObject jBuilding = new JSONObject();
+                    jBuilding.put("iId", b.getiId());
+                    jBuilding.put("bEnabled", b.isbEnable());
+                    jBuilding.put("iLevel", b.getiLevel());
+                    jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
+                    jBuilding.put("dConstruct", b.getdConstruct().getTime());
+                    jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
+                    jBuilding.put("iIndex", b.getIndexList());
+                    building.put(jBuilding);
+                }
+            }
+            jVillage.put("building", building);
+            Log.e("jVillage", jVillage.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.e("erreurgeo",e.getMessage());
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        requetePost(jVillage, "http://artshared.fr/andev1/distribue/android/set_village.php");
+    }
+
+    private void requetePost(JSONObject jObject, String url) {
+        final OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jObject.toString());
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Your Token")
+                .addHeader("cache-control", "no-cache")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    String mMessage = e.getMessage().toString();
+                    Log.e("failure Response", mMessage);
+                    //call.cancel();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response)
+                        throws IOException {
+
+                    String mMessage = response.body().string();
+                    if (response.isSuccessful()){
+
+                        Log.d("success POST", mMessage);
+
+                    }
+                }
+            }
+        );
+    }
+
+    public void sauvegardeRessource() {
+        JSONObject jRessources=new JSONObject();
+        try {
+            jRessources.put("sUUID", this.getsUUID());
+            jRessources.put("iFood", this.getiFood());
+            jRessources.put("iWood", this.getiWood());
+            jRessources.put("iRock", this.getiRock());
+            jRessources.put("iGold", this.getiGold());
+            jRessources.put("dateMAJ", new Date().getTime());
+        }
+            catch (Exception e){
+                e.printStackTrace();
+        }
+        requetePost(jRessources, "http://artshared.fr/andev1/distribue/android/sauvegarde_ressource.php");
+
+
+
     }
 
     public int getiId() {
