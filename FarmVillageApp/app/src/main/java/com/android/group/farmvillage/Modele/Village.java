@@ -138,15 +138,24 @@ public class Village implements Serializable {
         //// TODO: 13/11/17 insert webService
     }
 
-    public void construction (Building bTemp, Building newB){
-        bTemp.setsName("En construction : "+newB.getsName());
-        bTemp.setiLevel(newB.getiLevel());
-        bTemp.tbBuilding.setiId_typebuilding(newB.getTbBuilding().getiId_typebuilding());
+    public void resumeConstruction (Building bTemp, Building oldB){
+        bTemp.setsName("En construction : "+oldB.getsName());
+        bTemp.setiLevel(oldB.getiLevel());
+        bTemp.tbBuilding.setiId_typebuilding(oldB.getTbBuilding().getiId_typebuilding());
+        bTemp.setdConstruct(oldB.getdConstruct());
         listBuilding.set(bTemp.indexList, bTemp);
-        setiFood(iFood-(int) Math.pow(newB.tbBuilding.iPriceFood, 1+(double)(newB.iLevel-1)/10));
-        setiWood(iWood-(int) Math.pow(newB.tbBuilding.iPriceWood, 1+(double)(newB.iLevel-1)/10));
-        setiRock(iRock-(int) Math.pow(newB.tbBuilding.iPriceRock, 1+(double)(newB.iLevel-1)/10));
-        setiGold(iGold-(int) Math.pow(newB.tbBuilding.iPriceGold, 1+(double)(newB.iLevel-1)/10));
+    }
+
+    public void construction (Building bTemp, Building oldB){
+        bTemp.setsName("En construction : "+oldB.getsName());
+        bTemp.setiLevel(oldB.getiLevel());
+        bTemp.tbBuilding.setiId_typebuilding(oldB.getTbBuilding().getiId_typebuilding());
+        bTemp.setdConstruct(oldB.getdConstruct());
+        listBuilding.set(bTemp.indexList, bTemp);
+        setiFood(iFood-(int) Math.pow(oldB.tbBuilding.iPriceFood, 1+(double)(oldB.iLevel-1)/10));
+        setiWood(iWood-(int) Math.pow(oldB.tbBuilding.iPriceWood, 1+(double)(oldB.iLevel-1)/10));
+        setiRock(iRock-(int) Math.pow(oldB.tbBuilding.iPriceRock, 1+(double)(oldB.iLevel-1)/10));
+        setiGold(iGold-(int) Math.pow(oldB.tbBuilding.iPriceGold, 1+(double)(oldB.iLevel-1)/10));
     }
 
     /**
@@ -215,12 +224,18 @@ public class Village implements Serializable {
                 if(b.getTbBuilding()!=TypeBuilding.Vide) {
                     JSONObject jBuilding = new JSONObject();
                     jBuilding.put("iId", b.getiId());
-                    jBuilding.put("bEnabled", b.isbEnable());
+                    if(b.isbEnable() && b.getiTpsConstruct()<=999){
+                        jBuilding.put("bEnable", 1);
+                    }
+                    else {
+                        jBuilding.put("bEnable", 0);
+                    }
                     jBuilding.put("iLevel", b.getiLevel());
                     jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
                     jBuilding.put("dConstruct", b.getdConstruct().getTime());
                     jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
                     jBuilding.put("iIndex", b.getIndexList());
+                    jBuilding.put("iTpsConstruct", b.getiTpsConstruct());
                     building.put(jBuilding);
                 }
             }
@@ -265,7 +280,7 @@ public class Village implements Serializable {
                     String mMessage = response.body().string();
                     if (response.isSuccessful()){
 
-                        Log.d("success POST", mMessage);
+                        //Log.d("success POST", mMessage);
 
                     }
                 }
