@@ -13,14 +13,14 @@ public enum TypeBuilding {
     Entrepot (2, "Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
     Academie (3, "Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
     Scierie (4, "Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),
-    Carriere (6, "Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
-    Port (7, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
-    Garnison (8, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
-    Construction (9, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
-    Banque (10, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
-    Taverne (11, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
-    Marche (12, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
-    Vide (13, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
+    Carriere (5, "Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
+    Port (6, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Garnison (7, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
+    Construction (8, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
+    Banque (9, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
+    Taverne (10, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
+    Marche (11, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
+    Vide (12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
     protected int iId_typebuilding;
     protected String sName;
