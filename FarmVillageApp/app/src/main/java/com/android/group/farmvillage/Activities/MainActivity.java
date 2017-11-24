@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 };
-                timer.schedule(task, (int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
+                timer.schedule(task, newB.getiTpsConstruct());//(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
             }
         });
         thConstruction.start();
