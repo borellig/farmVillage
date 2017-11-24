@@ -1,5 +1,7 @@
 package com.android.group.farmvillage.Modele;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,12 +38,6 @@ public class Building implements Serializable {
 
 
 
-    /**
-     * Change l'état d'un batiment, le rend innactif si il était actif et actif si il était inactif.
-     */
-    public void changeEtat(){
-        this.bEnable=!bEnable;
-    }
 
     /**
      * Augmente le niveau de 1;
@@ -72,6 +68,7 @@ public class Building implements Serializable {
         price.add(r4);
         return price;
     }
+
 
     public int getiLevel() {
         return iLevel;

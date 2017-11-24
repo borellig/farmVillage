@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -40,11 +41,8 @@ import com.android.group.farmvillage.R;
 import com.android.group.farmvillage.Tools.BackgroundTask;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -52,13 +50,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -70,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler;
     public boolean eventValidate = true;
     public final static String VillageIntent = "village";
+
+    public GridView listTest;
     public final int nbCase=30;
 
 
@@ -114,6 +107,34 @@ public class MainActivity extends AppCompatActivity {
         Date d = new Date();
 
         myVillage = initialisation();
+        mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
+        listTest = (GridView) findViewById(R.id.gridMap);
+        listTest.setAdapter(mapAdapteur);
+        listTest.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                for (Building b : myVillage.getListBuilding()) {
+                    if (!b.isbEnable() && b.getTbBuilding() != TypeBuilding.Vide) {
+                        int dureeConstruction = (int) Math.pow(b.getTbBuilding().getDuration(), 1 + ((double) (b.getiLevel() - 1) / 10));
+                        if (b.getdConstruct().getTime() + dureeConstruction > new Date().getTime()) {
+                            Building construction = new Building(false, b.getiLevel(), TypeBuilding.Construction, b.getIndexList(), b.getdConstruct(), b.getiMilitaryCount());
+                            View view = listTest.getChildAt(b.getIndexList());
+                            TextView tv = (TextView) view.findViewById(R.id.timeConstruct);
+                            ImageView iv = (ImageView) view.findViewById(R.id.parchemin);
+                            int dureeRestante =  (int) (b.getdConstruct().getTime() + dureeConstruction - new Date().getTime());
+                            b.setiTpsConstruct(dureeRestante);
+                            myVillage.resumeConstruction(construction, b);
+                            threadConstruction(b.getTbBuilding(), b, myVillage, tv, iv);
+                            b.setbEnable(true);
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
 
 
 
@@ -126,13 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         initMainValue(myVillage);
 
-        mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
 
-        GridView listTest = (GridView) findViewById(R.id.gridMap);
-
-
-
-        listTest.setAdapter(mapAdapteur);
 
         recolteThread(myVillage);
         eventThread(myVillage);
@@ -222,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                     Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
                     final Building newB = new Building(true, 1, tb, position, d, 0);
                     myVillage.construction(construction, newB);
-
+                    newB.setiTpsConstruct((int) Math.pow(newB.getTbBuilding().getDuration(), 1 + ((double) (newB.getiLevel() - 1) / 10)));
                     threadConstruction(tb, newB, myVillage, timeConstruct, timeImage);
                 }
                 else {
@@ -250,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         final Thread thCountDown = new Thread(new Runnable() {
             @Override
             public void run() {
-                final int[] delay = {(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10))};
+                final int[] delay = {newB.getiTpsConstruct()};
                 Timer timerCountDown = new Timer();
                 TimerTask countDowntask = new TimerTask() {
                     @Override
@@ -267,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         if (delay[0] <=0 ){
+                            newB.setbEnable(true);
                             MainActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -290,6 +306,8 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
+                        newB.setbEnable(true);
+                        //newB.getTbBuilding().setsNameFile(TypeBuilding.values()[newB.getTbBuilding().getiId_typebuilding()].getsNameFile());
                         myVillage.addBuilding(newB);
                         invalidateOptionsMenu();
                         MainActivity.this.runOnUiThread(new Runnable() {
@@ -301,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 };
-                timer.schedule(task, (int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
+                timer.schedule(task, newB.getiTpsConstruct());//(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
             }
         });
         thConstruction.start();
@@ -351,8 +369,10 @@ public class MainActivity extends AppCompatActivity {
                 Building currentBuilding = myVillage.getListBuilding().get(position);
                 currentBuilding.levelUp();
                 Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                currentBuilding.setdConstruct(new Date());
                 myVillage.construction(construction, currentBuilding);
                 mapAdapteur.notifyDataSetChanged();
+                currentBuilding.setiTpsConstruct((int) Math.pow(currentBuilding.getTbBuilding().getDuration(), 1 + ((double) (currentBuilding.getiLevel() - 1) / 10)));
                 threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage, timeConstruct, timeImage);
             }
         });
@@ -510,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
         int rs=s%60;
         int h=m/60;
         m=m%60;
-        Log.d("date","Seconde :"+ s+" Heure : "+h+ " Minute : " +m+ " Reste seconde :"+rs);
+        //Log.d("date","Seconde :"+ s+" Heure : "+h+ " Minute : " +m+ " Reste seconde :"+rs);
         if(h==0){
             trueTime = m+"m "+rs+"s";
             if(m==0){
@@ -523,6 +543,7 @@ public class MainActivity extends AppCompatActivity {
     private Village initialisation() {
         BackgroundTask bgTask = new BackgroundTask();
         Village myVillage = null;
+
         try {
             String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid=UNIQUEID1").get());
             Log.d("str", str);
@@ -551,22 +572,22 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         bEnable=false;
                     }
+
                     int iLevel = jBuilding.getInt("iLevel");
                     int iMilitaryCount = jBuilding.getInt("iMilitaryCount");
                     Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
                     int typeBuilding = jBuilding.getInt("iId_typebuilding");
                     int index = jBuilding.getInt("iIndex");
+                    Log.d("benable", String.valueOf(bEnable)+" "+String.valueOf(index));
                     TypeBuilding tb = TypeBuilding.values()[typeBuilding];
                     Building newB = new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount);
-                    int dureeConstruction=(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10));
-                    if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
+                    if(newB.isbEnable()){//if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
                         listBuilding.set(index, newB);
                     }
                     else {
-                        final ImageView timeImage = (ImageView) findViewById(R.id.parchemin);
-                        final TextView timeConstruct = (TextView) findViewById(R.id.timeConstruct);
-                        /*newB.setiTpsConstruct(Math.toIntExact(newB.getdConstruct().getTime()+dureeConstruction-new Date().getTime()));
-                        threadConstruction(newB.getTbBuilding(), newB, myVillage, timeConstruct, timeImage);*/
+                        Building tmpBuilding = new Building(false, iLevel, TypeBuilding.values()[typeBuilding], index, dConstruct, iMilitaryCount);
+                        listBuilding.set(index, tmpBuilding);
+
                     }
                     listBuilding.get(index).setiId(jBuilding.getInt("iId"));
                 }
@@ -576,78 +597,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return myVillage;
-    }
-
-    public void sauvegarde(){
-        Log.d("myVillage", String.valueOf(myVillage.getiFood()));
-        JSONObject jVillage=new JSONObject();
-
-        try {
-            jVillage.put("iId", myVillage.getiId());
-            jVillage.put("sUUID", myVillage.getsUUID());
-            jVillage.put("sName", myVillage.getsName());
-            jVillage.put("iWood", myVillage.getiWood());
-            jVillage.put("iFood", myVillage.getiFood());
-            jVillage.put("iRock", myVillage.getiRock());
-            jVillage.put("iGold", myVillage.getiGold());
-            jVillage.put("iDefensePoint", myVillage.getiId());
-            JSONArray building = new JSONArray();
-            for(Building b : myVillage.getListBuilding()){
-                if(b.getTbBuilding()!=TypeBuilding.Vide) {
-                    JSONObject jBuilding = new JSONObject();
-                    jBuilding.put("iId", b.getiId());
-                    jBuilding.put("bEnabled", b.isbEnable());
-                    jBuilding.put("iLevel", b.getiLevel());
-                    jBuilding.put("iMilitaryCount", b.getiMilitaryCount());
-                    jBuilding.put("dConstruct", b.getdConstruct().getTime());
-                    jBuilding.put("iId_typebuilding", b.getTbBuilding().getiId_typebuilding());
-                    jBuilding.put("iIndex", b.getIndexList());
-                    building.put(jBuilding);
-                }
-            }
-            jVillage.put("building", building);
-            Log.e("jVillage", jVillage.toString());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            Log.e("erreurgeo",e.getMessage());
-        }
-        ////////////////////////////////////////////////////////////////////////////////
-
-
-        ///////////////////////////////////////////////////////////////////////////////
-        final OkHttpClient client = new OkHttpClient();
-
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jVillage.toString());
-
-        final Request request = new Request.Builder()
-                .url("http://artshared.fr/andev1/distribue/android/set_village.php")
-                .post(body)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Your Token")
-                .addHeader("cache-control", "no-cache")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    String mMessage = e.getMessage().toString();
-                    Log.e("failure Response", mMessage);
-                    //call.cancel();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response)
-                        throws IOException {
-
-                    String mMessage = response.body().string();
-                    if (response.isSuccessful()){
-
-                            Log.d("success POST", mMessage);
-
-                    }
-                }
-            }
-        );
     }
 
 

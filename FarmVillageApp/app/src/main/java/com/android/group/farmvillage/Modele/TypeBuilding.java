@@ -13,7 +13,6 @@ public enum TypeBuilding {
     Entrepot (2, "Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
     Academie (3, "Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
     Scierie (4, "Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),
-    Mur (5, "Mur d'enceinte", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "mur", 10000, 2000),
     Carriere (6, "Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
     Port (7, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
     Garnison (8, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
