@@ -168,6 +168,15 @@ public class Village implements Serializable {
         this.iRock += (int) Math.pow(building.tbBuilding.iPriceRock, 1+(double)(building.iLevel-1)/10);
         this.iGold += (int) Math.pow(building.tbBuilding.iPriceGold, 1+(double)(building.iLevel-1)/10);
         this.listBuilding.set(building.indexList, null);
+        JSONObject jBuilding = new JSONObject();
+        try {
+            jBuilding.put("UUID", "UNIQUEID1");
+            jBuilding.put("iIndex", building.getIndexList());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        requetePost(jBuilding, "http://artshared.fr/andev1/distribue/android/delete_building.php");
         // // TODO: 13/11/17 delete webservice
     }
 
@@ -302,9 +311,6 @@ public class Village implements Serializable {
                 e.printStackTrace();
         }
         requetePost(jRessources, "http://artshared.fr/andev1/distribue/android/sauvegarde_ressource.php");
-
-
-
     }
 
     public int getiId() {
