@@ -20,7 +20,7 @@ public enum TypeBuilding {
     Construction (9, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
     Banque (10, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
     Taverne (11, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
-    Marche (12, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "hdv", 300000, 0),
+    Marche (12, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
     Vide (13, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 
     protected int iId_typebuilding;

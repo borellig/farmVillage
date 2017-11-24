@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         //Test musique
         MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
         ring.start();
@@ -469,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
                 String newNameVillage = titleBox.getText().toString();
                 if(Pattern.matches("[^0-9]+", newNameVillage) && titleBox.getText().toString().trim().length() <= 25) {
                     myVillage.setsName(newNameVillage);
+                    myVillage.sauvegarde();
                 }else{
                     Toast.makeText(getBaseContext(), "Nom incorrect !", Toast.LENGTH_LONG).show();
                 }
