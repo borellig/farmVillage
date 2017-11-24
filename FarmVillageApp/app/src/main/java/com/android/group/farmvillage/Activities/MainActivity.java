@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -20,8 +21,10 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 
 
@@ -57,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler;
     public boolean eventValidate = true;
     public final static String VillageIntent = "village";
-    public final int nbCase=60;
+
     public GridView listTest;
+    public final int nbCase=30;
 
 
     /**
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Récupère la résolution du support
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -137,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
         ring.start();
 
         final ArrayList<Building> listBatiment = myVillage.getListBuilding();
-
-
 
         initMainValue(myVillage);
 
@@ -454,8 +458,51 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.exchangeMenu:
                 FonctionMissoum();
+            case R.id.renameVillage:
+                renameVillage();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Renomme le village
+     */
+    private void renameVillage(){
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Renommer votre village");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText titleBox = new EditText(this);
+        titleBox.setHint(myVillage.getsName());
+        titleBox.setInputType(InputType.TYPE_CLASS_TEXT);
+        layout.addView(titleBox);
+
+        builder.setView(layout);
+
+        // Lors du clic sur "Créer"
+        builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newNameVillage = titleBox.getText().toString();
+                if(Pattern.matches("[^0-9]+", newNameVillage) && titleBox.getText().toString().trim().length() <= 25) {
+                    myVillage.setsName(newNameVillage);
+                }else{
+                    Toast.makeText(getBaseContext(), "Nom incorrect !", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        // Lors du clic sur "Annuler"
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     /**

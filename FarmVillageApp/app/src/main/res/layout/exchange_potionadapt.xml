@@ -12,6 +12,8 @@
         android:id="@+id/UserNameRemotePotion"
         android:layout_width="150dp"
         android:layout_height="35dp"
+        style="@style/CustomTextExhangeactivity"
+        android:textColor="@android:color/white"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
@@ -22,8 +24,10 @@
 
     <TextView
         android:id="@+id/ValueTypePotion"
+        android:textColor="@android:color/white"
         android:layout_width="332dp"
         android:layout_height="35dp"
+        style="@style/CustomTextExhangeactivity"
         android:layout_alignTop="@+id/UserNameRemotePotion"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="34dp"
@@ -41,7 +45,7 @@
         android:layout_height="34dp"
         android:layout_x="554dp"
         android:layout_y="8dp"
-        app:srcCompat="@mipmap/potionlogo" />
+        app:srcCompat="@mipmap/logopotion" />
 
 
 </AbsoluteLayout>
