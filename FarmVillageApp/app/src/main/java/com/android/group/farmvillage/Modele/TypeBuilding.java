@@ -17,8 +17,8 @@ public enum TypeBuilding {
     Port (6, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
     Garnison (7, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
     Construction (8, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
-    Banque (9, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 0, 0),
-    Taverne (10, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 0, 0),
+    Banque (9, "Coffre", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 120000, 0),
+    Taverne (10, "Taverne", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 120000, 0),
     Marche (11, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
     Vide (12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
 

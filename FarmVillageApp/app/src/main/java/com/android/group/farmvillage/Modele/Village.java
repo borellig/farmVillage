@@ -170,7 +170,7 @@ public class Village implements Serializable {
         this.listBuilding.set(building.indexList, null);
         JSONObject jBuilding = new JSONObject();
         try {
-            jBuilding.put("UUID", "UNIQUEID1");
+            jBuilding.put("UUID", this.getsUUID());
             jBuilding.put("iIndex", building.getIndexList());
         }
         catch (Exception e){
@@ -262,7 +262,7 @@ public class Village implements Serializable {
         requetePost(jVillage, "http://artshared.fr/andev1/distribue/android/set_village.php");
     }
 
-    private void requetePost(JSONObject jObject, String url) {
+    private void requetePost(JSONObject jObject, final String url) {
         final OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jObject.toString());
@@ -278,7 +278,7 @@ public class Village implements Serializable {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     String mMessage = e.getMessage().toString();
-                    Log.e("failure Response", mMessage);
+                    Log.e("failure Response", url+" "+mMessage);
                     //call.cancel();
                 }
 

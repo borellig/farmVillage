@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         coord.add(new Coordonnees(1, 1));
         Date d = new Date();
 
-        myVillage = initialisation();
+        myVillage=(Village)getIntent().getSerializableExtra("village");
+        //myVillage = initialisation();
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
         listTest = (GridView) findViewById(R.id.gridMap);
         listTest.setAdapter(mapAdapteur);
@@ -319,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 };
-                timer.schedule(task, newB.getiTpsConstruct());//(int) Math.pow(tb.getDuration(), 1+((double)(newB.getiLevel()-1)/10)));
+                timer.schedule(task, newB.getiTpsConstruct());
             }
         });
         thConstruction.start();
@@ -540,64 +541,7 @@ public class MainActivity extends AppCompatActivity {
 
         return trueTime;
     }
-    private Village initialisation() {
-        BackgroundTask bgTask = new BackgroundTask();
-        Village myVillage = null;
 
-        try {
-            String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid=UNIQUEID1").get());
-            Log.d("str", str);
-            JSONObject jVillage = new JSONObject(str);
-            int iId = jVillage.getInt("iId");
-            String sUUID = jVillage.getString("sUUID");
-            String sName = jVillage.getString("sName");
-            int iWood = jVillage.getInt("iWood");
-            int iFood = jVillage.getInt("iFood");
-            int iRock = jVillage.getInt("iRock");
-            int iGold = jVillage.getInt("iGold");
-            int iDefensePoint = jVillage.getInt("iDefensePoint");
-            ArrayList<Building> listBuilding = new ArrayList<>();
-            JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
-            Date d = new Date();
-            for (int i=0; i<this.nbCase; i++){
-                listBuilding.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
-            }
-            if (jListBuilding != null) {
-                for (int i=0;i<jListBuilding.length();i++){
-                    JSONObject jBuilding = new JSONObject(jListBuilding.get(i).toString());
-                    boolean bEnable ;
-                    if(jBuilding.getInt("bEnable")==1){
-                        bEnable=true;
-                    }
-                    else {
-                        bEnable=false;
-                    }
-
-                    int iLevel = jBuilding.getInt("iLevel");
-                    int iMilitaryCount = jBuilding.getInt("iMilitaryCount");
-                    Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
-                    int typeBuilding = jBuilding.getInt("iId_typebuilding");
-                    int index = jBuilding.getInt("iIndex");
-                    Log.d("benable", String.valueOf(bEnable)+" "+String.valueOf(index));
-                    TypeBuilding tb = TypeBuilding.values()[typeBuilding];
-                    Building newB = new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount);
-                    if(newB.isbEnable()){//if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
-                        listBuilding.set(index, newB);
-                    }
-                    else {
-                        Building tmpBuilding = new Building(false, iLevel, TypeBuilding.values()[typeBuilding], index, dConstruct, iMilitaryCount);
-                        listBuilding.set(index, tmpBuilding);
-
-                    }
-                    listBuilding.get(index).setiId(jBuilding.getInt("iId"));
-                }
-            }
-            myVillage = new Village(iId, sUUID, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return myVillage;
-    }
 
 
 
