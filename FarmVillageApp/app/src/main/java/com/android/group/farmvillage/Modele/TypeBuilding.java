@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public enum TypeBuilding {
     //Objets directement construits
     HDV (0, "Hotel de Ville", 1, 10, 50, 10, "gold", 100, 100, 100, 100, 50, "hdv", 10000, 1000),
-    Ferme (1, "Ferme", 1, 10, 50, 10, "food", 100, 100, 100, 100, 50, "ferme", 10000, 2000),
+    Ferme (1, "Ferme", 1, 10, 50, 10, "food", 100, 100, 100, 100, 50, "ferme", 10000, 1000000),
     Entrepot (2, "Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
     Academie (3, "Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
     Scierie (4, "Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),

@@ -40,7 +40,7 @@ public class SplashScreen extends Activity{
                 Intent i = new Intent(SplashScreen.this, MainActivity.class);
                 Village myVillage = initialisation();
                 if(myVillage!=null) {
-                    i.putExtra("village", initialisation());
+                    i.putExtra("village", myVillage);
                     startActivity(i);
                     finish();
                 }
@@ -133,6 +133,10 @@ public class SplashScreen extends Activity{
                 }
             }
             myVillage = new Village(iId, sUUID, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
+            myVillage.setlLastmaj(jVillage.getLong("lastmaj"));
+            Log.d("timesJVillage", jVillage.toString());
+            Log.d("times", String.valueOf(jVillage.getLong("lastmaj")));
+            Log.d("times", String.valueOf(myVillage.getlLastmaj()));
         } catch (Exception e) {
             e.printStackTrace();
         }

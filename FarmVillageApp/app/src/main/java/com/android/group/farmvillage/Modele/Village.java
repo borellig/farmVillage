@@ -33,6 +33,7 @@ public class Village implements Serializable {
     protected int iGold;
     protected int iDefensePoint;
     protected ArrayList<Building> listBuilding;
+    protected long lLastmaj;
 
 
     public Village(int iId, String sUUID, String sName, int iWood, int iFood, int iRock, int iGold, int defensePoint, ArrayList<Building> listBuilding) {
@@ -54,7 +55,7 @@ public class Village implements Serializable {
     public void recolte() {
         int stockageCapacity=getStockageCapacity();
         for (Building b : this.listBuilding){
-            if (b.getTbBuilding().getsName()!="Vide" && b.getTbBuilding().getsProdutionType()!=null) {
+            if (b.getTbBuilding() != TypeBuilding.Vide && b.getTbBuilding() != TypeBuilding.Construction && b.getTbBuilding().getsProdutionType()!=null) {
                 switch(b.getTbBuilding().getsProdutionType()){
                     case "food" :
                         this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
@@ -76,6 +77,48 @@ public class Village implements Serializable {
                         break;
                     case "gold" :
                         this.iGold+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10);
+                        if(this.iGold>stockageCapacity/4) {
+                            this.iGold = stockageCapacity/4;
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    public void recolteServeur() {
+        for (Building b : this.listBuilding) {
+            if (b.getTbBuilding().getsName() != "Vide" && b.getTbBuilding().getsName() != "Construction" && b.getTbBuilding().getsProdutionType() != null) {
+                long now = new Date().getTime();
+                int duree = 0;
+                if(b.getdConstruct().getTime()+ Math.pow(b.getTbBuilding().getDuration(), 1 + ((double) (b.getiLevel() - 2) / 10)) < this.getlLastmaj()){
+                    duree = (int) (now - this.getlLastmaj())/1000;
+                }
+                else {
+                    duree = (int)(now - b.getdConstruct().getTime()-Math.pow(b.getTbBuilding().getDuration(), 1 + ((double) (b.getiLevel() - 2) / 10)))/1000;
+                }
+                int stockageCapacity=getStockageCapacity();
+                switch(b.getTbBuilding().getsProdutionType()){
+                    case "food" :
+                        this.iFood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10)*duree;
+                        if(this.iFood>stockageCapacity/4) {
+                            this.iFood = stockageCapacity/4;
+                        }
+                        break;
+                    case "wood" :
+                        this.iWood+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10)*duree;
+                        if(this.iWood>stockageCapacity/4) {
+                            this.iWood = stockageCapacity/4;
+                        }
+                        break;
+                    case "rock" :
+                        this.iRock+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10)*duree;
+                        if(this.iRock>stockageCapacity/4) {
+                            this.iRock = stockageCapacity/4;
+                        }
+                        break;
+                    case "gold" :
+                        this.iGold+=Math.pow(b.getTbBuilding().getiProductionCapacity(), 1+(double)b.iLevel/10)*duree;
                         if(this.iGold>stockageCapacity/4) {
                             this.iGold = stockageCapacity/4;
                         }
@@ -156,6 +199,7 @@ public class Village implements Serializable {
         setiWood(iWood-(int) Math.pow(oldB.tbBuilding.iPriceWood, 1+(double)(oldB.iLevel-1)/10));
         setiRock(iRock-(int) Math.pow(oldB.tbBuilding.iPriceRock, 1+(double)(oldB.iLevel-1)/10));
         setiGold(iGold-(int) Math.pow(oldB.tbBuilding.iPriceGold, 1+(double)(oldB.iLevel-1)/10));
+        sauvegarde();
     }
 
     /**
@@ -249,6 +293,7 @@ public class Village implements Serializable {
                 }
             }
             jVillage.put("building", building);
+            jVillage.put("lastmaj", new Date().getTime());
             Log.e("jVillage", jVillage.toString());
         }
         catch (Exception e){
@@ -391,6 +436,14 @@ public class Village implements Serializable {
 
     public void setiDefensePoint(int iDefensePoint) {
         this.iDefensePoint = iDefensePoint;
+    }
+
+    public long getlLastmaj() {
+        return lLastmaj;
+    }
+
+    public void setlLastmaj(long iLastmaj) {
+        this.lLastmaj = iLastmaj;
     }
 
     @Override

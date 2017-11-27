@@ -1,25 +1,20 @@
 package com.android.group.farmvillage.Activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Point;
-import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -31,17 +26,13 @@ import android.widget.Toast;
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
-import com.android.group.farmvillage.Modele.Coordonnees;
 import com.android.group.farmvillage.Modele.Event;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
-import com.android.group.farmvillage.Tools.BackgroundTask;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         mHandler=new Handler();
 
-        ArrayList<Coordonnees> coord = new ArrayList<Coordonnees>();
-        coord.add(new Coordonnees(1, 1));
-        Date d = new Date();
-
         myVillage=(Village)getIntent().getSerializableExtra("village");
-        //myVillage = initialisation();
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
         listTest = (GridView) findViewById(R.id.gridMap);
         listTest.setAdapter(mapAdapteur);
@@ -132,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        myVillage.recolteServeur();
+
+
 
 
 
@@ -262,6 +254,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void buildingModification(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
+        if(myVillage.getListBuilding().get(position).getTbBuilding()!=TypeBuilding.Construction) {
+            final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+            String besoin = "";
+            for (Ressource res : ressources) {
+                besoin += res.getType() + " x" + res.getQte() + "\n";
+            }
+            builder.setMessage("Pour passer de niveau il faut : \n" +
+                    besoin);
+            builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Date d = new Date();
+                    Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
+                    myVillage.removeBuilding(myVillage.getListBuilding().get(position));
+                    myVillage.addBuilding(b);
+                    invalidateOptionsMenu();
+                    mapAdapteur.notifyDataSetChanged();
+
+                }
+            });
+            boolean bool = true;
+            int cpt = 0;
+            ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
+            while (cpt < 4 && bool) {
+                if (villageRessources.get(cpt).getQte() < ressources.get(cpt).getQte()) {
+                    bool = false;
+                }
+                cpt++;
+            }
+            builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Date d = new Date();
+                    Building currentBuilding = myVillage.getListBuilding().get(position);
+                    currentBuilding.levelUp();
+                    Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
+                    currentBuilding.setdConstruct(new Date());
+                    myVillage.construction(construction, currentBuilding);
+                    mapAdapteur.notifyDataSetChanged();
+                    currentBuilding.setiTpsConstruct((int) Math.pow(currentBuilding.getTbBuilding().getDuration(), 1 + ((double) (currentBuilding.getiLevel() - 1) / 10)));
+                    threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage, timeConstruct, timeImage);
+                }
+            });
+            AlertDialog d = builder.show();
+
+            if (bool) {
+                d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+            } else {
+                d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+        }
+        else {
+            builder.setMessage("Rome ne s'est pas construite en un jour ! Patientez un peu !");
+            builder.show();
+        }
+
+    }
+
     private void threadConstruction(final TypeBuilding tb, final Building newB, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
         final Thread thCountDown = new Thread(new Runnable() {
             @Override
@@ -324,67 +383,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         thConstruction.start();
-    }
-
-    private void buildingModification(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
-        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
-        String besoin = "";
-        for(Ressource res : ressources){
-            besoin+=res.getType()+" x"+res.getQte()+"\n";
-        }
-        builder.setMessage("Pour passer de niveau il faut : \n"+
-            besoin);
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Date d = new Date();
-                Building b = new Building(false, 0, TypeBuilding.Vide, position, d, 0);
-                myVillage.removeBuilding(myVillage.getListBuilding().get(position));
-                myVillage.addBuilding(b);
-                invalidateOptionsMenu();
-                mapAdapteur.notifyDataSetChanged();
-
-            }
-        });
-        boolean bool = true;
-        int cpt = 0;
-        ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
-        while(cpt<4 && bool){
-            if (villageRessources.get(cpt).getQte()<ressources.get(cpt).getQte()){
-                bool=false;
-            }
-            cpt++;
-        }
-        builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Date d = new Date();
-                Building currentBuilding = myVillage.getListBuilding().get(position);
-                currentBuilding.levelUp();
-                Building construction = new Building(false, 0, TypeBuilding.Construction, position, d, 0);
-                currentBuilding.setdConstruct(new Date());
-                myVillage.construction(construction, currentBuilding);
-                mapAdapteur.notifyDataSetChanged();
-                currentBuilding.setiTpsConstruct((int) Math.pow(currentBuilding.getTbBuilding().getDuration(), 1 + ((double) (currentBuilding.getiLevel() - 1) / 10)));
-                threadConstruction(currentBuilding.getTbBuilding(), currentBuilding, myVillage, timeConstruct, timeImage);
-            }
-        });
-        AlertDialog d = builder.show();
-
-        if (bool) {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-        }
-        else {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
     }
 
     public void recolteThread(final Village myVillage) {
