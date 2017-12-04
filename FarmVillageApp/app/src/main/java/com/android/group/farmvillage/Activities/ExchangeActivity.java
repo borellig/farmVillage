@@ -90,11 +90,6 @@ public class ExchangeActivity extends AppCompatActivity {
         texteBottomscd= (TextView)findViewById(R.id.textView2);
 
 
-        try {
-            run();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
         final List<PotionAskExchange> listAskPotion = genererRequest();
@@ -217,7 +212,6 @@ public class ExchangeActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * Créé le menu horizontal en haut du layout
      * @param menu Le contenu du menu
@@ -234,6 +228,8 @@ public class ExchangeActivity extends AppCompatActivity {
         menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
         return true;
     }
+
+
 
     /**
      *
