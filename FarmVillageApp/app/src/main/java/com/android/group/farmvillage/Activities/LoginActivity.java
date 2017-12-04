@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,10 +43,23 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -66,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -77,6 +93,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View bLostPassword;
+    boolean isValidLogin = false;
+
+    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/temp/signin.php";
 
     //Connect with FB
     LoginButton lLoginButtonwithFB;
@@ -159,6 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -377,7 +397,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         builder.setView(layout);
 
-        // Configurations des bouttons
+        // Configurations des boutons
         builder.setPositiveButton("Demander", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -424,6 +444,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+
         }
 
         @Override
@@ -436,17 +457,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 return false;
             }
+            Log.d("Email", mEmail);
+            if(makePostLogin(mEmail,mPassword)==true){
+                return true;
+            }
+            else{
+                return false;
+            }
+            //sendDataConnection(mEmail,mPassword);
 
-            for (String credential : DUMMY_CREDENTIALS) {
+           /* for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
             // TODO: register the new account here.
-            return true;
         }
 
         @Override
@@ -473,16 +501,112 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static boolean isEmailValide(String email) {
         boolean isValid = false;
 
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        /*String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         CharSequence inputStr = email;
 
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
         if (matcher.matches()) {
             isValid = true;
-        }
+        }*/
+
+        //pour test
+        isValid=true;
         return isValid;
     }
+    public static String toSHA1(byte[] convertme) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-1");
+        }
+        catch(NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        Log.d("Sha1 : ", byteArrayToHexString(md.digest(convertme)));
+        return byteArrayToHexString(md.digest(convertme));
+    }
+
+
+    public static String byteArrayToHexString(byte[] b) {
+        String result = "";
+        for (int i=0; i < b.length; i++) {
+            result +=
+                    Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+        }
+        return result;
+    }
+
+    private boolean makePostLogin(String sEmail, String sPassword) {
+        try {
+            sPassword = toSHA1(sPassword.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        final OkHttpClient client = new OkHttpClient();
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("username", sEmail);
+            postdata.put("password", sPassword);
+        } catch(JSONException e){
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE,
+                postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url(urlPostLogin)
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Your Token")
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                                String mMessage = e.getMessage().toString();
+                                                Log.w("failure Response", mMessage);
+                                                Log.d("index_reponse :","error12");
+
+                                                //call.cancel();
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response)
+                                                    throws IOException {
+
+                                                String mMessage = response.body().string();
+                                                if (response.isSuccessful()){
+                                                    try {
+                                                        Log.d("index_",mMessage);
+                                                        JSONObject json = new JSONObject(mMessage);
+                                                        Log.d("index_",json.toString());
+                                                        final String serverResponse = json.getString("code");
+                                                        if(Integer.parseInt(serverResponse)>=1){
+                                                            isValidLogin =true;
+                                                            Log.d("validelogin :", String.valueOf(isValidLogin));
+                                                        }
+                                                        else {
+                                                            isValidLogin = false;
+                                                        }
+
+                                                    } catch (Exception e){
+                                                        Log.d("index_reponse :","error");
+
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+
+                                            }
+                                        }
+        );
+        Log.d("valideloginfinal :", String.valueOf(isValidLogin));
+
+        return isValidLogin;
+    }
+
 
 }
 
