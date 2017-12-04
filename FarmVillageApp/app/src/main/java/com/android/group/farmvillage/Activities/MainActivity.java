@@ -32,6 +32,7 @@ import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.Task;
 
 
 import java.util.ArrayList;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Task.setMyVillage((Village)getIntent().getSerializableExtra("village"));
+        Task.actionRecolte();
 
         //Récupère la résolution du support
         Display display = getWindowManager().getDefaultDisplay();
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        recolteThread(myVillage);
+        recolteThread();//myVillage);
         eventThread(myVillage);
 
         listTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -385,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
         thConstruction.start();
     }
 
-    public void recolteThread(final Village myVillage) {
+    public void recolteThread(){//final Village myVillage) {
         final Thread thRecolte = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -393,9 +396,10 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task = new TimerTask() {
                     public void run()
                     {
-                        myVillage.recolte();
+                        //myVillage.recolte();
+                        myVillage=Task.getMyVillage();
                         invalidateOptionsMenu();
-                        myVillage.sauvegardeRessource();
+                        //myVillage.sauvegardeRessource();
                     }
                 };
                 timer.schedule( task, 0L ,1000L);
@@ -436,7 +440,6 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                         builder.show();
-
                                     }
                                 });
                             }

@@ -14,7 +14,7 @@ public enum TypeBuilding {
     Academie (3, "Academie", 1, 5, 0, 0, null, 100, 100, 100, 100, 0, "academie", 10000, 2000),
     Scierie (4, "Scierie", 1, 5, 0, 10, "wood", 100, 100, 100, 100, 0, "scierie", 10000, 2000),
     Carriere (5, "Carrière", 1, 5, 0, 10, "rock", 100, 100, 100, 100, 0, "carriere", 10000, 2000),
-    Port (6, "Port", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
+    Laboratoire (6, "Laboratoire", 1, 0, 50, 0, null, 100, 100, 100, 100, 50, "hdv", 10000, 2000),
     Garnison (7, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
     Construction (8, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
     Banque (9, "Coffre", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "banque", 120000, 0),

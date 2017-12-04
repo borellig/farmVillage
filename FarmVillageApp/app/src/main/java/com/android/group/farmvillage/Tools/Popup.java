@@ -29,7 +29,7 @@ public class Popup {
                 break;
             case Carriere:
                 break;
-            case Port:
+            case Laboratoire:
                 break;
             case Garnison:
                 break;
