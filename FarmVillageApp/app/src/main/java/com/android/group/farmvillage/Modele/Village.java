@@ -192,7 +192,8 @@ public class Village implements Serializable {
     public void construction (Building bTemp, Building oldB){
         bTemp.setsName("En construction : "+oldB.getsName());
         bTemp.setiLevel(oldB.getiLevel());
-        bTemp.tbBuilding.setiId_typebuilding(oldB.getTbBuilding().getiId_typebuilding());
+        bTemp.setTbBuilding(oldB.getTbBuilding());
+        //bTemp.tbBuilding.setiId_typebuilding(oldB.getTbBuilding().getiId_typebuilding());
         bTemp.setdConstruct(oldB.getdConstruct());
         listBuilding.set(bTemp.indexList, bTemp);
         setiFood(iFood-(int) Math.pow(oldB.tbBuilding.iPriceFood, 1+(double)(oldB.iLevel-1)/10));
