@@ -462,6 +462,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return true;
             }
             else{
+
                 return false;
             }
             //sendDataConnection(mEmail,mPassword);
@@ -514,6 +515,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         isValid=true;
         return isValid;
     }
+
+
     public static String toSHA1(byte[] convertme) {
         MessageDigest md = null;
         try {
@@ -536,6 +539,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return result;
     }
 
+
+    /**
+     * Envoi les données de connexion sur le serveur
+     * @param sEmail l'email inseré par l'utilisateur - String
+     * @param sPassword le password inseré par l'utilisateur - String
+     * @return True si la connexion est bonne, false si erreur
+     */
     private boolean makePostLogin(String sEmail, String sPassword) {
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
@@ -580,10 +590,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 String mMessage = response.body().string();
                                                 if (response.isSuccessful()){
                                                     try {
-                                                        Log.d("index_",mMessage);
                                                         JSONObject json = new JSONObject(mMessage);
                                                         Log.d("index_",json.toString());
+                                                        // on récupere la reponse du serveur
                                                         final String serverResponse = json.getString("code");
+
+                                                       // Condition pour vérifier la réponse du serveur, si 0 erreur sinon Good
                                                         if(Integer.parseInt(serverResponse)>=1){
                                                             isValidLogin =true;
                                                             Log.d("validelogin :", String.valueOf(isValidLogin));
