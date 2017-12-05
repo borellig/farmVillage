@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.group.farmvillage.Modele.Users;
 import com.android.group.farmvillage.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -95,7 +96,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View bLostPassword;
     boolean isValidLogin = false;
 
+    String errormsg;
+    int errorcode;
     String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/";
+
+    //user
+    Users user;
 
     //Connect with FB
     LoginButton lLoginButtonwithFB;
@@ -262,7 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!isEmailValide(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -486,7 +492,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(errormsg+errorcode);
                 mPasswordView.requestFocus();
             }
         }
@@ -546,7 +552,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * @param sPassword le password inseré par l'utilisateur - String
      * @return True si la connexion est bonne, false si erreur
      */
-    private boolean makePostLogin(String sEmail, String sPassword) {
+    private boolean makePostLogin(final String sEmail, String sPassword) {
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -578,7 +584,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             public void onFailure(Call call, IOException e) {
                                                 String mMessage = e.getMessage().toString();
                                                 Log.w("failure Response", mMessage);
-                                                Log.d("index_reponse :","error12");
+                                                Log.d("index_reponse :","error failure");
 
                                                 //call.cancel();
                                             }
@@ -595,13 +601,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                         Log.d("index_",json.toString());
                                                         // on récupere la reponse du serveur
                                                         if(json.has("error")){
-                                                            Log.d("Erreur boucle?"," oui" );
-
-                                                            String message = json.getString("message");
-                                                            int code = json.getInt("code");
-                                                            Toast.makeText(getBaseContext(), message+" code :"+code,
-                                                                    Toast.LENGTH_LONG).show();
-                                                            Log.d("Erreur ?",message );
+                                                            Log.d("error :"," entree boucle" );
+                                                            errormsg =json.getJSONObject("error").getString("message");
+                                                            Log.d("error :"," avant code" );
+                                                            errorcode = json.getJSONObject("error").getInt("code");
+                                                            Log.d("Erreur ?",errormsg );
+                                                        }
+                                                        else{
+                                                            String sIDuser = json.getJSONObject("user").getString("_id");
+                                                            String sUUIDuser = json.getJSONObject("user").getString("globalId");
+                                                            String sNameuser = json.getJSONObject("user").getString("username");
+                                                            String sEmailuser = json.getJSONObject("user").getString("email");
+                                                            String sFactionuser = json.getJSONObject("user").getString("faction");
+                                                            user = new Users(sIDuser,sUUIDuser,sNameuser,sEmailuser,sFactionuser);
+                                                            Log.d("User", String.valueOf(user));
                                                         }
 
                                                         /*final String serverResponse = json.getString("code");
