@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Event;
@@ -33,7 +32,6 @@ import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 import com.android.group.farmvillage.Tools.Task;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -641,17 +639,18 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private void FonctionMissoum(){
-        /*
+
         // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(secondeActivite);
-        */
+
+        /*
        // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
         // On rajoute un extra
         secondeActivite.putExtra(VillageIntent,myVillage);
         startActivity(secondeActivite);
-
+*/
     }
 
     /**

@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View bLostPassword;
     boolean isValidLogin = false;
 
-    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/temp/signin.php";
+    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/";
 
     //Connect with FB
     LoginButton lLoginButtonwithFB;
@@ -591,9 +591,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 if (response.isSuccessful()){
                                                     try {
                                                         JSONObject json = new JSONObject(mMessage);
+
                                                         Log.d("index_",json.toString());
                                                         // on récupere la reponse du serveur
-                                                        final String serverResponse = json.getString("code");
+                                                        if(json.has("error")){
+                                                            Log.d("Erreur boucle?"," oui" );
+
+                                                            String message = json.getString("message");
+                                                            int code = json.getInt("code");
+                                                            Toast.makeText(getBaseContext(), message+" code :"+code,
+                                                                    Toast.LENGTH_LONG).show();
+                                                            Log.d("Erreur ?",message );
+                                                        }
+
+                                                        /*final String serverResponse = json.getString("code");
 
                                                        // Condition pour vérifier la réponse du serveur, si 0 erreur sinon Good
                                                         if(Integer.parseInt(serverResponse)>=1){
@@ -602,7 +613,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                         }
                                                         else {
                                                             isValidLogin = false;
-                                                        }
+                                                        }*/
 
                                                     } catch (Exception e){
                                                         Log.d("index_reponse :","error");
