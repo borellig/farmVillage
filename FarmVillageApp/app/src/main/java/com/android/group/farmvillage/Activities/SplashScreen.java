@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.android.group.farmvillage.Modele.Building;
+import com.android.group.farmvillage.Modele.ObjetBanque;
 import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
@@ -118,7 +119,6 @@ public class SplashScreen extends Activity{
                     Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
                     int typeBuilding = jBuilding.getInt("iId_typebuilding");
                     int index = jBuilding.getInt("iIndex");
-                    Log.d("benable", String.valueOf(bEnable)+" "+String.valueOf(index));
                     TypeBuilding tb = TypeBuilding.values()[typeBuilding];
                     Building newB = new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount);
                     if(newB.isbEnable()){//if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
@@ -134,9 +134,6 @@ public class SplashScreen extends Activity{
             }
             myVillage = new Village(iId, sUUID, sName, iWood, iFood, iRock, iGold, iDefensePoint,listBuilding);
             myVillage.setlLastmaj(jVillage.getLong("lastmaj"));
-            Log.d("timesJVillage", jVillage.toString());
-            Log.d("times", String.valueOf(jVillage.getLong("lastmaj")));
-            Log.d("times", String.valueOf(myVillage.getlLastmaj()));
         } catch (Exception e) {
             e.printStackTrace();
         }

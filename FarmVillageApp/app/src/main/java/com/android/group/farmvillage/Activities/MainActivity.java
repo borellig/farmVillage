@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -20,20 +21,27 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.android.group.farmvillage.Adapteur.MapAdapter;
+import com.android.group.farmvillage.Adapteur.ObjetBanqueAdapter;
 import com.android.group.farmvillage.Modele.Building;
 import com.android.group.farmvillage.Modele.Event;
+import com.android.group.farmvillage.Modele.ObjetBanque;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.BackgroundTask;
 import com.android.group.farmvillage.Tools.Task;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -268,8 +276,11 @@ public class MainActivity extends AppCompatActivity {
             if(bClicked==TypeBuilding.Laboratoire || bClicked == TypeBuilding.Academie){
                 popUpRecherche(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Banque || bClicked == TypeBuilding.Taverne || bClicked == TypeBuilding.Marche) {
+            if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne || bClicked == TypeBuilding.Marche) {
                 popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
+            }
+            if(bClicked==TypeBuilding.Banque){
+                popUpBanque(position, myVillage, timeConstruct, timeImage, builder);
             }
 
         }
@@ -300,28 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        boolean bool = true;
-        int cpt = 0;
-        ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
-        while (cpt < 4 && bool) {
-            if (villageRessources.get(cpt).getQte() < ressources.get(cpt).getQte()) {
-                bool = false;
-            }
-            cpt++;
-        }
-        builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ameliorerBuilding(myVillage, position, timeConstruct, timeImage);
-            }
-        });
-        AlertDialog d = builder.show();
-
-        if (bool) {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-        } else {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
+        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
     private void popUpRecherche(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
@@ -344,28 +334,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        boolean bool = true;
-        int cpt = 0;
-        ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
-        while (cpt < 4 && bool) {
-            if (villageRessources.get(cpt).getQte() < ressources.get(cpt).getQte()) {
-                bool = false;
-            }
-            cpt++;
-        }
-        builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ameliorerBuilding(myVillage, position, timeConstruct, timeImage);
-            }
-        });
-        AlertDialog d = builder.show();
-
-        if (bool) {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-        } else {
-            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
+        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
     private void popUpConstruction(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
@@ -406,6 +375,63 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
+
+    private void popUpBanque(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
+        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        BackgroundTask bgTask = new BackgroundTask();
+        ArrayList<ObjetBanque> obl = new ArrayList<>();
+        try {
+            JSONObject jItems = new JSONObject(String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_items.php?uid="+myVillage.getsUUID()).get()));
+            JSONArray jListObjetBanque = new JSONArray(jItems.getString("items"));
+            Log.d("items4", jListObjetBanque.toString());
+            if (jListObjetBanque != null) {
+                for (int i = 0; i < jListObjetBanque.length(); i++) {
+                    JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
+                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
+                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
+                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
+                    String obId = jObjetBanque.getString("_id");
+                    int obLvl = jTemplate.getInt("level");
+                    String obType = jType.getString("name");
+                    String obName = jTemplate.getString("name");
+                    int obHealth = jStat.getInt("health");
+                    int obAttack = jStat.getInt("attack");
+                    int obDefense = jStat.getInt("defense");
+                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
+                    obl.add(ob);
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        myVillage.setListeBanque(obl);
+
+        GridView gridObjetBanque = new GridView(getBaseContext());
+        gridObjetBanque.setNumColumns(5);
+        ObjetBanqueAdapter obAdapter = new ObjetBanqueAdapter(getBaseContext(), myVillage.getListeBanque());
+        gridObjetBanque.setAdapter(obAdapter);
+        builder.setView(gridObjetBanque);
+
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                destructionBuilding(position, myVillage);
+
+            }
+        });
+        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
+
+    private void ameliorerBuilding(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder, ArrayList<Ressource> ressources) {
         boolean bool = true;
         int cpt = 0;
         ArrayList<Ressource> villageRessources = myVillage.getAllRessource();

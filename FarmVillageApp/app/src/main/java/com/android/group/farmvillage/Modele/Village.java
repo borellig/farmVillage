@@ -33,6 +33,7 @@ public class Village implements Serializable {
     protected int iGold;
     protected int iDefensePoint;
     protected ArrayList<Building> listBuilding;
+    protected ArrayList<ObjetBanque> listeBanque;
     protected long lLastmaj;
 
 
@@ -50,6 +51,7 @@ public class Village implements Serializable {
                 this.iDefensePoint += b.getiMilitaryCount() + b.tbBuilding.iDefensePoint;
             }
         }
+        this.listeBanque=new ArrayList<ObjetBanque>();
     }
 
     public void recolte() {
@@ -437,6 +439,14 @@ public class Village implements Serializable {
 
     public void setiDefensePoint(int iDefensePoint) {
         this.iDefensePoint = iDefensePoint;
+    }
+
+    public ArrayList<ObjetBanque> getListeBanque() {
+        return listeBanque;
+    }
+
+    public void setListeBanque(ArrayList<ObjetBanque> listeBanque) {
+        this.listeBanque = listeBanque;
     }
 
     public long getlLastmaj() {
