@@ -28,6 +28,7 @@ import com.android.group.farmvillage.Modele.PotionAskExchange;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,6 +57,7 @@ public class ExchangeActivity extends AppCompatActivity {
     public String urlPostRessource="http://artshared.fr/andev1/distribue/android/set_request.php";
     TextView txtString;
 
+    exchange_adap adapter;
 
     private ListView mListView;
     Button BoisButton;
@@ -63,12 +67,12 @@ public class ExchangeActivity extends AppCompatActivity {
     ImageButton PotionButton;
     TextView texteBottomFirst;
     TextView texteBottomscd;
-
+    int iQtiteRestante;
     public final static String VillageIntent = "village";
     final List<AskExchange> demande= new ArrayList<AskExchange>();
     String strUrl = "http://artshared.fr/andev1/distribue/android/get_request.php?id_ressource=";
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
-
+    static List<AskExchange> listAskTry;
     Village myVillage;
 
 
@@ -78,7 +82,7 @@ public class ExchangeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
         myVillage = (Village) i.getSerializableExtra(VillageIntent);
-
+        recolteThread();
         //Mise en relation Layout Object
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
         BoisButton = (Button)findViewById(R.id.buttonBois);
@@ -91,7 +95,6 @@ public class ExchangeActivity extends AppCompatActivity {
 
 
 
-
         final List<PotionAskExchange> listAskPotion = genererRequest();
         BoisButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,14 +104,14 @@ public class ExchangeActivity extends AppCompatActivity {
 
                 /*Test json */
                 try {
-                    List<AskExchange> listAskTry = RunAskRessource(strUrl,1);
-                    exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
+                    listAskTry = RunAskRessource(strUrl,1);
+                    adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                            sendRessource(request,myVillage,1);
+                          sendRessource(listAskTry, i, request,myVillage,1);
                         }
                     });
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
@@ -127,14 +130,14 @@ public class ExchangeActivity extends AppCompatActivity {
                 texteBottomscd.setText("Quantité");
 
                 try {
-                    List<AskExchange> listAskTry = RunAskRessource(strUrl,3);
-                    exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
+                    listAskTry = RunAskRessource(strUrl,3);
+                    adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                            sendRessource(request,myVillage,3);
+                            sendRessource(listAskTry,i,request,myVillage,3);
                         }
                     });
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
@@ -153,16 +156,19 @@ public class ExchangeActivity extends AppCompatActivity {
                 texteBottomscd.setText("Quantité");
 
                 try {
-                    List<AskExchange> listAskTry = RunAskRessource(strUrl,4);
-                    exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
+                    listAskTry = RunAskRessource(strUrl,4);
+                    adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                            sendRessource(request,myVillage,4);
+                            sendRessource(listAskTry,i,request,myVillage,4);
+                            Log.d("valeur", String.valueOf(listAskTry.get(i).getrRessource()));
+
                         }
                     });
+
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
 
                 } catch (IOException e) {
@@ -179,15 +185,16 @@ public class ExchangeActivity extends AppCompatActivity {
                 texteBottomscd.setText("Quantité");
 
                 try {
-                    List<AskExchange> listAskTry = RunAskRessource(strUrl,2);
-                    exchange_adap adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
+                    listAskTry = RunAskRessource(strUrl,2);
+                    adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
                     //Log.d("str", String.valueOf(listAskTry.get(1)));
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             AskExchange request = (AskExchange) adapterView.getItemAtPosition(i);
-                            sendRessource(request,myVillage,2);
+                            sendRessource(listAskTry,i,request,myVillage,2);
+
                         }
                     });
 
@@ -276,14 +283,17 @@ public class ExchangeActivity extends AppCompatActivity {
         return  request;
     }
 
+
+
     /**
      *
      * @param request
      * @param village
      * @param i
      */
-    private void sendRessource(final AskExchange request, Village village, final int i){
+    private void sendRessource(final List<AskExchange> lRequeteListe, final int iPosition, final AskExchange request, Village village, final int i){
         final int[] iSommeRestante = new int[1];
+        final int[] iSommeSend = new int[1];
         final int max;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         
@@ -325,21 +335,22 @@ public class ExchangeActivity extends AppCompatActivity {
         //Controle de saisie
 
         // Configurations des bouttons
-        builder.setPositiveButton("Total :"+max+" "+ConvertIDRessource(i), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Total :"+max+" "+ConvertIDRessource(i), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             makePostRequest(request, 0);
                 UpdateRessourceVillage(myVillage,i,max);
+                updateList(lRequeteListe,iPosition,0);
             }
         });
 
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        builder.setNeutralButton("Somme indiquée ", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Somme", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(Integer.parseInt(titleBox.getText().toString())>max){
@@ -350,11 +361,29 @@ public class ExchangeActivity extends AppCompatActivity {
                     iSommeRestante[0] = RemainingAmount(request, Integer.parseInt(titleBox.getText().toString()));
                     makePostRequest(request, iSommeRestante[0]);
                     UpdateRessourceVillage(myVillage,i,Integer.parseInt(titleBox.getText().toString()));
+                    adapter.notifyDataSetChanged();
+                    iSommeSend[0] = Integer.parseInt(titleBox.getText().toString());
+                    updateList(lRequeteListe, iPosition,iSommeRestante[0]);
+
                 }
             }
         });
 
         builder.show();
+    }
+
+    private void updateList(List<AskExchange> lRequeteListe, int iPosition, int iSomme){
+        if (iSomme==0){
+            lRequeteListe.remove(iPosition);
+        }
+        else {
+            Log.d("rIpos", String.valueOf(iPosition));
+            Ressource rNewressource = new Ressource(lRequeteListe.get(iPosition).getrRessource().getType(),iSomme);
+            lRequeteListe.get(iPosition).setrRessource(rNewressource);
+            Log.d("Ressource", String.valueOf(lRequeteListe.get(iPosition).getrRessource().getQte()));
+        }
+        adapter.notifyDataSetChanged();
+
     }
 
     /**
@@ -674,4 +703,21 @@ public class ExchangeActivity extends AppCompatActivity {
 
     }
 
+    public void recolteThread(){
+        final Thread thRecolte = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        myVillage= Task.getMyVillage();
+                        invalidateOptionsMenu();
+                    }
+                };
+                timer.schedule( task, 0L ,1000L);
+            }
+        });
+        thRecolte.start(); //lance le thread
+    }
 }

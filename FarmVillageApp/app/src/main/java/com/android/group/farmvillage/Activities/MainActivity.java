@@ -25,7 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.android.group.farmvillage.Adapteur.MapAdapter;
 import com.android.group.farmvillage.Adapteur.ObjetBanqueAdapter;
 import com.android.group.farmvillage.Modele.Building;
@@ -667,16 +666,18 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private void FonctionMissoum(){
+
         // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(secondeActivite);
+
         /*
        // CreationBanqueDonneeMissoum();
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
         // On rajoute un extra
         secondeActivite.putExtra(VillageIntent,myVillage);
-        startActivity(secondeActivite);*/
-
+        startActivity(secondeActivite);
+*/
     }
 
     /**

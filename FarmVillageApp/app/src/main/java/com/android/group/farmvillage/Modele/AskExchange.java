@@ -39,4 +39,13 @@ public class AskExchange  {
     public void setrRessource(Ressource rRessource) {
         this.rRessource = rRessource;
     }
+
+    @Override
+    public String toString() {
+        return "AskExchange{" +
+                "iIDUserRemote=" + iIDUserRemote +
+                ", sUserNameRemote='" + sUserNameRemote + '\'' +
+                ", rRessource=" + rRessource +
+                '}';
+    }
 }

@@ -8,21 +8,29 @@ import java.util.Date;
 
 public class Users {
 
-    protected int iID;
-    protected String sGlobalID;
+    protected String iID;
+    protected String sUUID;
     protected String sUsername;
     protected String sEmail;
     protected String sPassword;
-    protected int iIdFaction;
+    protected String iIdFaction;
     protected Date dDate;
 
     public Users(){
 
     }
 
-    public Users(int iID, String sGlobalID, String sUsername, String sEmail, String sPassword, int iIdFaction, Date dDate) {
+    public Users(String iID, String sUUID, String sUsername, String sEmail, String iIdFaction) {
         this.iID = iID;
-        this.sGlobalID = sGlobalID;
+        this.sUUID = sUUID;
+        this.sUsername = sUsername;
+        this.sEmail = sEmail;
+        this.iIdFaction = iIdFaction;
+    }
+
+    public Users(String iID, String sUUID, String sUsername, String sEmail, String sPassword, String iIdFaction, Date dDate) {
+        this.iID = iID;
+        this.sUUID = sUUID;
         this.sUsername = sUsername;
         this.sEmail = sEmail;
         this.sPassword = sPassword;
@@ -30,16 +38,16 @@ public class Users {
         this.dDate = dDate;
     }
 
-    public Users(int iID) {
+    public Users(String iID) {
         this.iID = iID;
     }
 
-    public int getiID() {
+    public String getiID() {
         return iID;
     }
 
-    public String getsGlobalID() {
-        return sGlobalID;
+    public String getsUUID() {
+        return sUUID;
     }
 
     public String getsUsername() {
@@ -54,7 +62,7 @@ public class Users {
         return sPassword;
     }
 
-    public int getiIdFaction() {
+    public String getiIdFaction() {
         return iIdFaction;
     }
 
@@ -62,12 +70,12 @@ public class Users {
         return dDate;
     }
 
-    public void setiID(int iID) {
+    public void setiID(String iID) {
         this.iID = iID;
     }
 
-    public void setsGlobalID(String sGlobalID) {
-        this.sGlobalID = sGlobalID;
+    public void setsUUID(String sUUID) {
+        this.sUUID = sUUID;
     }
 
     public void setsUsername(String sUsername) {
@@ -82,8 +90,19 @@ public class Users {
         this.sPassword = sPassword;
     }
 
-    public void setiIdFaction(int iIdFaction) {
+    public void setiIdFaction(String iIdFaction) {
         this.iIdFaction = iIdFaction;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "iID='" + iID + '\'' +
+                ", sUUID='" + sUUID + '\'' +
+                ", sUsername='" + sUsername + '\'' +
+                ", sEmail='" + sEmail + '\'' +
+                ", iIdFaction='" + iIdFaction + '\'' +
+                '}';
     }
 
     public void setdDate(Date dDate) {

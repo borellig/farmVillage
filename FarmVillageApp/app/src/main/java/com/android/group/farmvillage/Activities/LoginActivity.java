@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.group.farmvillage.Modele.Users;
 import com.android.group.farmvillage.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -95,7 +96,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View bLostPassword;
     boolean isValidLogin = false;
 
-    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/temp/signin.php";
+    String errormsg;
+    int errorcode;
+    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/";
+
+    //user
+    Users user;
 
     //Connect with FB
     LoginButton lLoginButtonwithFB;
@@ -262,7 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!isEmailValide(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -462,6 +468,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return true;
             }
             else{
+
                 return false;
             }
             //sendDataConnection(mEmail,mPassword);
@@ -485,7 +492,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(errormsg+errorcode);
                 mPasswordView.requestFocus();
             }
         }
@@ -514,6 +521,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         isValid=true;
         return isValid;
     }
+
+
     public static String toSHA1(byte[] convertme) {
         MessageDigest md = null;
         try {
@@ -536,7 +545,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return result;
     }
 
-    private boolean makePostLogin(String sEmail, String sPassword) {
+
+    /**
+     * Envoi les données de connexion sur le serveur
+     * @param sEmail l'email inseré par l'utilisateur - String
+     * @param sPassword le password inseré par l'utilisateur - String
+     * @return True si la connexion est bonne, false si erreur
+     */
+    private boolean makePostLogin(final String sEmail, String sPassword) {
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -568,7 +584,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             public void onFailure(Call call, IOException e) {
                                                 String mMessage = e.getMessage().toString();
                                                 Log.w("failure Response", mMessage);
-                                                Log.d("index_reponse :","error12");
+                                                Log.d("index_reponse :","error failure");
 
                                                 //call.cancel();
                                             }
@@ -580,17 +596,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 String mMessage = response.body().string();
                                                 if (response.isSuccessful()){
                                                     try {
-                                                        Log.d("index_",mMessage);
                                                         JSONObject json = new JSONObject(mMessage);
+
                                                         Log.d("index_",json.toString());
-                                                        final String serverResponse = json.getString("code");
+                                                        // on récupere la reponse du serveur
+                                                        if(json.has("error")){
+                                                            Log.d("error :"," entree boucle" );
+                                                            errormsg =json.getJSONObject("error").getString("message");
+                                                            Log.d("error :"," avant code" );
+                                                            errorcode = json.getJSONObject("error").getInt("code");
+                                                            Log.d("Erreur ?",errormsg );
+                                                        }
+                                                        else{
+                                                            String sIDuser = json.getJSONObject("user").getString("_id");
+                                                            String sUUIDuser = json.getJSONObject("user").getString("globalId");
+                                                            String sNameuser = json.getJSONObject("user").getString("username");
+                                                            String sEmailuser = json.getJSONObject("user").getString("email");
+                                                            String sFactionuser = json.getJSONObject("user").getString("faction");
+                                                            user = new Users(sIDuser,sUUIDuser,sNameuser,sEmailuser,sFactionuser);
+                                                            Log.d("User", String.valueOf(user));
+                                                        }
+
+                                                        /*final String serverResponse = json.getString("code");
+
+                                                       // Condition pour vérifier la réponse du serveur, si 0 erreur sinon Good
                                                         if(Integer.parseInt(serverResponse)>=1){
                                                             isValidLogin =true;
                                                             Log.d("validelogin :", String.valueOf(isValidLogin));
                                                         }
                                                         else {
                                                             isValidLogin = false;
-                                                        }
+                                                        }*/
 
                                                     } catch (Exception e){
                                                         Log.d("index_reponse :","error");
