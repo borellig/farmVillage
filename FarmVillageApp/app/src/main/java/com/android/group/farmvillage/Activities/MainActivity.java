@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +51,7 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Déclaration de l'adapteur MarketAdapteur
+    //Déclaration de l'adapteur
     //public map_adapt mapAdapteur;
     public MapAdapter mapAdapteur;
     public Village myVillage;
@@ -587,6 +585,12 @@ public class MainActivity extends AppCompatActivity {
                                         builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialog) {
                                                 myVillage.evement(e.getrConsequence());
                                                 invalidateOptionsMenu();
                                                 eventValidate = true;

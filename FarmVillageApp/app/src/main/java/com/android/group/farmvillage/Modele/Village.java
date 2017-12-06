@@ -274,7 +274,7 @@ public class Village implements Serializable {
             jVillage.put("iFood", this.getiFood());
             jVillage.put("iRock", this.getiRock());
             jVillage.put("iGold", this.getiGold());
-            jVillage.put("iDefensePoint", this.getiId());
+            jVillage.put("iDefensePoint", this.getiDefensePoint());
             JSONArray building = new JSONArray();
             for(Building b : this.getListBuilding()){
                 if(b.getTbBuilding()!=TypeBuilding.Vide) {
