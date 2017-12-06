@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class Users {
 
-    protected String iID;
+    protected int iID;
     protected String sUUID;
     protected String sUsername;
     protected String sEmail;
@@ -20,7 +20,7 @@ public class Users {
 
     }
 
-    public Users(String iID, String sUUID, String sUsername, String sEmail, String iIdFaction) {
+    public Users(int iID, String sUUID, String sUsername, String sEmail, String iIdFaction) {
         this.iID = iID;
         this.sUUID = sUUID;
         this.sUsername = sUsername;
@@ -28,7 +28,7 @@ public class Users {
         this.iIdFaction = iIdFaction;
     }
 
-    public Users(String iID, String sUUID, String sUsername, String sEmail, String sPassword, String iIdFaction, Date dDate) {
+    public Users(int iID, String sUUID, String sUsername, String sEmail, String sPassword, String iIdFaction, Date dDate) {
         this.iID = iID;
         this.sUUID = sUUID;
         this.sUsername = sUsername;
@@ -38,11 +38,11 @@ public class Users {
         this.dDate = dDate;
     }
 
-    public Users(String iID) {
+    public Users(int iID) {
         this.iID = iID;
     }
 
-    public String getiID() {
+    public int getiID() {
         return iID;
     }
 
@@ -70,7 +70,7 @@ public class Users {
         return dDate;
     }
 
-    public void setiID(String iID) {
+    public void setiID(int iID) {
         this.iID = iID;
     }
 

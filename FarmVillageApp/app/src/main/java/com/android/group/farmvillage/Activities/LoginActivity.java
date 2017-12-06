@@ -48,7 +48,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -94,11 +93,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View bLostPassword;
-    boolean isValidLogin = false;
+    private volatile boolean isValidLogin;
 
     String errormsg;
     int errorcode;
-    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/";
+    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/?loop";
 
     //user
     Users user;
@@ -464,7 +463,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
             Log.d("Email", mEmail);
-            if(makePostLogin(mEmail,mPassword)==true){
+            isValidLogin = makePostLogin(mEmail,mPassword);
+            if(isValidLogin==true){
                 return true;
             }
             else{
@@ -553,16 +553,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * @return True si la connexion est bonne, false si erreur
      */
     private boolean makePostLogin(final String sEmail, String sPassword) {
+        /*
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        }*/
         final OkHttpClient client = new OkHttpClient();
         JSONObject postdata = new JSONObject();
         try {
             postdata.put("username", sEmail);
             postdata.put("password", sPassword);
+            Log.d("error password? ",sPassword);
+            Log.d("error username? ",sEmail);
+
         } catch(JSONException e){
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -574,7 +578,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final Request request = new Request.Builder()
                 .url(urlPostLogin)
                 .post(body)
-                .addHeader("Content-Type", "application/json")
+               .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", "Your Token")
                 .addHeader("cache-control", "no-cache")
                 .build();
@@ -583,8 +587,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             @Override
                                             public void onFailure(Call call, IOException e) {
                                                 String mMessage = e.getMessage().toString();
-                                                Log.w("failure Response", mMessage);
-                                                Log.d("index_reponse :","error failure");
+                                                Log.w("error failure ", mMessage);
 
                                                 //call.cancel();
                                             }
@@ -594,11 +597,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                     throws IOException {
 
                                                 String mMessage = response.body().string();
+                                                Log.d("error mMessage",mMessage);
                                                 if (response.isSuccessful()){
+
                                                     try {
                                                         JSONObject json = new JSONObject(mMessage);
 
-                                                        Log.d("index_",json.toString());
                                                         // on récupere la reponse du serveur
                                                         if(json.has("error")){
                                                             Log.d("error :"," entree boucle" );
@@ -608,13 +612,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                             Log.d("Erreur ?",errormsg );
                                                         }
                                                         else{
-                                                            String sIDuser = json.getJSONObject("user").getString("_id");
+                                                            Log.d("error avant iduser ","oui");
+
+                                                            int iIDuser = json.getJSONObject("user").getInt("_id");
                                                             String sUUIDuser = json.getJSONObject("user").getString("globalId");
                                                             String sNameuser = json.getJSONObject("user").getString("username");
                                                             String sEmailuser = json.getJSONObject("user").getString("email");
                                                             String sFactionuser = json.getJSONObject("user").getString("faction");
-                                                            user = new Users(sIDuser,sUUIDuser,sNameuser,sEmailuser,sFactionuser);
+                                                            user = new Users(iIDuser,sUUIDuser,sNameuser,sEmailuser,sFactionuser);
                                                             Log.d("User", String.valueOf(user));
+                                                            isValidLogin=true;
                                                         }
 
                                                         /*final String serverResponse = json.getString("code");
@@ -636,12 +643,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 }
 
                                             }
+
                                         }
         );
         Log.d("valideloginfinal :", String.valueOf(isValidLogin));
 
         return isValidLogin;
     }
+
 
 
 }
