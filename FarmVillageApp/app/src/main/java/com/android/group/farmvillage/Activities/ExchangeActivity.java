@@ -105,6 +105,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 /*Test json */
                 try {
                     listAskTry = RunAskRessource(strUrl,1);
+
                     adapter = new exchange_adap(ExchangeActivity.this, listAskTry);
                     mListView.setAdapter(adapter);
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -201,6 +202,7 @@ public class ExchangeActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
 
 
             }
@@ -557,6 +559,13 @@ public class ExchangeActivity extends AppCompatActivity {
      * @return
      * @throws IOException
      */
+    /**
+     *
+     * @param url1
+     * @param j
+     * @return
+     * @throws IOException
+     */
     List<AskExchange> RunAskRessource(String url1, final int j) throws IOException {
         OkHttpClient client = new OkHttpClient();
         final Request request = new Request.Builder()
@@ -610,7 +619,6 @@ public class ExchangeActivity extends AppCompatActivity {
         });
         return demande;
     }
-
     /**
      * Fonction pour envoyer les ressources demandée
      * @param demande

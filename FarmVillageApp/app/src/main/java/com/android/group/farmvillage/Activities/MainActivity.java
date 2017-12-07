@@ -672,11 +672,13 @@ public class MainActivity extends AppCompatActivity {
     private void FonctionMissoum(){
 
         // CreationBanqueDonneeMissoum();
+
         Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(secondeActivite);
 
-        /*
+
        // CreationBanqueDonneeMissoum();
+      /*
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
         // On rajoute un extra
         secondeActivite.putExtra(VillageIntent,myVillage);

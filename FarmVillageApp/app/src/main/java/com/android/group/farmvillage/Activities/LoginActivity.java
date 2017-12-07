@@ -53,8 +53,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -463,12 +461,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
             Log.d("Email", mEmail);
-            isValidLogin = makePostLogin(mEmail,mPassword);
-            if(isValidLogin==true){
-                return true;
-            }
-            else{
+            try {
+                if(makePostLogin(mEmail,mPassword)==true){
+                    return true;
+                }
+                else{
 
+                    return false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
                 return false;
             }
             //sendDataConnection(mEmail,mPassword);
@@ -552,7 +554,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * @param sPassword le password inseré par l'utilisateur - String
      * @return True si la connexion est bonne, false si erreur
      */
-    private boolean makePostLogin(final String sEmail, String sPassword) {
+    private boolean makePostLogin(final String sEmail, String sPassword) throws IOException {
         /*
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
@@ -578,79 +580,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final Request request = new Request.Builder()
                 .url(urlPostLogin)
                 .post(body)
-               .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", "Your Token")
                 .addHeader("cache-control", "no-cache")
                 .build();
+        Response response = client.newCall(request).execute();
+        String mMessage = response.body().string();
+        if (response.isSuccessful()) {
 
-        client.newCall(request).enqueue(new Callback() {
-                                            @Override
-                                            public void onFailure(Call call, IOException e) {
-                                                String mMessage = e.getMessage().toString();
-                                                Log.w("error failure ", mMessage);
+            try {
+                JSONObject json = new JSONObject(mMessage);
 
-                                                //call.cancel();
-                                            }
+                // on récupere la reponse du serveur
+                if (json.has("error")) {
+                    Log.d("error :", " entree boucle");
+                    errormsg = json.getJSONObject("error").getString("message");
+                    Log.d("error :", " avant code");
+                    errorcode = json.getJSONObject("error").getInt("code");
+                    Log.d("Erreur ?", errormsg);
+                } else {
+                    Log.d("error avant iduser ", "oui");
 
-                                            @Override
-                                            public void onResponse(Call call, Response response)
-                                                    throws IOException {
+                    int iIDuser = json.getJSONObject("user").getInt("_id");
+                    String sUUIDuser = json.getJSONObject("user").getString("globalId");
+                    String sNameuser = json.getJSONObject("user").getString("username");
+                    String sEmailuser = json.getJSONObject("user").getString("email");
+                    String sFactionuser = json.getJSONObject("user").getString("faction");
+                    user = new Users(iIDuser, sUUIDuser, sNameuser, sEmailuser, sFactionuser);
+                    Log.d("User", String.valueOf(user));
+                    isValidLogin = true;
+                }
+            } catch (Exception e) {
+                Log.d("index_reponse :", "error");
 
-                                                String mMessage = response.body().string();
-                                                Log.d("error mMessage",mMessage);
-                                                if (response.isSuccessful()){
-
-                                                    try {
-                                                        JSONObject json = new JSONObject(mMessage);
-
-                                                        // on récupere la reponse du serveur
-                                                        if(json.has("error")){
-                                                            Log.d("error :"," entree boucle" );
-                                                            errormsg =json.getJSONObject("error").getString("message");
-                                                            Log.d("error :"," avant code" );
-                                                            errorcode = json.getJSONObject("error").getInt("code");
-                                                            Log.d("Erreur ?",errormsg );
-                                                        }
-                                                        else{
-                                                            Log.d("error avant iduser ","oui");
-
-                                                            int iIDuser = json.getJSONObject("user").getInt("_id");
-                                                            String sUUIDuser = json.getJSONObject("user").getString("globalId");
-                                                            String sNameuser = json.getJSONObject("user").getString("username");
-                                                            String sEmailuser = json.getJSONObject("user").getString("email");
-                                                            String sFactionuser = json.getJSONObject("user").getString("faction");
-                                                            user = new Users(iIDuser,sUUIDuser,sNameuser,sEmailuser,sFactionuser);
-                                                            Log.d("User", String.valueOf(user));
-                                                            isValidLogin=true;
-                                                        }
-
-                                                        /*final String serverResponse = json.getString("code");
-
-                                                       // Condition pour vérifier la réponse du serveur, si 0 erreur sinon Good
-                                                        if(Integer.parseInt(serverResponse)>=1){
-                                                            isValidLogin =true;
-                                                            Log.d("validelogin :", String.valueOf(isValidLogin));
-                                                        }
-                                                        else {
-                                                            isValidLogin = false;
-                                                        }*/
-
-                                                    } catch (Exception e){
-                                                        Log.d("index_reponse :","error");
-
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-
-                                            }
-
-                                        }
-        );
-        Log.d("valideloginfinal :", String.valueOf(isValidLogin));
-
+                e.printStackTrace();
+            }
+        }
         return isValidLogin;
     }
-
 
 
 }
