@@ -34,7 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.group.farmvillage.Modele.Building;
+import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.Users;
+import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -44,6 +47,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +55,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -92,10 +97,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private View bLostPassword;
     private volatile boolean isValidLogin;
-
+    Village village;
     String errormsg;
     int errorcode;
     String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/?loop";
+    public final int nbCase=30;
 
     //user
     Users user;
@@ -463,7 +469,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.d("Email", mEmail);
             try {
                 if(makePostLogin(mEmail,mPassword)==true){
-                    return true;
+                    if(village!=null) {
+                        Log.d("error avant intent"," non");
+                        Intent MainActivite = new Intent(LoginActivity.this, MainActivity.class);
+                        MainActivite.putExtra("village", village);
+                        Log.d("error avant MA"," non");
+                        Log.d("error village :", String.valueOf(village));
+                        startActivity(MainActivite);
+                        finish();
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
                 else{
 
@@ -608,7 +626,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     String sFactionuser = json.getJSONObject("user").getString("faction");
                     user = new Users(iIDuser, sUUIDuser, sNameuser, sEmailuser, sFactionuser);
                     Log.d("User", String.valueOf(user));
-                    isValidLogin = true;
+
+                                            Log.d("error avant initi","oui");
+                        village = initialisation(sUUIDuser);
+                        Log.d("error apres initi","oui");
+
+                        isValidLogin = true;
+
+
+
                 }
             } catch (Exception e) {
                 Log.d("index_reponse :", "error");
@@ -619,6 +645,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return isValidLogin;
     }
 
+    private Village initialisation(String UUID) throws IOException {
 
+        OkHttpClient client = new OkHttpClient();
+        final Request request = new Request.Builder()
+                .url("http://artshared.fr/andev1/distribue/android/get_game.php?uid="+UUID)
+                .build();
+        Response response = client.newCall(request).execute();
+        String mMessage = response.body().string();
+        Village myVillage = null;
+        if (response.isSuccessful()) {
+            Log.d("error avant try ini", UUID);
+            try {
+                JSONObject jVillage = new JSONObject(mMessage);
+                int iId = jVillage.getInt("iId");
+                String sUUID = jVillage.getString("sUUID");
+                String sName = jVillage.getString("sName");
+                int iWood = jVillage.getInt("iWood");
+                int iFood = jVillage.getInt("iFood");
+                int iRock = jVillage.getInt("iRock");
+                int iGold = jVillage.getInt("iGold");
+                int iDefensePoint = jVillage.getInt("iDefensePoint");
+                ArrayList<Building> listBuilding = new ArrayList<>();
+                JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
+                Date d = new Date();
+                for (int i = 0; i < this.nbCase; i++) {
+                    listBuilding.add(i, new Building(false, 0, TypeBuilding.Vide, i, d, 0));
+                }
+                if (jListBuilding != null) {
+                    for (int i = 0; i < jListBuilding.length(); i++) {
+                        JSONObject jBuilding = new JSONObject(jListBuilding.get(i).toString());
+                        boolean bEnable;
+                        if (jBuilding.getInt("bEnable") == 1) {
+                            bEnable = true;
+                        } else {
+                            bEnable = false;
+                        }
+
+                        int iLevel = jBuilding.getInt("iLevel");
+                        int iMilitaryCount = jBuilding.getInt("iMilitaryCount");
+                        Date dConstruct = new Date(jBuilding.getLong("dConstruct"));
+                        int typeBuilding = jBuilding.getInt("iId_typebuilding");
+                        int index = jBuilding.getInt("iIndex");
+                        TypeBuilding tb = TypeBuilding.values()[typeBuilding];
+                        Building newB = new Building(bEnable, iLevel, tb, index, dConstruct, iMilitaryCount);
+                        if (newB.isbEnable()) {//if(newB.getdConstruct().getTime()+dureeConstruction<new Date().getTime()){
+                            listBuilding.set(index, newB);
+                        } else {
+                            Building tmpBuilding = new Building(false, iLevel, TypeBuilding.values()[typeBuilding], index, dConstruct, iMilitaryCount);
+                            listBuilding.set(index, tmpBuilding);
+
+                        }
+                        listBuilding.get(index).setiId(jBuilding.getInt("iId"));
+                    }
+                }
+                myVillage = new Village(iId, sUUID, sName, iWood, iFood, iRock, iGold, iDefensePoint, listBuilding);
+                myVillage.setlLastmaj(jVillage.getLong("lastmaj"));
+            } catch (Exception e) {
+                Log.d("errorTry", "plantage");
+                e.printStackTrace();
+            }
+            Log.d("error apres init", " oui");
+
+        }
+        return myVillage;
+
+    }
 }
 

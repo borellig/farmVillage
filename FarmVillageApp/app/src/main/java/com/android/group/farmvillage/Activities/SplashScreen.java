@@ -5,30 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.android.group.farmvillage.Modele.Building;
-import com.android.group.farmvillage.Modele.ObjetBanque;
-import com.android.group.farmvillage.Modele.TypeBuilding;
-import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
-import com.android.group.farmvillage.Tools.BackgroundTask;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by gui on 24/11/2017.
  */
 
 public class SplashScreen extends Activity{
-    private static int SPLASH_TIME_OUT = 5000;
+    private static int SPLASH_TIME_OUT = 1000;
     public final int nbCase=30;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -38,8 +25,8 @@ public class SplashScreen extends Activity{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run(){
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                Village myVillage = initialisation();
+                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+                /*Village myVillage = initialisation();
                 if(myVillage!=null) {
                     i.putExtra("village", myVillage);
                     startActivity(i);
@@ -47,7 +34,8 @@ public class SplashScreen extends Activity{
                 }
                 else {
                     Log.d("dommage...", "grv");
-                }
+                }*/
+                startActivity(i);
             }
 
         }, SPLASH_TIME_OUT);
@@ -81,12 +69,13 @@ public class SplashScreen extends Activity{
         mCountDownTimer[0].start();//lance le timer
     }
 
-    private Village initialisation() {
+   /* private Village initialisation() {
         BackgroundTask bgTask = new BackgroundTask();
         Village myVillage = null;
 
         try {
-            String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid=UNIQUEID1").get());
+            String str = String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_game.php?uid="
+            ).get());
             Log.d("str", str);
             JSONObject jVillage = new JSONObject(str);
             int iId = jVillage.getInt("iId");
@@ -140,5 +129,5 @@ public class SplashScreen extends Activity{
         return myVillage;
     }
 
-
+*/
 }
