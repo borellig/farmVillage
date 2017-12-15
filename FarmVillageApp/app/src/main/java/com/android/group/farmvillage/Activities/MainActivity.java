@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Test musique
         MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
-        ring.start();
+        //ring.start();
 
         final ArrayList<Building> listBatiment = myVillage.getListBuilding();
 
@@ -270,14 +272,20 @@ public class MainActivity extends AppCompatActivity {
             if(bClicked==TypeBuilding.Carriere || bClicked == TypeBuilding.Scierie || bClicked == TypeBuilding.Ferme || bClicked == TypeBuilding.HDV) {
                 popUpConstruction(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Laboratoire || bClicked == TypeBuilding.Academie){
+            if(bClicked == TypeBuilding.Academie){
                 popUpRecherche(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne || bClicked == TypeBuilding.Marche) {
+            if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne) {
                 popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
             }
             if(bClicked==TypeBuilding.Banque){
                 popUpBanque(position, myVillage, timeConstruct, timeImage, builder);
+            }
+            if(bClicked==TypeBuilding.Laboratoire){
+                popUpLaboratoire(position, myVillage, timeConstruct, timeImage, builder);
+            }
+            if(bClicked==TypeBuilding.Marche){
+                popUpMarche(position, myVillage, timeConstruct, timeImage, builder);
             }
 
         }
@@ -295,20 +303,26 @@ public class MainActivity extends AppCompatActivity {
             besoin += res.getType() + " x" + res.getQte() + "\n";
         }
         builder.setMessage("Pour passer de niveau il faut : \n" +besoin);
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
 
+    private void popUpMarche(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
+        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        String besoin = "";
+        for (Ressource res : ressources) {
+            besoin += res.getType() + " x" + res.getQte() + "\n";
+        }
+        builder.setMessage("Pour passer de niveau il faut : \n" +besoin);
+        Button toMarche = new Button(getApplicationContext());
+        toMarche.setText("Visiter le marché");
+        toMarche.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FonctionMissoum();
             }
         });
-        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                destructionBuilding(position, myVillage);
-
-            }
-        });
-        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+        builder.setView(toMarche);
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
     private void popUpRecherche(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
@@ -318,20 +332,7 @@ public class MainActivity extends AppCompatActivity {
             besoin += res.getType() + " x" + res.getQte() + "\n";
         }
         builder.setMessage("Pour passer de niveau il faut : \n" +besoin);
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                destructionBuilding(position, myVillage);
-
-            }
-        });
-        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
     private void popUpConstruction(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
@@ -359,23 +360,191 @@ public class MainActivity extends AppCompatActivity {
         String productionLvlUp = "Au niveau suivant la production sera de : "+(int)Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getiProductionCapacity(), 1+((double)myVillage.getListBuilding().get(position).getiLevel()+1)/10)+" "+typeProd+" par secondes";
         String tempsLvlUp = "L'amélioration au niveau superieur prendra : "+formatSeconde((int) Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getDuration(), 1 + ((double) (myVillage.getListBuilding().get(position).getiLevel()) / 10)));
         builder.setMessage(production+"\nPour passer de niveau il faut : \n" +besoin+"\n"+productionLvlUp+"\n"+tempsLvlUp);
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setNeutralButton("Détruire", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                destructionBuilding(position, myVillage);
-
-            }
-        });
-        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
-    private void popUpBanque(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
+    private void popUpBanque(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, final AlertDialog.Builder builder) {
+        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        BackgroundTask bgTask = new BackgroundTask();
+        ArrayList<ObjetBanque> obl = new ArrayList<>();
+        try {
+            JSONObject jItems = new JSONObject(String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_items.php?uid="+myVillage.getsUUID()).get()));
+            JSONArray jListObjetBanque = new JSONArray(jItems.getString("items"));
+            Log.d("items4", jListObjetBanque.toString());
+//            if (jListObjetBanque != null) {
+//                for (int i = 0; i < jListObjetBanque.length(); i++) {
+//                    JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
+//                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
+//                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
+//                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
+//                    String obId = jObjetBanque.getString("_id");
+//                    int obLvl = jTemplate.getInt("level");
+//                    String obType = jType.getString("name");
+//                    String obName = jTemplate.getString("name");
+//                    int obHealth = jStat.getInt("health");
+//                    int obAttack = jStat.getInt("attack");
+//                    int obDefense = jStat.getInt("defense");
+//                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
+//                    obl.add(ob);
+//                }
+//            }
+            ObjetBanque ob;
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+            ob = new ObjetBanque("1", 1, "test", "n1", 100, 100, 100);
+            obl.add(ob);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        myVillage.setListeBanque(obl);
+
+
+
+        final GridView gridObjetBanque = new GridView(getBaseContext());
+        gridObjetBanque.setNumColumns(3);
+        ObjetBanqueAdapter obAdapter = new ObjetBanqueAdapter(getBaseContext(), myVillage.getListeBanque());
+        gridObjetBanque.setAdapter(obAdapter);
+        //RelativeLayout rl = new RelativeLayout(getApplicationContext());
+        final LinearLayout rl = new LinearLayout(getApplicationContext());
+        rl.setOrientation(LinearLayout.VERTICAL);
+        final Button btoInfo = new Button(rl.getContext());
+        btoInfo.setText("Information batiment");
+        final Button btoObjets = new Button(rl.getContext());
+        btoObjets.setText("Retour aux objets");
+        final TextView tv = new TextView(getApplicationContext());
+        tv.setText("vladadadadadam");
+        rl.addView(btoInfo);
+        rl.addView(gridObjetBanque);
+        Log.d("builder",builder.toString());
+        btoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rl.removeAllViews();
+                rl.addView(btoObjets);
+                rl.addView(tv);
+            }
+        });
+        btoObjets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rl.removeAllViews();
+                rl.addView(btoInfo);
+                rl.addView(gridObjetBanque);
+            }
+        });
+
+
+        //params.addRule(RelativeLayout.ALIGN_TOP, gridObjetBanque.getId());
+
+        //bChange.setLayoutParams(params); //causes layout update
+
+
+
+        builder.setView(rl);
+
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
+
+    private void popUpLaboratoire(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
         BackgroundTask bgTask = new BackgroundTask();
         ArrayList<ObjetBanque> obl = new ArrayList<>();
@@ -412,6 +581,10 @@ public class MainActivity extends AppCompatActivity {
         gridObjetBanque.setAdapter(obAdapter);
         builder.setView(gridObjetBanque);
 
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
+
+    private void genereBoutonsPopup(final int position, final Village myVillage, TextView timeConstruct, ImageView timeImage, AlertDialog.Builder builder, ArrayList<Ressource> ressources) {
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -425,10 +598,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        ameliorerBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
+        upgradeBuilding(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }
 
-    private void ameliorerBuilding(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder, ArrayList<Ressource> ressources) {
+        private void upgradeBuilding(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder, ArrayList<Ressource> ressources) {
         boolean bool = true;
         int cpt = 0;
         ArrayList<Ressource> villageRessources = myVillage.getAllRessource();
@@ -441,7 +614,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Améliorer", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ameliorerBuilding(myVillage, position, timeConstruct, timeImage);
+                upgradeBuilding(myVillage, position, timeConstruct, timeImage);
             }
         });
         AlertDialog d = builder.show();
@@ -462,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
         mapAdapteur.notifyDataSetChanged();
     }
 
-    private void ameliorerBuilding(Village myVillage, int position, TextView timeConstruct, ImageView timeImage) {
+    private void upgradeBuilding(Village myVillage, int position, TextView timeConstruct, ImageView timeImage) {
         Date d = new Date();
         Building currentBuilding = myVillage.getListBuilding().get(position);
         currentBuilding.levelUp();
@@ -527,7 +700,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 mapAdapteur.notifyDataSetChanged();
-                                Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Construction de "+newB.getsName()+" terminée.", Toast.LENGTH_SHORT).show();
                                 myVillage.sauvegarde();
                             }
                         });
@@ -673,17 +846,17 @@ public class MainActivity extends AppCompatActivity {
 
         // CreationBanqueDonneeMissoum();
 
-        Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(secondeActivite);
+//        Intent secondeActivite = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(secondeActivite);
 
 
        // CreationBanqueDonneeMissoum();
-      /*
+
         Intent secondeActivite = new Intent(MainActivity.this, ExchangeActivity.class);
         // On rajoute un extra
         secondeActivite.putExtra(VillageIntent,myVillage);
         startActivity(secondeActivite);
-*/
+
     }
 
     /**

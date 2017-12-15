@@ -130,6 +130,36 @@ public class Village implements Serializable {
         }
     }
 
+    public void usePotion (PotionAskExchange potion){
+        int stockageCapacity=getStockageCapacity();
+        switch (potion.getrRessource().getType()) {
+            case "food" :
+                this.iFood+=this.iFood*potion.getrRessource().getQte()/100;
+                if(this.iFood>stockageCapacity/4) {
+                    this.iFood = stockageCapacity/4;
+                }
+                break;
+            case "wood" :
+                this.iWood+=this.iWood*potion.getrRessource().getQte()/100;
+                if(this.iWood>stockageCapacity/4) {
+                    this.iWood = stockageCapacity/4;
+                }
+                break;
+            case "rock" :
+                this.iRock+=this.iRock*potion.getrRessource().getQte()/100;
+                if(this.iRock>stockageCapacity/4) {
+                    this.iRock = stockageCapacity/4;
+                }
+                break;
+            case "gold" :
+                this.iGold+=this.iGold*potion.getrRessource().getQte()/100;
+                if(this.iGold>stockageCapacity/4) {
+                    this.iGold = stockageCapacity/4;
+                }
+                break;
+        }
+    }
+
     public void evement(ArrayList<Ressource> rConsequence){
         int stockageCapacity=getStockageCapacity();
         for(Ressource r : rConsequence){
