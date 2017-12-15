@@ -39,6 +39,7 @@ import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.Users;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -170,6 +171,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+                final String accessToken = AccessToken.getCurrentAccessToken().getUserId();
+                Log.d("tokken fb", accessToken);
 
             }
 
@@ -711,5 +714,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return myVillage;
 
     }
+
 }
 
