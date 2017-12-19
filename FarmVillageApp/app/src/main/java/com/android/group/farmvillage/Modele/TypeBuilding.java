@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public enum TypeBuilding {
-    //Objets directement construits
+    //Objets directement construits liste
     HDV(0, "Hotel de Ville", 1, 10, 50, 10, "gold", 100, 100, 100, 100, 50, "hdv", 10000, 1000),
     Ferme(1, "Ferme", 1, 10, 50, 10, "food", 100, 100, 100, 100, 50, "ferme", 10000, 1000),
     Entrepot(2, "Entrepot", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "entrepot", 10000, 2000),
