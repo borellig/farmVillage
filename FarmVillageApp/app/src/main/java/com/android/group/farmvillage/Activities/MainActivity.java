@@ -791,8 +791,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.exchangeMenu:
                 FonctionMissoum();
+                break;
             case R.id.renameVillage:
                 renameVillage();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -823,6 +825,7 @@ public class MainActivity extends AppCompatActivity {
                 if(Pattern.matches("[^0-9]+", newNameVillage) && titleBox.getText().toString().trim().length() <= 25) {
                     myVillage.setsName(newNameVillage);
                     myVillage.sauvegarde();
+                    invalidateOptionsMenu();
                 }else{
                     Toast.makeText(getBaseContext(), "Nom incorrect !", Toast.LENGTH_LONG).show();
                 }
