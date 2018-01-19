@@ -15,6 +15,17 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:android:windowTitleStyle">@style/DialogTitle</item>
+        <item name="android:background">@android:color/holo_orange_light</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="DialogTitle">
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomTextExhangeactivity">
         <item name="android:textColor">@android:color/white</item>

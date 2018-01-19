@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buildingModification(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyDialogTheme);
         builder.setTitle(myVillage.getListBuilding().get(position).getsName()+" niv "+myVillage.getListBuilding().get(position).getiLevel());
         TypeBuilding bClicked = myVillage.getListBuilding().get(position).getTbBuilding();
         if(bClicked!=TypeBuilding.Construction) {
@@ -293,6 +294,8 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("Rome ne s'est pas construite en un jour ! Patientez un peu !");
             builder.show();
         }
+
+
 
     }
 

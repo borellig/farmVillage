@@ -1,3 +1,4 @@
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -5,6 +6,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.android.group.farmvillage.Activities.LoginActivity">
+
+
 
     <!-- Login progress -->
     <ScrollView
@@ -19,6 +22,8 @@
             android:layout_gravity="center"
             android:layout_height="300dp"
             android:orientation="vertical">
+
+
 
 
             <com.facebook.login.widget.LoginButton
@@ -116,5 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
+
+
 
 </LinearLayout>
