@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <HorizontalScrollView
-    android:layout_width="3000px"
+    android:layout_width="3500px"
     android:layout_height="2500px"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="4000px"
+        android:layout_width="4500px"
         android:layout_height="1500px">
 
 
             <RelativeLayout
-                android:layout_width="3500px"
+                android:layout_width="3000px"
                 android:layout_height="1500px"
                 android:background="@drawable/map"
                 android:orientation="vertical">
 
                     <GridView
-                        android:layout_width="3000px"
+                        android:layout_width="2500px"
                         android:layout_height="2000px"
                         android:id="@+id/gridMap"
                         android:numColumns="6"
