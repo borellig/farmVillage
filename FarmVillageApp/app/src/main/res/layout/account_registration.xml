@@ -15,38 +15,41 @@
         android:background="@color/marronclair"
         android:text="S'enregistrer" />
 
-    <TextView
+    <EditText
         android:id="@+id/Username"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:text="Nom d'utilisateur" />
+        android:layout_marginTop="14dp"
+        android:hint="Nom d'utilisateur" />
 
-    <TextView
+    <EditText
         android:id="@+id/Password"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/AddressMail"
         android:layout_below="@+id/AddressMail"
-        android:layout_marginTop="26dp"
-        android:text="Mot de passe" />
+        android:layout_marginTop="24dp"
+        android:hint="Mot de passe"
+        android:inputType="textPassword" />
 
     <Spinner
         android:id="@+id/faction_choice"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button-validate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp" />
+        android:layout_alignStart="@+id/Password"
+        android:layout_below="@+id/Password"
+        android:layout_marginTop="22dp" />
 
-    <TextView
+    <EditText
         android:id="@+id/AddressMail"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/Username"
         android:layout_below="@+id/Username"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Adresse mail" />
+        android:layout_marginTop="22dp"
+        android:hint="Adresse mail"
+        android:inputType="textEmailAddress"
+        android:singleLine="false" />
 </RelativeLayout>

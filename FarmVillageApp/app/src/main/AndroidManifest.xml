@@ -70,7 +70,9 @@
         <activity
             android:name=".Activities.ExchangeActivity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".Activities.RegistrerAccount"></activity>
+        <activity android:name=".Activities.RegistrerAccount"
+        android:screenOrientation="sensorLandscape" />
+
     </application>
 
 </manifest>

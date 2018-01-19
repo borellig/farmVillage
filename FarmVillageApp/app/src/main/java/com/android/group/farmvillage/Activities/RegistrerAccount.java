@@ -2,6 +2,7 @@ package com.android.group.farmvillage.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,12 +28,13 @@ import static com.android.group.farmvillage.Activities.LoginActivity.MEDIA_TYPE;
 public class RegistrerAccount extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     //Variable
-    String urlPostLogin = "";
+    String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signup/";
     String errormsg;
     int errorcode;
     boolean isValidLogin;
     EditText etUserName,etPassword, etAdressMail ;
     Button bRegistrer;
+    int iFactionID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +61,75 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
         bRegistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                try {
+                    attemptLogin(iFactionID++);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                iFactionID = (int) spinner.getSelectedItemId();
+                iFactionID++;
+                Log.d("spinner id : ", String.valueOf(iFactionID));
             }
         });
 
 
     }
 
-    private boolean makePostRegistrer(String sUsername, String sEmail, String sPassword, String name_faction) throws IOException {
+    private void attemptLogin(int idFaction) throws IOException {
+
+        // Reset errors.
+        etAdressMail.setError(null);
+        etPassword.setError(null);
+        etUserName.setError(null);
+
+        View focusView = null;
+        boolean cancel = false;
+
+        // Store values at the time of the login attempt.
+        String username = etUserName.getText().toString();
+        String email = etAdressMail.getText().toString();
+        String password = etPassword.getText().toString();
+
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            etPassword.setError(getString(R.string.error_invalid_password));
+            focusView = etPassword;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            etAdressMail.setError(getString(R.string.error_field_required));
+            focusView = etAdressMail;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            etAdressMail.setError(getString(R.string.error_invalid_email));
+            focusView = etAdressMail;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            if (makePostRegistrer(username,email,password,idFaction)==true){
+
+            }
+            else{
+                etUserName.setError(errormsg+errorcode);
+                etUserName.requestFocus();
+                focusView.requestFocus();
+            }
+        }
+    }
+
+
+    private boolean makePostRegistrer(String sUsername, String sEmail, String sPassword, int idfaction) throws IOException {
+
         /*
         try {
             sPassword = toSHA1(sPassword.getBytes("UTF-8"));
@@ -76,16 +139,16 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
         final OkHttpClient client = new OkHttpClient();
         JSONObject postdata = new JSONObject();
         try {
-            postdata.put("username", sEmail);
+            postdata.put("username", sUsername);
+            postdata.put("email", sEmail);
             postdata.put("password", sPassword);
-            Log.d("error password? ",sPassword);
-            Log.d("error username? ",sEmail);
+            postdata.put("id_faction", idfaction);
 
         } catch(JSONException e){
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        Log.d("error avant envoi ?", "non");
         RequestBody body = RequestBody.create(MEDIA_TYPE,
                 postdata.toString());
 
@@ -102,18 +165,14 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
 
             try {
                 JSONObject json = new JSONObject(mMessage);
+                Log.d("error apres reception ?", "non");
 
                 // on récupere la reponse du serveur
                 if (json.has("error")) {
-                    Log.d("error :", " entree boucle");
                     errormsg = json.getJSONObject("error").getString("message");
-                    Log.d("error :", " avant code");
                     errorcode = json.getJSONObject("error").getInt("code");
-                    Log.d("Erreur ?", errormsg);
+                    Log.d("retour error :", String.valueOf(json));
                 } else {
-                    Log.d("error avant iduser ", "oui");
-
-
 
 
                 }
@@ -136,5 +195,12 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() > 4;
+    }
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
     }
 }
