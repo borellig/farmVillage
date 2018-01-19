@@ -18,6 +18,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -128,14 +130,8 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
     }
 
 
-    private boolean makePostRegistrer(String sUsername, String sEmail, String sPassword, int idfaction) throws IOException {
 
-        /*
-        try {
-            sPassword = toSHA1(sPassword.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }*/
+    private boolean makePostRegistrer(String sUsername, String sEmail, String sPassword, int idfaction) {
         final OkHttpClient client = new OkHttpClient();
         JSONObject postdata = new JSONObject();
         try {
@@ -148,7 +144,7 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Log.d("error avant envoi ?", "non");
+
         RequestBody body = RequestBody.create(MEDIA_TYPE,
                 postdata.toString());
 
@@ -159,33 +155,47 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
                 .addHeader("Authorization", "Your Token")
                 .addHeader("cache-control", "no-cache")
                 .build();
-        Response response = client.newCall(request).execute();
-        String mMessage = response.body().string();
-        if (response.isSuccessful()) {
 
-            try {
-                JSONObject json = new JSONObject(mMessage);
-                Log.d("error apres reception ?", "non");
+        client.newCall(request).enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                                String mMessage = e.getMessage().toString();
+                                                Log.w("failure Response", mMessage);
+                                                //call.cancel();
+                                            }
 
-                // on récupere la reponse du serveur
-                if (json.has("error")) {
-                    errormsg = json.getJSONObject("error").getString("message");
-                    errorcode = json.getJSONObject("error").getInt("code");
-                    Log.d("retour error :", String.valueOf(json));
-                } else {
+                                            @Override
+                                            public void onResponse(Call call, Response response)
+                                                    throws IOException {
 
+                                                String mMessage = response.body().string();
+                                                if (response.isSuccessful()){
+                                                    try {
+                                                        JSONObject json = new JSONObject(mMessage);
+                                                        Log.d("error apres reception ?", "non");
 
-                }
-            } catch (Exception e) {
-                Log.d("index_reponse :", "error");
+                                                        // on récupere la reponse du serveur
+                                                        if (json.has("error")) {
+                                                            errormsg = json.getJSONObject("error").getString("message");
+                                                            errorcode = json.getJSONObject("error").getInt("code");
+                                                            Log.d("retour error :", String.valueOf(json));
+                                                            isValidLogin = false;
+                                                        } else {
 
-                e.printStackTrace();
-            }
-        }
+                                                            isValidLogin = true;
+
+                                                        }
+                                                    } catch (Exception e) {
+                                                        Log.d("index_reponse :", "error");
+
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }
+                                        }
+        );
         return isValidLogin;
     }
-
-
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
