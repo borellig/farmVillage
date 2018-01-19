@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private View bLostPassword;
     private volatile boolean isValidLogin;
+    private Button registrerButton;
     Village village;
     String errormsg;
     int errorcode;
@@ -116,6 +117,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        registrerButton = (Button) findViewById(R.id.email_account_button);
+        bLostPassword = (Button)findViewById(R.id.nopassword);
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
 
         // Set up the login form.
@@ -137,15 +142,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
+        registrerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GOtoRegistrer();
+            }
+        });
 
-        bLostPassword = (Button)findViewById(R.id.nopassword);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -715,5 +724,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    private void GOtoRegistrer (){
+
+        Intent RegistrerActivity = new Intent(LoginActivity.this, RegistrerAccount.class);
+        // On rajoute un extra
+       // secondeActivite.putExtra(VillageIntent,myVillage);
+        startActivity(RegistrerActivity);
+    }
 }
 
