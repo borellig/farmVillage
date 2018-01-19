@@ -715,5 +715,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    private void GOtoRegistrer (){
+
+        Intent RegistrerActivity = new Intent(LoginActivity.this, RegistrerAccount.class);
+        // On rajoute un extra
+       // secondeActivite.putExtra(VillageIntent,myVillage);
+        startActivity(RegistrerActivity);
+    }
 }
 
