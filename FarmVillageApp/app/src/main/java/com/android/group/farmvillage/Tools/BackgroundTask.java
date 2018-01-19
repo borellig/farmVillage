@@ -3,7 +3,6 @@ package com.android.group.farmvillage.Tools;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.android.group.farmvillage.Activities.MainActivity;

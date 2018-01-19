@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <!--
-           <activity android:name=".Activities.MainActivity">
+           <activity android:name=".Activities.MainActivity">http://193.190.248.154/ajoutNote
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
