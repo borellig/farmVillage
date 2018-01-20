@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.group.farmvillage.R;
 
@@ -63,14 +64,14 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
         bRegistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                iFactionID = (int) spinner.getSelectedItemId();
+                iFactionID++;
                 try {
+
                     attemptLogin(iFactionID++);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                iFactionID = (int) spinner.getSelectedItemId();
-                iFactionID++;
-                Log.d("spinner id : ", String.valueOf(iFactionID));
             }
         });
 
@@ -119,12 +120,12 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             if (makePostRegistrer(username,email,password,idFaction)==true){
-
+                Toast.makeText(getApplicationContext(),"Enregistrement validé",Toast.LENGTH_SHORT);
+                GOtoLogin();
             }
             else{
                 etUserName.setError(errormsg+errorcode);
                 etUserName.requestFocus();
-                focusView.requestFocus();
             }
         }
     }
@@ -213,4 +214,9 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
+    private void GOtoLogin (){
+
+        finish();
+    }
+
 }
