@@ -70,9 +70,12 @@
         <activity
             android:name=".Activities.ExchangeActivity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".Activities.RegistrerAccount"
-        android:screenOrientation="sensorLandscape" />
-
+        <activity
+            android:name=".Activities.RegistrerAccount"
+            android:screenOrientation="sensorLandscape" />
+        <activity android:name=".Activities.PotionActivity"
+            android:screenOrientation="sensorLandscape"
+            />
     </application>
 
 </manifest>

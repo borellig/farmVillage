@@ -65,10 +65,10 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View view) {
                 iFactionID = (int) spinner.getSelectedItemId();
-                iFactionID++;
+                iFactionID = iFactionID+1;
                 try {
 
-                    attemptLogin(iFactionID++);
+                    attemptLogin(iFactionID);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -89,7 +89,7 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
         boolean cancel = false;
 
         // Store values at the time of the login attempt.
-        String username = etUserName.getText().toString();
+        String username = etUserName.getText().toString().toLowerCase();
         String email = etAdressMail.getText().toString();
         String password = etPassword.getText().toString();
 
@@ -119,7 +119,14 @@ public class RegistrerAccount extends AppCompatActivity implements AdapterView.O
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            if (makePostRegistrer(username,email,password,idFaction)==true){
+            makePostRegistrer(username,email,password,idFaction);
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (isValidLogin==true){
                 Toast.makeText(getApplicationContext(),"Enregistrement validé",Toast.LENGTH_SHORT);
                 GOtoLogin();
             }
