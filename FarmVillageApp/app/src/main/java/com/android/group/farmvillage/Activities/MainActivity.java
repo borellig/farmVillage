@@ -377,19 +377,19 @@ public class MainActivity extends AppCompatActivity {
             if (jListObjetBanque != null) {
                 for (int i = 0; i < jListObjetBanque.length(); i++) {
                     JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-//                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-//                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
-//                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
-//                    String obId = jObjetBanque.getString("id");
-//                    int obLvl = jTemplate.getInt("level");
-//                    String obType = jType.getString("name");
-//                    String obName = jTemplate.getString("name");
-//                    int obHealth = jStat.getInt("health");
-//                    int obAttack = jStat.getInt("attack");
-//                    int obDefense = jStat.getInt("defense");
-//                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-//                    Log.d("objetBanque", ob.toString());
-//                    obl.add(ob);
+                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
+                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
+                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
+                    String obId = jObjetBanque.getString("id");
+                    int obLvl = jTemplate.getInt("level");
+                    String obType = jType.getString("name");
+                    String obName = jTemplate.getString("name");
+                    int obHealth = jStat.getInt("health");
+                    int obAttack = jStat.getInt("attack");
+                    int obDefense = jStat.getInt("defense");
+                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
+                    Log.d("objetBanque", ob.toString());
+                    obl.add(ob);
                     Log.e("idItemgetted", jObjetBanque.getString("id"));
                 }
             }
@@ -450,38 +450,54 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
         BackgroundTask bgTask = new BackgroundTask();
         ArrayList<ObjetBanque> obl = new ArrayList<>();
-        try {
-            JSONObject jItems = new JSONObject(String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_items.php?uid="+myVillage.getsUUID()).get()));
-            JSONArray jListObjetBanque = new JSONArray(jItems.getString("items"));
-            Log.d("items4", jListObjetBanque.toString());
-            if (jListObjetBanque != null) {
-                for (int i = 0; i < jListObjetBanque.length(); i++) {
-                    JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
-                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
-                    String obId = jObjetBanque.getString("_id");
-                    int obLvl = jTemplate.getInt("level");
-                    String obType = jType.getString("name");
-                    String obName = jTemplate.getString("name");
-                    int obHealth = jStat.getInt("health");
-                    int obAttack = jStat.getInt("attack");
-                    int obDefense = jStat.getInt("defense");
-                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-                    obl.add(ob);
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        myVillage.setListeBanque(obl);
+//        try {
+//            JSONObject jItems = new JSONObject(String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_items.php?uid="+myVillage.getsUUID()).get()));
+//            JSONArray jListObjetBanque = new JSONArray(jItems.getString("items"));
+//            Log.d("items4", jListObjetBanque.toString());
+//            if (jListObjetBanque != null) {
+//                for (int i = 0; i < jListObjetBanque.length(); i++) {
+//                    JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
+//                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
+//                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
+//                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
+//                    String obId = jObjetBanque.getString("_id");
+//                    int obLvl = jTemplate.getInt("level");
+//                    String obType = jType.getString("name");
+//                    String obName = jTemplate.getString("name");
+//                    int obHealth = jStat.getInt("health");
+//                    int obAttack = jStat.getInt("attack");
+//                    int obDefense = jStat.getInt("defense");
+//                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
+//                    obl.add(ob);
+//                }
+//            }
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        myVillage.setListeBanque(obl);
+//
+//        GridView gridObjetBanque = new GridView(getBaseContext());
+//        gridObjetBanque.setNumColumns(5);
+//        ObjetBanqueAdapter obAdapter = new ObjetBanqueAdapter(getBaseContext(), myVillage.getListeBanque());
+//        gridObjetBanque.setAdapter(obAdapter);
+//        builder.setView(gridObjetBanque);
 
-        GridView gridObjetBanque = new GridView(getBaseContext());
-        gridObjetBanque.setNumColumns(5);
-        ObjetBanqueAdapter obAdapter = new ObjetBanqueAdapter(getBaseContext(), myVillage.getListeBanque());
-        gridObjetBanque.setAdapter(obAdapter);
-        builder.setView(gridObjetBanque);
+        RelativeLayout rl = new RelativeLayout(getApplicationContext());
+        Button toLabo = new Button(getApplicationContext());
+        toLabo.setText("Entrer dans le laboratoire");
+        toLabo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent secondeActivite = new Intent(MainActivity.this, PotionActivity.class);
+                // On rajoute un extra
+                secondeActivite.putExtra(VillageIntent, myVillage);
+                startActivity(secondeActivite);
+            }
+        });
+
+        rl.addView(toLabo);
+        builder.setView(rl);
 
         genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
     }

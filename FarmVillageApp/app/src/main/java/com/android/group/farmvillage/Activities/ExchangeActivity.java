@@ -82,7 +82,6 @@ public class ExchangeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exchange);
         Intent i = getIntent();
         myVillage = (Village) i.getSerializableExtra(VillageIntent);
-        recolteThread();
         //Mise en relation Layout Object
         mListView = (ListView) findViewById(R.id.ExchangeListeView);
         BoisButton = (Button)findViewById(R.id.buttonBois);
