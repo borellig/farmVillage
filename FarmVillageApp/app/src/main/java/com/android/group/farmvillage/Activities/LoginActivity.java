@@ -619,6 +619,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (response.isSuccessful()) {
 
             try {
+                String s = mMessage;
                 JSONObject json = new JSONObject(mMessage);
 
                 // on récupere la reponse du serveur
@@ -631,12 +632,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } else {
                     Log.d("error avant iduser ", "oui");
 
-                    int iIDuser = json.getJSONObject("user").getInt("_id");
+                    //int iIDuser = json.getJSONObject("user").getInt("_id");
                     String sUUIDuser = json.getJSONObject("user").getString("globalId");
                     String sNameuser = json.getJSONObject("user").getString("username");
                     String sEmailuser = json.getJSONObject("user").getString("email");
                     String sFactionuser = json.getJSONObject("user").getString("faction");
-                    user = new Users(iIDuser, sUUIDuser, sNameuser, sEmailuser, sFactionuser);
+                    user = new Users(0, sUUIDuser, sNameuser, sEmailuser, sFactionuser);
                     Log.d("User", String.valueOf(user));
 
                                             Log.d("error avant initi","oui");
@@ -665,11 +666,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .build();
         Response response = client.newCall(request).execute();
         String mMessage = response.body().string();
+        Log.e("tagMmessage", UUID);
         Village myVillage = null;
         if (response.isSuccessful()) {
             Log.d("error avant try ini", UUID);
             try {
                 JSONObject jVillage = new JSONObject(mMessage);
+
                 int iId = jVillage.getInt("iId");
                 String sUUID = jVillage.getString("sUUID");
                 String sName = jVillage.getString("sName");

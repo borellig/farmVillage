@@ -377,19 +377,20 @@ public class MainActivity extends AppCompatActivity {
             if (jListObjetBanque != null) {
                 for (int i = 0; i < jListObjetBanque.length(); i++) {
                     JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
-                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
-                    String obId = jObjetBanque.getString("id");
-                    int obLvl = jTemplate.getInt("level");
-                    String obType = jType.getString("name");
-                    String obName = jTemplate.getString("name");
-                    int obHealth = jStat.getInt("health");
-                    int obAttack = jStat.getInt("attack");
-                    int obDefense = jStat.getInt("defense");
-                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-                    Log.d("objetBanque", ob.toString());
-                    obl.add(ob);
+//                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
+//                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
+//                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
+//                    String obId = jObjetBanque.getString("id");
+//                    int obLvl = jTemplate.getInt("level");
+//                    String obType = jType.getString("name");
+//                    String obName = jTemplate.getString("name");
+//                    int obHealth = jStat.getInt("health");
+//                    int obAttack = jStat.getInt("attack");
+//                    int obDefense = jStat.getInt("defense");
+//                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
+//                    Log.d("objetBanque", ob.toString());
+//                    obl.add(ob);
+                    Log.e("idItemgetted", jObjetBanque.getString("id"));
                 }
             }
         }
