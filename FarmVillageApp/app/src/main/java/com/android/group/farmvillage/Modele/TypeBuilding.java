@@ -20,7 +20,8 @@ public enum TypeBuilding {
     Banque(9, "Coffre", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "bank", 120000, 0),
     Taverne(10, "Taverne", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 120000, 0),
     Marche(11, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
-    Vide(12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0);
+    Vide(12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0),
+    PAB(13, "Piscine à boules", 1, 86400, 100, 0, null, 100000, 100000, 100000, 100000, 100, "pab", 10000, 10000);
 
     protected int iId_typebuilding;
     protected String sName;
