@@ -619,6 +619,7 @@ public class ExchangeActivity extends AppCompatActivity {
         });
         return demande;
     }
+
     /**
      * Fonction pour envoyer les ressources demandée
      * @param demande
