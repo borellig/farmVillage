@@ -134,15 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
         myVillage.recolteServeur();
 
-
-
-
-
-
-
-
-
-
         //Test musique
         MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
         //ring.start();
@@ -368,6 +359,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void popUpBanque(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, final AlertDialog.Builder builder) {
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        String besoin = "";
+        for (Ressource res : ressources) {
+            besoin += res.getType() + " x" + res.getQte() + "\n";
+        }
         BackgroundTask bgTask = new BackgroundTask();
         ArrayList<ObjetBanque> obl = new ArrayList<>();
         Log.d("ici", "ici");
@@ -377,20 +372,16 @@ public class MainActivity extends AppCompatActivity {
             if (jListObjetBanque != null) {
                 for (int i = 0; i < jListObjetBanque.length(); i++) {
                     JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
                     JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
                     String obId = jObjetBanque.getString("id");
-                    int obLvl = jTemplate.getInt("level");
-                    String obType = jType.getString("name");
-                    String obName = jTemplate.getString("name");
+                    int obLvl = jObjetBanque.getInt("level");
+                    String obType = jObjetBanque.getString("equipement");
+                    String obName = jObjetBanque.getString("name");
                     int obHealth = jStat.getInt("health");
                     int obAttack = jStat.getInt("attack");
                     int obDefense = jStat.getInt("defense");
                     ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-                    Log.d("objetBanque", ob.toString());
                     obl.add(ob);
-                    Log.e("idItemgetted", jObjetBanque.getString("id"));
                 }
             }
         }
@@ -413,7 +404,11 @@ public class MainActivity extends AppCompatActivity {
         final Button btoObjets = new Button(rl.getContext());
         btoObjets.setText("Retour aux objets");
         final TextView tv = new TextView(getApplicationContext());
-        tv.setText("vladadadadadam");
+        String capacity = "Votre coffre contient : "+(myVillage.getListBuilding().get(position).getiLevel()+10)+" emplacements";
+        String productionLvlUp = "Au niveau suivant vous béneficirez de : "+(myVillage.getListBuilding().get(position).getiLevel()+1+10)+" emplacements";
+        String tempsLvlUp = "L'amélioration au niveau superieur prendra : "+formatSeconde((int) Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getDuration(), 1 + ((double) (myVillage.getListBuilding().get(position).getiLevel()) / 10)));
+        tv.setText(capacity+"\nPour passer de niveau il faut : \n" +besoin+"\n"+productionLvlUp+"\n"+tempsLvlUp);
+        Log.e("tempsMaggle", formatSeconde((int) Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getDuration(), 1 + ((double) (myVillage.getListBuilding().get(position).getiLevel()) / 10))));
         rl.addView(btoInfo);
         rl.addView(gridObjetBanque);
         Log.d("builder",builder.toString());
