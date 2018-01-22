@@ -1,12 +1,13 @@
 package com.android.group.farmvillage.Modele;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by hm on 14/11/2017.
  */
 
-public class Users {
+public class Users implements Serializable{
 
     protected int iID;
     protected String sUUID;
