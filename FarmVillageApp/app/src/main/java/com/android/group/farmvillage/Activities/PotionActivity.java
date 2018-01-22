@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.android.group.farmvillage.Modele.PotionAskExchange;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
+import com.android.group.farmvillage.Tools.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,7 +44,7 @@ public class PotionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_potion);
         Intent i = getIntent();
         myVillage = (Village) i.getSerializableExtra(VillageIntent);
-
+        recolteThread();
        // Potionexchange_adapt adapter = new Potionexchange_adapt(PotionActivity.this, listAskPotion);
      //   lvPotion.setAdapter(adapter);
 
@@ -122,6 +125,23 @@ public class PotionActivity extends AppCompatActivity {
             }
         });
         return demande;
+    }
+    public void recolteThread(){
+        final Thread thRecolte = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    public void run()
+                    {
+                        myVillage= Task.getMyVillage();
+                        invalidateOptionsMenu();
+                    }
+                };
+                timer.schedule( task, 0L ,1000L);
+            }
+        });
+        thRecolte.start(); //lance le thread
     }
 
 }

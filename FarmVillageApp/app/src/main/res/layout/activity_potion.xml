@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.android.group.farmvillage.Activities.PotionActivity"
-    android:background="@drawable/backroundwood1">
+    android:background="@drawable/potion_background">
 
 
     <ListView

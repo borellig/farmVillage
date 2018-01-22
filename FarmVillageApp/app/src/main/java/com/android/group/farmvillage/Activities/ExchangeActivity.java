@@ -551,13 +551,7 @@ public class ExchangeActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     *
-     * @param url1
-     * @param j
-     * @return
-     * @throws IOException
-     */
+
     /**
      *
      * @param url1
