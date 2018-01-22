@@ -79,11 +79,64 @@ public class MainActivity extends AppCompatActivity {
         menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
         menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
         menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
+        if(indiceSong == 1){
+            menu.findItem(R.id.stopSong).setTitle("Couper le son");
+        }else{
+            menu.findItem(R.id.stopSong).setTitle("Activer le son");
+        }
+
         return true;
     }
 
+    private MediaPlayer ring;
+    private int indiceSong = 1;
 
 
+    /**
+     * Fonction pour récupérer la clé SHA1 pour FB Connect
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exchangeMenu:
+                FonctionMissoum();
+                break;
+            case R.id.renameVillage:
+                renameVillage();
+                break;
+            case R.id.stopSong:
+                if(indiceSong == 0){
+                    indiceSong = 1;
+                    changeSong(ring);
+                }else{
+                    indiceSong = 0;
+                    changeSong(ring);
+                }
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void changeSong(MediaPlayer ring){
+        if(indiceSong == 0){
+            ring.pause();
+        }else {
+            ring.start();
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ring.pause();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ring.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,18 +187,11 @@ public class MainActivity extends AppCompatActivity {
 
         myVillage.recolteServeur();
 
+        //-------------------Gestion de la musique--------------------
+        //------------------------------------------------------------
+        ring = MediaPlayer.create(getBaseContext(),R.raw.aoe);
+        changeSong(ring);
 
-
-
-
-
-
-
-
-
-        //Test musique
-        MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
-        //ring.start();
 
         final ArrayList<Building> listBatiment = myVillage.getListBuilding();
 
@@ -368,6 +414,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void popUpBanque(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, final AlertDialog.Builder builder) {
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        String besoin = "";
+        for (Ressource res : ressources) {
+            besoin += res.getType() + " x" + res.getQte() + "\n";
+        }
         BackgroundTask bgTask = new BackgroundTask();
         ArrayList<ObjetBanque> obl = new ArrayList<>();
         Log.d("ici", "ici");
@@ -377,20 +427,16 @@ public class MainActivity extends AppCompatActivity {
             if (jListObjetBanque != null) {
                 for (int i = 0; i < jListObjetBanque.length(); i++) {
                     JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
                     JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
                     String obId = jObjetBanque.getString("id");
-                    int obLvl = jTemplate.getInt("level");
-                    String obType = jType.getString("name");
-                    String obName = jTemplate.getString("name");
+                    int obLvl = jObjetBanque.getInt("level");
+                    String obType = jObjetBanque.getString("equipement");
+                    String obName = jObjetBanque.getString("name");
                     int obHealth = jStat.getInt("health");
                     int obAttack = jStat.getInt("attack");
                     int obDefense = jStat.getInt("defense");
                     ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-                    Log.d("objetBanque", ob.toString());
                     obl.add(ob);
-                    Log.e("idItemgetted", jObjetBanque.getString("id"));
                 }
             }
         }
@@ -413,7 +459,11 @@ public class MainActivity extends AppCompatActivity {
         final Button btoObjets = new Button(rl.getContext());
         btoObjets.setText("Retour aux objets");
         final TextView tv = new TextView(getApplicationContext());
-        tv.setText("vladadadadadam");
+        String capacity = "Votre coffre contient : "+(myVillage.getListBuilding().get(position).getiLevel()+10)+" emplacements";
+        String productionLvlUp = "Au niveau suivant vous béneficirez de : "+(myVillage.getListBuilding().get(position).getiLevel()+1+10)+" emplacements";
+        String tempsLvlUp = "L'amélioration au niveau superieur prendra : "+formatSeconde((int) Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getDuration(), 1 + ((double) (myVillage.getListBuilding().get(position).getiLevel()) / 10)));
+        tv.setText(capacity+"\nPour passer de niveau il faut : \n" +besoin+"\n"+productionLvlUp+"\n"+tempsLvlUp);
+        Log.e("tempsMaggle", formatSeconde((int) Math.pow(myVillage.getListBuilding().get(position).getTbBuilding().getDuration(), 1 + ((double) (myVillage.getListBuilding().get(position).getiLevel()) / 10))));
         rl.addView(btoInfo);
         rl.addView(gridObjetBanque);
         Log.d("builder",builder.toString());
@@ -702,20 +752,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /**
-     * Fonction pour récupérer la clé SHA1 pour FB Connect
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.exchangeMenu:
-                FonctionMissoum();
-                break;
-            case R.id.renameVillage:
-                renameVillage();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 
     /**
      * Renomme le village

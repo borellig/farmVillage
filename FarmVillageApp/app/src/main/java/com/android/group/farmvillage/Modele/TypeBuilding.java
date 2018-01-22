@@ -17,11 +17,11 @@ public enum TypeBuilding {
     Laboratoire(6, "Laboratoire", 1, 0, 50, 0, null, 100, 100, 100, 100, 50, "laboratoire", 10000, 2000),
     Garnison(7, "Garnison", 1, 10, 50, 0, null, 100, 100, 100, 100, 50, "garnison", 10000, 2000),
     Construction(8, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "construction", 0, 0),
-    Banque(9, "Coffre", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "bank", 120000, 0),
+    Banque(9, "Coffre", 0, 50, 0, 0, null, 100, 100, 100, 100, 0, "bank", 120000, 0),
     Taverne(10, "Taverne", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "taverne", 120000, 0),
     Marche(11, "Marché", 1, 300, 0, 0, null, 50, 50, 50, 50, 0, "marche", 300000, 0),
     Vide(12, "", 0, 0, 0, 0, null, 0, 0, 0, 0, 0, "vide", 0, 0),
-    PAB(13, "Piscine à boules", 1, 86400, 100, 0, null, 100000, 100000, 100000, 100000, 100, "pab", 10000, 10000);
+    PAB(13, "Piscine à boules", 1, 10, 100, 0, null, 0, 0, 0, 0, 100, "pab", 10000, 10000);
 
     protected int iId_typebuilding;
     protected String sName;
