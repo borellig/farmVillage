@@ -1,5 +1,6 @@
 package com.android.group.farmvillage.Activities;
 
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -86,7 +88,14 @@ public class MainActivity extends AppCompatActivity {
         }else{
             menu.findItem(R.id.stopSong).setTitle("Activer le son");
         }
-        
+
+        Log.d("okokok", user.getiIdFaction());
+        //Gestion des factions
+        if(user.getiIdFaction().contentEquals("shadow")){
+            menu.findItem(R.id.flag).setIcon(R.drawable.flagblack);
+        }else{
+            menu.findItem(R.id.flag).setIcon(R.drawable.flag);
+        }
         //menu.findItem(R.id.flag).setIcon();
 
         return true;
@@ -148,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         Task.setMyVillage((Village)getIntent().getSerializableExtra("village"));
         Task.actionRecolte();
 
+
         //Récupère la résolution du support
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -165,7 +175,10 @@ public class MainActivity extends AppCompatActivity {
 
         myVillage=(Village)getIntent().getSerializableExtra("village");
         user=(Users)getIntent().getSerializableExtra("user");
+
         Log.e("userFaction", user.getiIdFaction());
+
+
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
         listTest = (GridView) findViewById(R.id.gridMap);
         listTest.setAdapter(mapAdapteur);
