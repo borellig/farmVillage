@@ -34,6 +34,7 @@ import com.android.group.farmvillage.Modele.ObjetBanque;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.TypeBuilding;
 import com.android.group.farmvillage.Modele.TypeEvent;
+import com.android.group.farmvillage.Modele.Users;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
 import com.android.group.farmvillage.Tools.BackgroundTask;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         }else{
             menu.findItem(R.id.stopSong).setTitle("Activer le son");
         }
+        
+        //menu.findItem(R.id.flag).setIcon();
 
         return true;
     }
