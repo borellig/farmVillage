@@ -20,7 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.group.farmvillage.Adapteur.Potionexchange_adapt;
 import com.android.group.farmvillage.Adapteur.exchange_adap;
 import com.android.group.farmvillage.Modele.AskExchange;
 import com.android.group.farmvillage.Modele.InputFilterMinMax;
@@ -210,11 +209,11 @@ public class ExchangeActivity extends AppCompatActivity {
         PotionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                texteBottomscd.setText("Quantité");
+               /* texteBottomscd.setText("Quantité");
 
                 texteBottomFirst.setText("Offreur");
                 Potionexchange_adapt adapter = new Potionexchange_adapt(ExchangeActivity.this, listAskPotion);
-                mListView.setAdapter(adapter);
+                mListView.setAdapter(adapter);*/
             }
         });
 

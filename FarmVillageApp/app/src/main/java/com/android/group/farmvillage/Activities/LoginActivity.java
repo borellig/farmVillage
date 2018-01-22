@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private Button registrerButton;
     Village village;
     String errormsg;
+    String sIDUser_FB;
     int errorcode;
     String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/?loop";
     public final int nbCase=30;
@@ -197,8 +198,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-                final String accessToken = AccessToken.getCurrentAccessToken().getUserId();
-                Log.d("tokken fb", accessToken);
+                sIDUser_FB = AccessToken.getCurrentAccessToken().getUserId();
+                Log.d("tokken fb", sIDUser_FB);
 
             }
 
