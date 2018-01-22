@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.android.group.farmvillage.Modele.PotionAskExchange;
+import com.android.group.farmvillage.Modele.PotionListAsk;
 import com.android.group.farmvillage.R;
 
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.List;
  * Created by hm on 23/11/2017.
  */
 
-public class Potionexchange_adapt extends ArrayAdapter<PotionAskExchange> {
+public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
     ImageButton ibButtonPotion;
 
-    public Potionexchange_adapt(Context context, List<PotionAskExchange> askProduct) {
+    public Potionexchange_adapt(Context context, List<PotionListAsk> askProduct) {
         super(context, 0, askProduct);
     }
 
@@ -35,18 +35,18 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionAskExchange> {
         PotionViewHolder viewHolder = (PotionViewHolder) convertView.getTag();
         if (viewHolder == null) {
             viewHolder = new PotionViewHolder();
-            viewHolder.tvPseudo = (TextView) convertView.findViewById(R.id.UserNameRemotePotion);
-            viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.ValueTypePotion);
+            viewHolder.tvPseudo = (TextView) convertView.findViewById(R.id.TypePotion);
+            viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.QtitePotion);
             convertView.setTag(viewHolder);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        final PotionAskExchange requestPotion = getItem(position);
+        final PotionListAsk requestPotion = getItem(position);
         ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
 
         //il ne reste plus qu'à remplir notre vue
-        viewHolder.tvPseudo.setText(requestPotion.getsUserNameRemotePotion());
-        viewHolder.tvDescription.setText(String.valueOf(requestPotion.getrRessource().getQte()));
+        viewHolder.tvPseudo.setText(String.valueOf(requestPotion.getiPuissancePotion()));
+        viewHolder.tvDescription.setText(String.valueOf(requestPotion.getQtite()));
         ibButtonPotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

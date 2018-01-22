@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -56,6 +57,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private Button registrerButton;
     Village village;
     String errormsg;
+    String sIDUser_FB;
     int errorcode;
     String urlPostLogin = "http://artshared.fr/andev1/distribue/api/auth/signin/?loop";
     public final int nbCase=30;
@@ -197,8 +200,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-                final String accessToken = AccessToken.getCurrentAccessToken().getUserId();
-                Log.d("tokken fb", accessToken);
+                sIDUser_FB = AccessToken.getCurrentAccessToken().getUserId();
+                Log.d("tokken fb", sIDUser_FB);
 
             }
 
@@ -502,6 +505,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Log.d("error avant intent"," non");
                         Intent MainActivite = new Intent(LoginActivity.this, MainActivity.class);
                         MainActivite.putExtra("village", village);
+                        MainActivite.putExtra("user", user);
                         Log.d("error avant MA"," non");
                         Log.d("error village :", String.valueOf(village));
                         startActivity(MainActivite);

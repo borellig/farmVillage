@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler;
     public boolean eventValidate = true;
     public final static String VillageIntent = "village";
+    public Users user;
 
     public GridView listTest;
     public final int nbCase=30;
@@ -163,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
         mHandler=new Handler();
 
         myVillage=(Village)getIntent().getSerializableExtra("village");
+        user=(Users)getIntent().getSerializableExtra("user");
+        Log.e("userFaction", user.getiIdFaction());
         mapAdapteur = new MapAdapter(getApplicationContext(), myVillage.getListBuilding());
         listTest = (GridView) findViewById(R.id.gridMap);
         listTest.setAdapter(mapAdapteur);
@@ -322,20 +325,23 @@ public class MainActivity extends AppCompatActivity {
             if(bClicked==TypeBuilding.Carriere || bClicked == TypeBuilding.Scierie || bClicked == TypeBuilding.Ferme || bClicked == TypeBuilding.HDV) {
                 popUpConstruction(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked == TypeBuilding.Academie){
+            else if(bClicked == TypeBuilding.Academie){
                 popUpRecherche(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne) {
+            else if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne) {
                 popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Banque){
+            else if(bClicked==TypeBuilding.Banque){
                 popUpBanque(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Laboratoire){
+            else if(bClicked==TypeBuilding.Laboratoire){
                 popUpLaboratoire(position, myVillage, timeConstruct, timeImage, builder);
             }
-            if(bClicked==TypeBuilding.Marche){
+            else if(bClicked==TypeBuilding.Marche){
                 popUpMarche(position, myVillage, timeConstruct, timeImage, builder);
+            }
+            else {
+                popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
             }
 
         }
