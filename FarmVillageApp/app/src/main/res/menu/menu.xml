@@ -10,9 +10,15 @@
             android:id="@+id/renameVillage"
             android:tooltipText="1000"
             android:title="Renommer votre village" />
+
         <item
             android:id="@+id/stopSong"
             android:title="Couper le son" />
+        <item
+            android:id="@+id/flag"
+            android:icon="@drawable/flag"
+            android:title=""
+            app:showAsAction="always"/>
         <item
             android:id="@+id/or"
             android:icon="@drawable/or"
