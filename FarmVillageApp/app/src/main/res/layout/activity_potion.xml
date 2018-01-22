@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/button_potiongold"
+        android:focusable="true"
         android:background="#80ffffff"
         android:footerDividersEnabled="false" />
 

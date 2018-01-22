@@ -1,7 +1,6 @@
 package com.android.group.farmvillage.Adapteur;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,14 +44,14 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
 
         //il ne reste plus qu'à remplir notre vue
-        viewHolder.tvPseudo.setText(String.valueOf(requestPotion.getiPuissancePotion()));
+        viewHolder.tvPseudo.setText(requestPotion.getNamePuissane());
         viewHolder.tvDescription.setText(String.valueOf(requestPotion.getQtite()));
-        ibButtonPotion.setOnClickListener(new View.OnClickListener() {
+       /* ibButtonPotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("Les deguns ? ","oui");
             }
-        });
+        });*/
         return convertView;
     }
 

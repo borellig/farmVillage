@@ -71,10 +71,27 @@ public class PotionListAsk {
         this.iTypeRessource = iTypeRessource;
     }
 
-    /*public String getNamePuissane (){
+    public String getNamePuissane (){
         String Namepuissance= null;
         switch (this.getiPuissancePotion()){
-            case
+            case 1 :
+                Namepuissance="Petite";
+                break;
+            case 2 :
+                Namepuissance="Moyenne";
+
+                break;
+            case 3 :
+                Namepuissance="Grande";
+
+                break;
+            case 4 :
+                Namepuissance="Colossale";
+
+                break;
+
+
         }
-    }*/
+        return Namepuissance;
+    }
 }
