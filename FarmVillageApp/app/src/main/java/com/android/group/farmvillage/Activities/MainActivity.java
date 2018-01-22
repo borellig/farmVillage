@@ -79,11 +79,64 @@ public class MainActivity extends AppCompatActivity {
         menu.findItem(R.id.pierreValue).setTitle(String.valueOf(myVillage.getiRock()));
         menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
         menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
+        if(indiceSong == 1){
+            menu.findItem(R.id.stopSong).setTitle("Couper le son");
+        }else{
+            menu.findItem(R.id.stopSong).setTitle("Activer le son");
+        }
+
         return true;
     }
 
+    private MediaPlayer ring;
+    private int indiceSong = 1;
 
 
+    /**
+     * Fonction pour récupérer la clé SHA1 pour FB Connect
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exchangeMenu:
+                FonctionMissoum();
+                break;
+            case R.id.renameVillage:
+                renameVillage();
+                break;
+            case R.id.stopSong:
+                if(indiceSong == 0){
+                    indiceSong = 1;
+                    changeSong(ring);
+                }else{
+                    indiceSong = 0;
+                    changeSong(ring);
+                }
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void changeSong(MediaPlayer ring){
+        if(indiceSong == 0){
+            ring.pause();
+        }else {
+            ring.start();
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ring.pause();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ring.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +187,11 @@ public class MainActivity extends AppCompatActivity {
 
         myVillage.recolteServeur();
 
-        //Test musique
-        MediaPlayer ring= MediaPlayer.create(MainActivity.this,R.raw.ageofempire);
-        //ring.start();
+        //-------------------Gestion de la musique--------------------
+        //------------------------------------------------------------
+        ring = MediaPlayer.create(getBaseContext(),R.raw.aoe);
+        changeSong(ring);
+
 
         final ArrayList<Building> listBatiment = myVillage.getListBuilding();
 
@@ -697,20 +752,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /**
-     * Fonction pour récupérer la clé SHA1 pour FB Connect
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.exchangeMenu:
-                FonctionMissoum();
-                break;
-            case R.id.renameVillage:
-                renameVillage();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 
     /**
      * Renomme le village
