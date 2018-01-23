@@ -66,6 +66,7 @@ public class ExchangeActivity extends AppCompatActivity {
     int iQtiteRestante;
     public final static String VillageIntent = "village";
     final List<AskExchange> demande= new ArrayList<AskExchange>();
+
     String strUrl = "http://artshared.fr/andev1/distribue/android/get_request.php?id_ressource=";
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     static List<AskExchange> listAskTry;
@@ -539,7 +540,7 @@ public class ExchangeActivity extends AppCompatActivity {
                             JSONObject json = new JSONObject(myResponse);
                             demande.clear();
                             JSONArray values = json.getJSONArray("request");
-                            int length = json.length();
+                            int length = values.length();
                             Log.d("Ca arrive la ? ", "oui"+length);
                             for (int i = 0; i <= length; i++) {
                                 JSONObject building = values.getJSONObject(i);
