@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import com.android.group.farmvillage.Adapteur.exchange_adap;
 import com.android.group.farmvillage.Modele.AskExchange;
 import com.android.group.farmvillage.Modele.InputFilterMinMax;
-import com.android.group.farmvillage.Modele.PotionAskExchange;
 import com.android.group.farmvillage.Modele.Ressource;
 import com.android.group.farmvillage.Modele.Village;
 import com.android.group.farmvillage.R;
@@ -63,7 +61,6 @@ public class ExchangeActivity extends AppCompatActivity {
     Button OrButton;
     Button PierreButton;
     Button FoodButton;
-    ImageButton PotionButton;
     TextView texteBottomFirst;
     TextView texteBottomscd;
     int iQtiteRestante;
@@ -87,13 +84,11 @@ public class ExchangeActivity extends AppCompatActivity {
         OrButton = (Button)findViewById(R.id.buttonOR);
         PierreButton = (Button)findViewById(R.id.buttonPierre);
         FoodButton = (Button)findViewById(R.id.buttonFood);
-        PotionButton = (ImageButton)findViewById(R.id.imageButtonPotion);
         texteBottomFirst= (TextView)findViewById(R.id.textView);
         texteBottomscd= (TextView)findViewById(R.id.textView2);
 
+        recolteThread();
 
-
-        final List<PotionAskExchange> listAskPotion = genererRequest();
         BoisButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,17 +200,6 @@ public class ExchangeActivity extends AppCompatActivity {
             }
         });
 
-        PotionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               /* texteBottomscd.setText("Quantité");
-
-                texteBottomFirst.setText("Offreur");
-                Potionexchange_adapt adapter = new Potionexchange_adapt(ExchangeActivity.this, listAskPotion);
-                mListView.setAdapter(adapter);*/
-            }
-        });
-
     }
 
     /**
@@ -233,34 +217,6 @@ public class ExchangeActivity extends AppCompatActivity {
         menu.findItem(R.id.boisValue).setTitle(String.valueOf(myVillage.getiWood()));
         menu.findItem(R.id.foodValue).setTitle(String.valueOf(myVillage.getiFood()));
         return true;
-    }
-
-
-
-    /**
-     *
-     * @return
-     */
-    private List<PotionAskExchange> genererRequest(){
-        List<PotionAskExchange> request = new ArrayList<PotionAskExchange>();
-        Ressource ressource1 = new Ressource("Bois",4);
-        request.add(new PotionAskExchange("Zizou",ressource1));
-        Ressource ressource2 = new Ressource("Bois",4);
-        request.add(new PotionAskExchange("Zizou",ressource2));
-        Ressource ressource3 = new Ressource("Or",5000);
-        request.add(new PotionAskExchange("Henry",ressource3));
-        Ressource ressource4 = new Ressource("Pierre",4);
-        request.add(new PotionAskExchange("Henry",ressource4));
-        Ressource ressource5 = new Ressource("Bois",3444);
-        request.add(new PotionAskExchange("Zizou",ressource5));
-        Ressource ressource6 = new Ressource("Bois",4);
-        request.add(new PotionAskExchange("Zizou",ressource6));
-        Ressource ressource7 = new Ressource("Or",4);
-        request.add(new PotionAskExchange("Henry",ressource7));
-        Ressource ressource8 = new Ressource("Food",4);
-        request.add(new PotionAskExchange("Henry",ressource8));
-
-        return request;
     }
 
     /**

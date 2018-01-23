@@ -56,7 +56,7 @@ public class PotionActivity extends AppCompatActivity {
     String errormsg;
     String errorcode;
     String urlGet= "http://artshared.fr/andev1/distribue/android/get_potion.php?uid=";
-    String urlPost = "http://artshared.fr/andev1/distribue/android/post_potion.php?uid=307c7442-5da2-4c4e-8199-2d12fe21533d";
+    String urlPost = "http://artshared.fr/andev1/distribue/android/set_potion.php?uid=";
     int iBonuslv1 = 10;
     int iBonuslv2 = 40;
     int iBonuslv3 = 100;
@@ -236,67 +236,6 @@ public class PotionActivity extends AppCompatActivity {
         return true;
     }
 
-    void RunAskRessource() throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        final Request request = new Request.Builder()
-                .url(urlGet)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                final String myResponse = response.body().string();
-
-                PotionActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(" execute ?","oui");
-
-                        try {
-                            JSONObject json = new JSONObject(myResponse);
-                            ListAllPotion.clear();
-                            Log.d(" avant etude json"," oui");
-                            JSONArray values = json.getJSONArray("potions");
-                            Log.d(" contenu json ", String.valueOf(values));
-                            int length = values.length();
-                            Log.d("Ca arrive la ? ", "oui"+length);
-                            for (int i = 0; i < length; i++) {
-                                JSONObject potion = values.getJSONObject(i);
-
-                                int idpotion = potion.getInt("id");
-                                int iPuissance = potion.getInt("puissance");
-                                String sName = potion.getString("nom");
-                                String sDescription = potion.getString("description");
-                                int iQtite = potion.getInt("qte");
-                                String sType = potion.getString("type");
-                                int iType = ConvertTypetoID(sType);
-                                ListAllPotion.add(new PotionListAsk(idpotion,iPuissance,sName,sDescription,iQtite,iType));
-                                Log.d("OK pour le ","potion "+i);
-
-                            }
-                            Log.e("List potion all",ListAllPotion.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Ca marche ? ","non");
-
-                        }
-
-
-
-                    }
-
-                });
-
-            }
-        });
-    }
-
     public void recolteThread(){
         final Thread thRecolte = new Thread(new Runnable() {
             @Override
@@ -352,7 +291,7 @@ public class PotionActivity extends AppCompatActivity {
 
         final EditText titleBox = new EditText(this);
 
-        titleBox.setText("yep");
+        titleBox.setText(String.valueOf(request.getQtite()));
         titleBox.setInputType(InputType.TYPE_CLASS_NUMBER);
         layout.addView(titleBox);
         builder.setView(layout);
@@ -376,12 +315,12 @@ public class PotionActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        builder.setPositiveButton("Somme", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Somme ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                     int value = ValuePotion(request,Integer.parseInt(titleBox.getText().toString()));
-                  makePostRequest(request, Integer.parseInt(titleBox.getText().toString()));
-                UpdateRessourceVillage(myVillage,request.getiTypeRessource(), value);
+                    makePostRequest(request, Integer.parseInt(titleBox.getText().toString()));
+                    UpdateRessourceVillage(myVillage,request.getiTypeRessource(), value);
                     int iSommeRestante = request.getQtite()-Integer.parseInt(titleBox.getText().toString());
                     updateList(lRequeteListe, iPosition,iSommeRestante);
                     adapter.notifyDataSetChanged();
@@ -440,7 +379,7 @@ public class PotionActivity extends AppCompatActivity {
                 postdata.toString());
 
         final Request request = new Request.Builder()
-                .url(urlPost)
+                .url(urlPost+myVillage.getsUUID())
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", "Your Token")

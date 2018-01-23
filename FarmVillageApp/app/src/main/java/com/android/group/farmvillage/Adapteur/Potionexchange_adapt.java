@@ -1,12 +1,14 @@
 package com.android.group.farmvillage.Adapteur;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.group.farmvillage.Modele.PotionListAsk;
@@ -41,7 +43,7 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        PotionListAsk requestPotion = getItem(position);
+        final PotionListAsk requestPotion = getItem(position);
        // ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
 
         //il ne reste plus qu'à remplir notre vue
@@ -50,15 +52,10 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         viewHolder.ibButtonPotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("popo", "poposarace");
+                infopotion(requestPotion);
             }
         });
-       /* ibButtonPotion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("Les deguns ? ","oui");
-            }
-        });*/
+
         return convertView;
     }
 
@@ -66,7 +63,58 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         public TextView tvPseudo;
         public TextView tvDescription;
         public ImageButton ibButtonPotion;
+
     }
+
+
+    private void infopotion(final PotionListAsk potion){
+
+        final int max;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.MyDialogTheme);
+
+        builder.setTitle("Information sur l'élément :");
+
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+
+        final TextView titleBox = new TextView(getContext());
+        final TextView descriptBox = new TextView(getContext());
+
+        switch(potion.getiPuissancePotion()){
+            case 1:
+                    titleBox.setText("Petite Puissance: + 10 ");
+
+                break;
+            case 2:
+                titleBox.setText("Puissance Normal : + 40 ");
+
+                break;
+            case 3:
+                titleBox.setText("Grande puissance : + 100 ");
+                break;
+            case 4:
+                titleBox.setText("Puissance Colossale : +300 ");
+
+                break;
+        }
+        layout.addView(titleBox);
+        layout.addView(descriptBox);
+        builder.setView(layout);
+        //Controle de saisie
+        descriptBox.setText(potion.getsDescription());
+
+        builder.setNeutralButton("Fermer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+
+        builder.show();
+    }
+
 
 
 }

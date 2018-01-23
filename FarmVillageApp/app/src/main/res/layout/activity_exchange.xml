@@ -110,17 +110,6 @@
             android:layout_alignEnd="@+id/buttonBois"
             android:layout_above="@+id/ExchangeListeView" />
 
-        <ImageButton
-            android:id="@+id/imageButtonPotion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/logopotion"
-            android:clickable="true"
-            android:layout_alignEnd="@+id/relativeLayout"
-            android:layout_marginEnd="12dp"
-            android:layout_above="@+id/relativeLayout"
-            android:background="@android:color/transparent"
-            />
 
     </RelativeLayout>
 
