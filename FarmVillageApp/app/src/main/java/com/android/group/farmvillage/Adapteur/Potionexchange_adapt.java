@@ -1,6 +1,7 @@
 package com.android.group.farmvillage.Adapteur;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
             viewHolder = new PotionViewHolder();
             viewHolder.tvPseudo = (TextView) convertView.findViewById(R.id.TypePotion);
             viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.QtitePotion);
-            convertView.setTag(viewHolder);
+            viewHolder.ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
@@ -46,6 +47,12 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         //il ne reste plus qu'à remplir notre vue
         viewHolder.tvPseudo.setText(requestPotion.getNamePuissane());
         viewHolder.tvDescription.setText(String.valueOf(requestPotion.getQtite()));
+        viewHolder.ibButtonPotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("popo", "poposarace");
+            }
+        });
        /* ibButtonPotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

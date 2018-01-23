@@ -153,7 +153,7 @@ public class PotionActivity extends AppCompatActivity {
                     lvPotion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Log.d("Onclick ", "oui");
+                            Log.e("OnclickList", "oui");
                             PotionListAsk request = (PotionListAsk) adapterView.getItemAtPosition(i);
                             TakePotion(ListGoldPotion,i,request,myVillage);
                         }
