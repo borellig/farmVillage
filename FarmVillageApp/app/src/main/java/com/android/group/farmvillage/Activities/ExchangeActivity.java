@@ -576,6 +576,7 @@ public class ExchangeActivity extends AppCompatActivity {
     private void makePostRequest(AskExchange demande, int montantrestant) {
         final OkHttpClient client = new OkHttpClient();
         JSONObject postdata = new JSONObject();
+        Log.d("ID user remote", demande.getsUserNameRemote());
         try {
             postdata.put("id", demande.getiIDUserRemote());
             postdata.put("amount", montantrestant);
