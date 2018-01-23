@@ -41,7 +41,7 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        PotionListAsk requestPotion = getItem(position);
+        final PotionListAsk requestPotion = getItem(position);
        // ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
 
         //il ne reste plus qu'à remplir notre vue
@@ -50,7 +50,7 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         viewHolder.ibButtonPotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("popo", "poposarace");
+
             }
         });
        /* ibButtonPotion.setOnClickListener(new View.OnClickListener() {
