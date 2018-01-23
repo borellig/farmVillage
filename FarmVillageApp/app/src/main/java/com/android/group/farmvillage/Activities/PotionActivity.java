@@ -45,7 +45,7 @@ import okhttp3.Response;
 
 public class PotionActivity extends AppCompatActivity {
 
-    private ListView lvPotion;
+    ListView lvPotion;
     Village myVillage;
     private String VillageIntent = "village";
     private List<PotionListAsk> ListAllPotion = new ArrayList<PotionListAsk>();
@@ -80,7 +80,6 @@ public class PotionActivity extends AppCompatActivity {
         RockButton = (Button) findViewById(R.id.button_potionrock);
         FoodButton = (Button) findViewById(R.id.button_potionfood);
         lvPotion = (ListView) findViewById(R.id.lv_potions);
-        lvPotion.setFocusable(true);
 
         //try {
             //RunAskRessource();
@@ -297,6 +296,7 @@ public class PotionActivity extends AppCompatActivity {
             }
         });
     }
+
     public void recolteThread(){
         final Thread thRecolte = new Thread(new Runnable() {
             @Override

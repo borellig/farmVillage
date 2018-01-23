@@ -40,8 +40,8 @@ public class Potionexchange_adapt extends ArrayAdapter<PotionListAsk> {
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        final PotionListAsk requestPotion = getItem(position);
-        ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
+        PotionListAsk requestPotion = getItem(position);
+       // ibButtonPotion = (ImageButton) convertView.findViewById(R.id.PotionButtonValidate);
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.tvPseudo.setText(requestPotion.getNamePuissane());

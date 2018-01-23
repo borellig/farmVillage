@@ -147,7 +147,6 @@ public class ExchangeActivity extends AppCompatActivity {
 
             }
         });
-
         PierreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
