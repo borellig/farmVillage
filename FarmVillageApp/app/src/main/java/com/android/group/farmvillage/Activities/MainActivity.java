@@ -44,8 +44,10 @@ import com.android.group.farmvillage.Tools.Task;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -53,6 +55,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -89,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.stopSong).setTitle("Activer le son");
         }
 
-        Log.d("okokok", user.getiIdFaction());
         //Gestion des factions
         if(user.getiIdFaction().contentEquals("shadow")){
             menu.findItem(R.id.flag).setIcon(R.drawable.flagblack);
@@ -110,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.exchangeMenu:
-                FonctionMissoum();
-                break;
+//            case R.id.exchangeMenu:
+//                FonctionMissoum();
+//                break;
             case R.id.renameVillage:
                 renameVillage();
                 break;
@@ -341,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
             else if(bClicked == TypeBuilding.Academie){
                 popUpRecherche(position, myVillage, timeConstruct, timeImage, builder);
             }
-            else if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Garnison || bClicked == TypeBuilding.Taverne) {
+            else if(bClicked==TypeBuilding.Entrepot || bClicked == TypeBuilding.Taverne) {
                 popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
             }
             else if(bClicked==TypeBuilding.Banque){
@@ -352,6 +360,10 @@ public class MainActivity extends AppCompatActivity {
             }
             else if(bClicked==TypeBuilding.Marche){
                 popUpMarche(position, myVillage, timeConstruct, timeImage, builder);
+            }
+            else if(bClicked==TypeBuilding.Garnison){
+                Log.e("connard", "connard");
+                popUpGarnison(position, myVillage, timeConstruct, timeImage, builder);
             }
             else {
                 popUpAutre(position, myVillage, timeConstruct, timeImage, builder);
@@ -522,38 +534,7 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
         BackgroundTask bgTask = new BackgroundTask();
         ArrayList<ObjetBanque> obl = new ArrayList<>();
-//        try {
-//            JSONObject jItems = new JSONObject(String.valueOf(bgTask.execute("http://artshared.fr/andev1/distribue/android/get_items.php?uid="+myVillage.getsUUID()).get()));
-//            JSONArray jListObjetBanque = new JSONArray(jItems.getString("items"));
-//            Log.d("items4", jListObjetBanque.toString());
-//            if (jListObjetBanque != null) {
-//                for (int i = 0; i < jListObjetBanque.length(); i++) {
-//                    JSONObject jObjetBanque = new JSONObject(jListObjetBanque.get(i).toString());
-//                    JSONObject jTemplate = new JSONObject(jObjetBanque.getString("template"));
-//                    JSONObject jType = new JSONObject(jTemplate.getString("type"));
-//                    JSONObject jStat = new JSONObject(jObjetBanque.getString("stats"));
-//                    String obId = jObjetBanque.getString("_id");
-//                    int obLvl = jTemplate.getInt("level");
-//                    String obType = jType.getString("name");
-//                    String obName = jTemplate.getString("name");
-//                    int obHealth = jStat.getInt("health");
-//                    int obAttack = jStat.getInt("attack");
-//                    int obDefense = jStat.getInt("defense");
-//                    ObjetBanque ob = new ObjetBanque(obId, obLvl, obType, obName, obHealth, obAttack, obDefense);
-//                    obl.add(ob);
-//                }
-//            }
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        myVillage.setListeBanque(obl);
-//
-//        GridView gridObjetBanque = new GridView(getBaseContext());
-//        gridObjetBanque.setNumColumns(5);
-//        ObjetBanqueAdapter obAdapter = new ObjetBanqueAdapter(getBaseContext(), myVillage.getListeBanque());
-//        gridObjetBanque.setAdapter(obAdapter);
-//        builder.setView(gridObjetBanque);
+
 
         RelativeLayout rl = new RelativeLayout(getApplicationContext());
         Button toLabo = new Button(getApplicationContext());
@@ -569,6 +550,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
         rl.addView(toLabo);
+        builder.setView(rl);
+
+        genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
+    }
+
+    private void popUpGarnison(final int position, final Village myVillage, final TextView timeConstruct, final ImageView timeImage, AlertDialog.Builder builder) {
+        final ArrayList<Ressource> ressources = myVillage.getListBuilding().get(position).getLvlUpPrice();
+        BackgroundTask bgTask = new BackgroundTask();
+        ArrayList<ObjetBanque> obl = new ArrayList<>();
+
+
+        RelativeLayout rl = new RelativeLayout(getApplicationContext());
+        Button demandeTroupe = new Button(getApplicationContext());
+        int militaryCount =0;
+        for (Building building : myVillage.getListBuilding()){
+            militaryCount+=building.getiMilitaryCount();
+        }
+        final int nbTroupe = myVillage.getHomeCapacityAvailable();
+        Log.e("homecapacity", String.valueOf(myVillage.getHomeCapacityAvailable()));
+        demandeTroupe.setText("Demander "+nbTroupe+" troupes");
+        demandeTroupe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jDemande = new JSONObject();
+                try {
+                    jDemande.put("uuid", myVillage.getsUUID());
+                    jDemande.put("nbTroupes", nbTroupe);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                requetePost(jDemande, "http://artshared.fr/andev1/distribue/android/set_army.php");
+                Toast.makeText(getApplicationContext(), "Vous venez de demander "+nbTroupe+" troupes", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        rl.addView(demandeTroupe);
         builder.setView(rl);
 
         genereBoutonsPopup(position, myVillage, timeConstruct, timeImage, builder, ressources);
@@ -859,6 +876,41 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return trueTime;
+    }
+
+    private void requetePost(JSONObject jObject, final String url) {
+        final OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jObject.toString());
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Your Token")
+                .addHeader("cache-control", "no-cache")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                                String mMessage = e.getMessage().toString();
+                                                Log.e("failure Response", url+" "+mMessage);
+                                                //call.cancel();
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response)
+                                                    throws IOException {
+
+                                                String mMessage = response.body().string();
+                                                if (response.isSuccessful()){
+
+                                                    //Log.d("success POST", mMessage);
+
+                                                }
+                                            }
+                                        }
+        );
     }
 
 

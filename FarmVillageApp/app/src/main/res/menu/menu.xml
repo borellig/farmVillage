@@ -2,10 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <item
-            android:id="@+id/exchangeMenu"
-            android:tooltipText="1000"
-            android:title="exchangeMenu" />
+
         <item
             android:id="@+id/renameVillage"
             android:tooltipText="1000"

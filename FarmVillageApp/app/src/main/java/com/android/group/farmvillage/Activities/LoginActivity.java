@@ -684,6 +684,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 int iRock = jVillage.getInt("iRock");
                 int iGold = jVillage.getInt("iGold");
                 int iDefensePoint = jVillage.getInt("iDefensePoint");
+                Log.e("loginDP", String.valueOf(iDefensePoint));
                 ArrayList<Building> listBuilding = new ArrayList<>();
                 JSONArray jListBuilding = new JSONArray(jVillage.getString("building"));
                 Date d = new Date();

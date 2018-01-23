@@ -45,6 +45,7 @@ public class Village implements Serializable {
         this.iFood = iFood;
         this.iRock = iRock;
         this.iGold = iGold;
+        this.iDefensePoint = defensePoint;
         this.listBuilding = listBuilding;
         for (Building b : listBuilding){
             if (b.getTbBuilding().name()!="Vide") {
@@ -464,6 +465,7 @@ public class Village implements Serializable {
     }
 
     public int getiDefensePoint() {
+        Log.e("village3", String.valueOf(iDefensePoint));
         return iDefensePoint;
     }
 
